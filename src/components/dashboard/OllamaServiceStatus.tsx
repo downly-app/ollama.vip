@@ -1,0 +1,480 @@
+import React, { useState, useEffect } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
+import { Play, Square, RefreshCw, Copy, ExternalLink, Server, Activity, Settings, Tag, Globe, Save, MessageCircle, Database, Upload, PieChart as PieChartIcon, Zap } from 'lucide-react';
+import { useTheme } from '@/contexts/ThemeContext';
+import { ollamaApi } from '@/services/ollamaApi';
+import SystemApi from '@/services/systemApi';
+import configApi from '@/services/configApi';
+import { useToast } from '@/hooks/use-toast';
+import { useTranslation } from 'react-i18next';
+import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
+
+interface SystemResource {
+  name: string;
+  usage: number;
+  color: string;
+}
+
+const OllamaServiceStatus = () => {
+  const { currentTheme } = useTheme();
+  const { toast } = useToast();
+  const { t } = useTranslation();
+  const [isConnected, setIsConnected] = useState(false);
+  const [isChecking, setIsChecking] = useState(false);
+  const [autoStart, setAutoStart] = useState(false);
+  const [version, setVersion] = useState('');
+  const [appVersion] = useState('1.0.0'); // Ollama Pro application version
+  const [serviceAddress, setServiceAddress] = useState('');
+  const [runningModels, setRunningModels] = useState(0);
+  const [totalModels, setTotalModels] = useState(0);
+
+  // Simulated system resource data - should be obtained from system API in actual application
+  const [systemResources, setSystemResources] = useState<SystemResource[]>([
+    { name: 'CPU', usage: 25, color: '#3b82f6' },
+    { name: 'GPU', usage: 78, color: '#10b981' },
+    { name: 'Memory', usage: 50, color: '#f59e0b' },
+    { name: 'Disk', usage: 65, color: '#ef4444' }
+  ]);
+
+  const quickActions = [
+    {
+      icon: MessageCircle,
+      label: t('dashboard.ollamaService.quickActionLabels.aiChat'),
+      color: 'from-blue-500 to-purple-500',
+      onClick: () => {
+        // Navigate to chat page
+        window.location.href = '/chat';
+      }
+    },
+    {
+      icon: Database,
+      label: t('dashboard.ollamaService.quickActionLabels.modelLibrary'),
+      color: 'from-green-500 to-teal-500',
+      onClick: () => {
+        // Navigate to model library page
+        window.location.href = '/models';
+      }
+    },
+    {
+      icon: Upload,
+      label: t('dashboard.ollamaService.quickActionLabels.importGguf'),
+      color: 'from-purple-500 to-pink-500',
+      onClick: () => {
+        // Open import dialog
+        console.log('Import GGUF model');
+      }
+    }
+  ];
+
+  useEffect(() => {
+    initializeComponent();
+    const interval = setInterval(() => {
+      checkConnection();
+      fetchData();
+    }, 30000); // Check every 30 seconds
+    return () => clearInterval(interval);
+  }, []);
+
+  const initializeComponent = async () => {
+    try {
+      // First get the configured API address
+      const host = await configApi.getOllamaHost();
+      setServiceAddress(host);
+      
+      // Update ollamaApi configuration
+      ollamaApi.updateConfig({ baseUrl: host });
+      
+      // Then check connection and fetch data
+      await checkConnection();
+      await fetchData();
+    } catch (error) {
+      console.error('Failed to initialize component:', error);
+      // Use default address as fallback
+      const defaultHost = 'http://127.0.0.1:11434';
+      setServiceAddress(defaultHost);
+      ollamaApi.updateConfig({ baseUrl: defaultHost });
+    }
+  };
+
+  const checkConnection = async () => {
+    setIsChecking(true);
+    try {
+      const connected = await ollamaApi.checkConnection();
+      setIsConnected(connected);
+      
+      if (connected) {
+        // Get version information
+        const versionInfo = await ollamaApi.getVersion();
+        if (versionInfo) {
+          setVersion(versionInfo.version);
+        }
+      }
+    } catch (error) {
+      setIsConnected(false);
+      console.error('Connection check failed:', error);
+    }
+    setIsChecking(false);
+  };
+
+  const fetchData = async () => {
+    try {
+      // Get system resource data (this should always be available)
+      const systemInfo = await SystemApi.getSystemResources();
+      
+      // Try to get model data, use default values if Ollama service is not started
+      let models: any[] = [];
+      let runningModelsList: any[] = [];
+      
+      if (isConnected) {
+        try {
+          [models, runningModelsList] = await Promise.all([
+            ollamaApi.listModels(),
+            ollamaApi.listRunningModels()
+          ]);
+        } catch (error) {
+          console.warn('Failed to fetch Ollama data, service may be unavailable:', error);
+          // Set connection status to false, but don't throw error
+          setIsConnected(false);
+        }
+      }
+      
+      setTotalModels(models.length);
+      setRunningModels(runningModelsList.length);
+      
+      // Use real system resource data
+      const realSystemResources: SystemResource[] = [
+        { 
+          name: 'CPU', 
+          usage: Math.round(systemInfo.cpu.usage), 
+          color: '#3b82f6' 
+        },
+        { 
+          name: 'Memory', 
+          usage: Math.round(systemInfo.memory.usage_percent), 
+          color: '#10b981' 
+        },
+        { 
+          name: 'Disk', 
+          usage: systemInfo.disks.length > 0 ? Math.round(systemInfo.disks[0].usage_percent) : 0, 
+          color: '#f59e0b' 
+        }
+      ];
+
+      // If there's GPU data, add GPU resource
+      if (systemInfo.gpus.length > 0) {
+        const gpu = systemInfo.gpus[0];
+        const gpuUsage = gpu.core_usage_percent > 0 ? gpu.core_usage_percent : gpu.memory_usage_percent;
+        realSystemResources.push({
+          name: 'GPU',
+          usage: Math.round(gpuUsage),
+          color: '#8b5cf6'
+        });
+      }
+
+      setSystemResources(realSystemResources);
+      
+    } catch (error) {
+      console.error('Failed to fetch data:', error);
+      // If fetch fails, use simulated data as fallback
+      setSystemResources([
+        { name: 'CPU', usage: 25, color: '#3b82f6' },
+        { name: 'Memory', usage: 50, color: '#10b981' },
+        { name: 'Disk', usage: 65, color: '#f59e0b' }
+      ]);
+    }
+  };
+
+  const copyAddress = () => {
+    navigator.clipboard.writeText(serviceAddress);
+    toast({
+      title: t('dashboard.ollamaService.actions.copied'),
+      description: t('dashboard.ollamaService.actions.addressCopied'),
+    });
+  };
+
+  const saveAddress = async () => {
+    try {
+      // Use config API to save address
+      const normalizedHost = await configApi.setOllamaHost(serviceAddress);
+      setServiceAddress(normalizedHost);
+      
+      // Update API configuration
+      ollamaApi.updateConfig({ baseUrl: normalizedHost });
+      
+      toast({
+        title: t('dashboard.ollamaService.actions.save'),
+        description: t('dashboard.ollamaService.actions.addressSaved'),
+      });
+      
+      // Recheck connection after saving
+      await checkConnection();
+    } catch (error) {
+      console.error('Failed to save address:', error);
+      toast({
+        title: 'Save Failed',
+        description: `Unable to save address: ${error}`,
+        variant: 'destructive',
+      });
+    }
+  };
+
+  const toggleService = async () => {
+    if (isConnected) {
+      // Restart Ollama service
+      try {
+        setIsChecking(true);
+        const result = await ollamaApi.restartOllama();
+        
+        toast({
+          title: t('dashboard.ollamaService.actions.serviceRestarted'),
+          description: result,
+        });
+        
+        // Wait for a while then recheck connection status
+        setTimeout(async () => {
+          await checkConnection();
+          await fetchData();
+        }, 2000);
+        
+      } catch (error) {
+        console.error('Failed to restart Ollama:', error);
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        
+        toast({
+          title: t('dashboard.ollamaService.actions.restartFailed') || 'Restart Failed',
+          description: errorMessage,
+          variant: 'destructive',
+          duration: 8000, // Extend display time for users to read detailed information
+        });
+      } finally {
+        setIsChecking(false);
+      }
+    } else {
+      // Start Ollama service
+      try {
+        setIsChecking(true);
+        const result = await ollamaApi.restartOllama();
+        
+        toast({
+          title: t('dashboard.ollamaService.actions.serviceStarted'),
+          description: result,
+        });
+        
+        // Wait for a while then recheck connection status
+        setTimeout(async () => {
+          await checkConnection();
+          await fetchData();
+        }, 2000);
+        
+      } catch (error) {
+        console.error('Failed to start Ollama:', error);
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        
+        toast({
+          title: t('dashboard.ollamaService.actions.startFailed') || 'Start Failed',
+          description: errorMessage,
+          variant: 'destructive',
+          duration: 8000, // Extend display time for users to read detailed information
+        });
+      } finally {
+        setIsChecking(false);
+      }
+    }
+  };
+
+  const getStatusColor = () => {
+    if (isChecking) return 'bg-yellow-500';
+    return isConnected ? 'bg-green-500' : 'bg-red-500';
+  };
+
+  const getStatusText = () => {
+    if (isChecking) return t('dashboard.ollamaService.status.checking');
+    return isConnected ? t('dashboard.ollamaService.status.running') : t('dashboard.ollamaService.status.stopped');
+  };
+
+  return (
+    <Card className="bg-white/10 backdrop-blur-sm border-white/20">
+      <CardHeader className="pb-4">
+        <CardTitle className={`text-xl font-bold bg-gradient-to-r ${currentTheme.colors.secondary} bg-clip-text text-transparent flex items-center`}>
+          <Server className="mr-2" size={20} />
+          {t('dashboard.ollamaService.title')}
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        {/* Service status and basic information */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-3">
+            {/* Ollama Pro Version */}
+            <div className="flex items-center justify-between">
+              <span className="text-white/70 flex items-center">
+                <Tag size={16} className="mr-2" />
+                Ollama Pro Version
+              </span>
+              <Badge variant="secondary" className="text-white/90 bg-white/20">
+                {appVersion}
+              </Badge>
+            </div>
+
+            {/* Ollama Version information */}
+            <div className="flex items-center justify-between">
+              <span className="text-white/70 flex items-center">
+                <Tag size={16} className="mr-2" />
+                {t('dashboard.ollamaService.version')}
+              </span>
+              <div className="flex items-center space-x-2">
+                <Badge variant="secondary" className="text-white/90 bg-white/20">
+                  {version || t('dashboard.ollamaService.unknown')}
+                </Badge>
+                <Button 
+                  size="sm" 
+                  variant="ghost" 
+                  className="text-white/70 hover:text-white hover:bg-white/10"
+                  onClick={checkConnection}
+                >
+                  <RefreshCw size={14} className="mr-1" />
+                  {t('dashboard.ollamaService.checkUpdate')}
+                </Button>
+              </div>
+            </div>
+
+            {/* Service status */}
+            <div className="flex items-center justify-between">
+              <span className="text-white/70 flex items-center">
+                <Activity size={16} className="mr-2" />
+                {t('dashboard.ollamaService.serviceStatus')}
+              </span>
+              <div className="flex items-center space-x-2">
+                <div className={`w-3 h-3 rounded-full ${getStatusColor()} animate-pulse`}></div>
+                <span className="text-white font-medium">{getStatusText()}</span>
+                <Button 
+                  size="sm" 
+                  variant={isConnected ? "secondary" : "default"}
+                  onClick={toggleService}
+                  disabled={isChecking}
+                  className={isConnected ? "bg-orange-600 hover:bg-orange-700 text-white" : "bg-green-600 hover:bg-green-700 text-white"}
+                >
+                  {isConnected ? <RefreshCw size={14} /> : <Play size={14} />}
+                  <span className="ml-1">{isConnected ? t('dashboard.ollamaService.actions.restart') : t('dashboard.ollamaService.actions.start')}</span>
+                </Button>
+              </div>
+            </div>
+
+            {/* Listening address */}
+            <div className="flex items-center justify-between">
+              <span className="text-white/70 flex items-center">
+                <Globe size={16} className="mr-2" />
+                {t('dashboard.ollamaService.listeningAddress')}
+              </span>
+              <div className="flex items-center space-x-2">
+                <Input
+                  type="text"
+                  value={serviceAddress}
+                  onChange={(e) => setServiceAddress(e.target.value)}
+                  className="bg-black/30 px-2 py-1 rounded text-sm text-white/90 w-48"
+                />
+                <Button size="sm" variant="ghost" onClick={copyAddress} className="text-white/70 hover:text-white hover:bg-white/10">
+                  <Copy size={14} />
+                </Button>
+                <Button size="sm" variant="ghost" onClick={saveAddress} className="text-white/70 hover:text-white hover:bg-white/10">
+                  <Save size={14} />
+                </Button>
+              </div>
+            </div>
+
+            {/* Auto start on boot */}
+            <div className="flex items-center justify-between">
+              <span className="text-white/70 flex items-center">
+                <Settings size={16} className="mr-2" />
+                {t('dashboard.ollamaService.autoStart')}
+              </span>
+              <div className="relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 bg-gray-600">
+                <input
+                  type="checkbox"
+                  className="sr-only"
+                  checked={autoStart}
+                  onChange={(e) => setAutoStart(e.target.checked)}
+                />
+                <span
+                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform cursor-pointer ${
+                    autoStart ? 'translate-x-6 bg-blue-500' : 'translate-x-1'
+                  }`}
+                  onClick={() => setAutoStart(!autoStart)}
+                />
+              </div>
+            </div>
+
+            {/* Quick actions */}
+            <div className="space-y-2 pt-4 border-t border-white/10">
+              <h4 className="text-white font-medium flex items-center">
+                <Zap size={16} className="mr-2" />
+                {t('dashboard.ollamaService.quickActions')}
+              </h4>
+              <div className="grid grid-cols-3 gap-2">
+                {quickActions.map((action, index) => (
+                  <Button
+                    key={index}
+                    variant="ghost"
+                    className={`h-auto p-3 flex flex-col items-center text-center space-y-1 bg-gradient-to-r ${action.color} bg-opacity-20 hover:bg-opacity-30 transition-all duration-200 border border-white/10 text-white hover:text-white`}
+                    onClick={action.onClick}
+                  >
+                    <action.icon size={20} className="text-white" />
+                    <div className="text-white text-xs font-medium">{action.label}</div>
+                  </Button>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* System load overview */}
+          <div className="space-y-2 flex flex-col justify-center min-h-[300px]">
+            <h4 className="text-white font-medium text-center flex items-center justify-center">
+              <PieChartIcon size={16} className="mr-2" />
+              {t('dashboard.ollamaService.systemLoadOverview')}
+            </h4>
+            <div className="flex justify-center flex-1 items-center">
+              <div className="w-56 h-56">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={systemResources}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={70}
+                      outerRadius={90}
+                      dataKey="usage"
+                      startAngle={90}
+                      endAngle={450}
+                    >
+                      {systemResources.map((resource, index) => (
+                        <Cell key={`cell-${index}`} fill={resource.color} />
+                      ))}
+                    </Pie>
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-2 mt-2">
+              {systemResources.map((resource, index) => (
+                <div key={index} className="flex items-center justify-between p-2 bg-black/20 rounded">
+                  <div className="flex items-center space-x-2">
+                    <div 
+                      className="w-3 h-3 rounded-full" 
+                      style={{ backgroundColor: resource.color }}
+                    ></div>
+                    <span className="text-white/70 text-xs">{resource.name}</span>
+                  </div>
+                  <span className="text-white text-xs font-medium">{resource.usage}%</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+};
+
+export default OllamaServiceStatus;

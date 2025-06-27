@@ -1,0 +1,438 @@
+{
+    "auth": {
+        "login": "Connexion",
+        "register": "S'inscrire",
+        "email": "Email",
+        "password": "Mot de passe",
+        "username": "Nom d'utilisateur",
+        "logout": "Déconnexion",
+        "profile": "Profil"
+    },
+    "common": {
+        "save": "Enregistrer",
+        "cancel": "Annuler",
+        "delete": "Supprimer",
+        "edit": "Modifier",
+        "copy": "Copier",
+        "search": "Rechercher",
+        "loading": "Chargement...",
+        "error": "Erreur",
+        "success": "Succès",
+        "confirm": "Confirmer",
+        "close": "Fermer",
+        "settings": "Paramètres",
+        "language": "Langue",
+        "refresh": "Actualiser"
+    },
+    "app": {
+        "title": "Client Web Ollama",
+        "description": "Interface Web Professionnelle Ollama"
+    },
+    "navigation": {
+        "general": "Général",
+        "chat": "Chat",
+        "models": "Modèles",
+        "onlineModels": "Modèles en ligne",
+        "localModels": "Modèles locaux",
+        "settings": "Paramètres",
+        "profile": "Profil"
+    },
+    "chat": {
+        "title": "Chat",
+        "newConversation": "Nouvelle conversation",
+        "searchConversations": "Rechercher des conversations...",
+        "noConversations": "Aucune conversation",
+        "createFirstConversation": "Créer votre première conversation",
+        "typeMessage": "Tapez votre message...",
+        "inputTip": "Tapez votre message ici...",
+        "characters": "caractères",
+        "recording": "Enregistrement...",
+        "send": "Envoyer",
+        "resend": "Renvoyer",
+        "editMessage": "Modifier le message",
+        "deleteMessage": "Supprimer le message",
+        "copyMessage": "Copier le message",
+        "regenerateResponse": "Régénérer la réponse",
+        "stopGeneration": "Arrêter la génération",
+        "messageCount": "{{count}} messages",
+        "messageCount_plural": "{{count}} messages",
+        "selectModel": "Sélectionner un modèle",
+        "noModelSelected": "Aucun modèle sélectionné",
+        "modelNotAvailable": "Modèle non disponible",
+        "apiSettings": "Paramètres API",
+        "needApiKey": "Clé API requise",
+        "needApiKeyDescription": "Veuillez configurer votre clé API dans les paramètres pour utiliser la fonctionnalité de chat.",
+        "goToSettings": "Aller aux paramètres",
+        "conversationDeleted": "Conversation supprimée",
+        "messageCopied": "Message copié dans le presse-papiers",
+        "messageEdited": "Message modifié",
+        "messageDeleted": "Message supprimé",
+        "conversationRenamed": "Conversation renommée",
+        "deleteConversation": "Supprimer la conversation",
+        "renameConversation": "Renommer la conversation",
+        "confirmDeleteConversation": "Êtes-vous sûr de vouloir supprimer cette conversation ?",
+        "conversationName": "Nom de la conversation",
+        "enterConversationName": "Entrez le nom de la conversation",
+        "apiKeyRequired": "Clé API requise",
+        "apiKeyRequiredDescription": "Veuillez configurer votre clé API dans les paramètres pour utiliser cette fonctionnalité",
+        "typing": "En cours de frappe...",
+        "selectConversation": "Sélectionner une conversation",
+        "selectConversationDescription": "Sélectionnez une conversation à gauche pour commencer à discuter, ou créez-en une nouvelle",
+        "modelConfigRequired": "Configuration du modèle requise",
+        "modelConfigRequiredDescription": "Veuillez configurer une clé API ou télécharger un modèle local",
+        "startNewConversation": "Commencer une nouvelle conversation",
+        "sendMessageToStart": "Envoyez un message pour commencer la conversation",
+        "localModelNotAvailable": "Modèle local non disponible, veuillez télécharger des modèles ou sélectionner un autre modèle",
+        "configureApiKey": "Veuillez configurer une clé API ou télécharger des modèles locaux",
+        "noModelsConfigured": "Veuillez télécharger des modèles locaux ou configurer une clé API",
+        "noAvailableModels": "Aucun modèle disponible",
+        "noModelsAvailable": "Aucun modèle disponible",
+        "configureModels": "Configurer les modèles",
+        "modelSelectorFooter": "Les modèles locaux sont prioritaires",
+        "noMatchingConversations": "Aucune conversation correspondante trouvée"
+    },
+    "models": {
+        "title": "Gestion des modèles",
+        "searchModels": "Rechercher des modèles...",
+        "noModels": "Aucun modèle trouvé",
+        "download": "Télécharger",
+        "install": "Installer",
+        "installNow": "Installer maintenant",
+        "delete": "Supprimer",
+        "select": "Sélectionner",
+        "selected": "Sélectionné",
+        "downloading": "Téléchargement...",
+        "installing": "Installation...",
+        "modelName": "Nom du modèle",
+        "description": "Description",
+        "type": "Type",
+        "size": "Taille",
+        "tags": "Tags",
+        "downloads": "Téléchargements",
+        "updated": "Mis à jour",
+        "actions": "Actions",
+        "filterByType": "Filtrer par type",
+        "sortBy": "Trier par",
+        "popular": "Populaire",
+        "newest": "Plus récent",
+        "embedding": "Intégration",
+        "vision": "Vision",
+        "tools": "Outils",
+        "thinking": "Réflexion",
+        "downloadProgress": "Progression du téléchargement",
+        "downloadComplete": "Téléchargement terminé",
+        "downloadFailed": "Échec du téléchargement"
+    },
+    "localModels": {
+        "title": "Gestion des modèles locaux",
+        "modelsCount": "{{count}} modèles",
+        "searchPlaceholder": "Rechercher des modèles...",
+        "downloadNewModel": "Télécharger un nouveau modèle",
+        "modelNamePlaceholder": "Entrez le nom du modèle (ex: llama3.2:3b)",
+        "localModelsList": "Liste des modèles locaux",
+        "loading": "Chargement...",
+        "noModelsFound": "Aucun modèle correspondant trouvé",
+        "noLocalModels": "Aucun modèle local",
+        "adjustSearchCriteria": "Essayez d'ajuster les critères de recherche",
+        "useDownloadFunction": "Utilisez la fonction de téléchargement ci-dessus pour ajouter des modèles",
+        "size": "Taille",
+        "parameters": "Paramètres",
+        "modifiedTime": "Modifié",
+        "details": "Détails",
+        "modelInfo": "Informations du modèle",
+        "viewDetailedInfo": "Voir les informations détaillées et la configuration du modèle",
+        "basicInfo": "Informations de base",
+        "family": "Famille",
+        "format": "Format",
+        "quantization": "Quantification",
+        "capabilities": "Capacités",
+        "architectureInfo": "Informations d'architecture",
+        "parameterConfig": "Configuration des paramètres",
+        "promptTemplate": "Modèle de prompt",
+        "modelfile": "Modelfile",
+        "failedToGetModelInfo": "Impossible d'obtenir les informations du modèle",
+        "confirmDeleteModel": "Confirmer la suppression du modèle",
+        "deleteConfirmation": "Êtes-vous sûr de vouloir supprimer le modèle {{modelName}} ? Cette action ne peut pas être annulée et libérera {{size}} d'espace de stockage.",
+        "cancel": "Annuler",
+        "delete": "Supprimer",
+        "deleteSuccess": "Suppression réussie",
+        "deleteSuccessMessage": "Le modèle {{modelName}} a été supprimé avec succès",
+        "deleteFailed": "Échec de la suppression",
+        "deleteFailedMessage": "Impossible de supprimer le modèle {{modelName}}",
+        "fetchFailed": "Échec de récupération des modèles",
+        "fetchFailedMessage": "Impossible d'obtenir la liste des modèles locaux, veuillez vérifier si le service Ollama fonctionne",
+        "getInfoFailed": "Échec d'obtention des informations",
+        "getInfoFailedMessage": "Impossible d'obtenir les informations détaillées du modèle {{modelName}}",
+        "enterModelName": "Veuillez entrer le nom du modèle",
+        "enterModelNameMessage": "Veuillez entrer le nom du modèle à télécharger"
+    },
+    "settings": {
+        "title": "Paramètres",
+        "aiModelSettings": "Paramètres du modèle IA",
+        "currentModel": "Modèle actuel",
+        "theme": "Thème",
+        "provider": "Fournisseur",
+        "model": "Modèle",
+        "apiKey": "Clé API",
+        "temperature": "Température",
+        "enterApiKey": "Entrer la clé API",
+        "enterTemperature": "Entrer la température (0.0 - 2.0)",
+        "saveSettings": "Sauvegarder les paramètres",
+        "settingsSaved": "Paramètres sauvegardés",
+        "languageSettings": "Paramètres de langue",
+        "selectLanguage": "Sélectionner la langue",
+        "temperatureError": "La température doit être entre 0 et 2",
+        "temperatureInvalid": "Veuillez entrer un nombre valide",
+        "temperatureRange": "La température doit être entre 0 et 2",
+        "themes": {
+            "midnight": "Bleu Minuit",
+            "rose": "Violet Rose",
+            "starlight": "Violet Étoilé",
+            "sunset": "Orange Coucher de Soleil",
+            "ocean": "Bleu Océan",
+            "forest": "Vert Forêt"
+        },
+        "languages": {
+            "en": "English",
+            "zh": "中文",
+            "ja": "日本語",
+            "ko": "한국어",
+            "fr": "Français"
+        },
+        "selectProvider": "Fournisseur",
+        "selectProviderPlaceholder": "Veuillez sélectionner un fournisseur IA",
+        "configured": "Configuré",
+        "notConfigured": "Non configuré",
+        "visitWebsite": "Visiter le site web",
+        "defaultUrl": "URL par défaut",
+        "providers": {
+            "openai": {
+                "description": "OpenAI propose des modèles d'IA avancés comme GPT-4 pour diverses tâches de traitement du langage naturel."
+            },
+            "anthropic": {
+                "description": "Anthropic développe des systèmes d'IA sûrs et bénéfiques, notamment la série de modèles Claude."
+            },
+            "deepseek": {
+                "description": "DeepSeek propose des modèles d'IA performants pour le codage et les tâches générales."
+            },
+            "google": {
+                "description": "Google propose des modèles d'IA avancés comme Gemini pour diverses applications."
+            },
+            "meta": {
+                "description": "Meta développe des modèles d'IA open source comme Llama pour la recherche et les applications commerciales."
+            },
+            "xai": {
+                "description": "xAI développe des systèmes d'IA pour comprendre l'univers, notamment le modèle Grok."
+            },
+            "alibaba": {
+                "description": "Alibaba propose des modèles d'IA haute performance pour diverses applications, notamment la série Qwen."
+            }
+        }
+    },
+    "general": {
+        "title": "Tableau de bord",
+        "welcome": "Bienvenue dans Ollama Pro",
+        "ollamaStatus": "État du service Ollama",
+        "modelOverview": "Aperçu des modèles",
+        "systemResources": "Ressources système",
+        "activityLog": "Journal d'activité",
+        "totalModels": "Total des modèles",
+        "activeModel": "Modèle actif",
+        "storageUsed": "Stockage utilisé",
+        "memoryUsage": "Utilisation de la mémoire",
+        "cpuUsage": "Utilisation du CPU",
+        "diskUsage": "Utilisation du disque"
+    },
+    "profile": {
+        "title": "Profil",
+        "username": "Nom d'utilisateur",
+        "email": "Email",
+        "avatar": "Avatar",
+        "preferences": "Préférences",
+        "account": "Compte",
+        "privacy": "Confidentialité",
+        "notifications": "Notifications"
+    },
+    "errors": {
+        "networkError": "Erreur réseau survenue",
+        "apiError": "Erreur API survenue",
+        "invalidApiKey": "Clé API invalide",
+        "modelNotFound": "Modèle non trouvé",
+        "downloadFailed": "Échec du téléchargement",
+        "uploadFailed": "Échec du téléversement",
+        "fileNotSupported": "Type de fichier non supporté",
+        "fileTooLarge": "Fichier trop volumineux",
+        "unknownError": "Erreur inconnue survenue"
+    },
+    "tooltips": {
+        "refresh": "Actualiser",
+        "minimize": "Réduire",
+        "maximize": "Agrandir",
+        "close": "Fermer",
+        "openFolder": "Ouvrir le dossier",
+        "copyPath": "Copier le chemin",
+        "viewDetails": "Voir les détails"
+    },
+    "pages": {
+        "general": "Général",
+        "models": "Gestion des modèles",
+        "localModels": "Modèles locaux",
+        "notFound": {
+            "title": "404",
+            "message": "Oups ! Page non trouvée",
+            "returnHome": "Retour à l'accueil"
+        }
+    },
+    "time": {
+        "justNow": "À l'instant",
+        "minutesAgo": "Il y a {{count}} minute",
+        "minutesAgo_plural": "Il y a {{count}} minutes",
+        "hoursAgo": "Il y a {{count}} heure",
+        "hoursAgo_plural": "Il y a {{count}} heures",
+        "daysAgo": "Il y a {{count}} jour",
+        "daysAgo_plural": "Il y a {{count}} jours",
+        "longTimeAgo": "Il y a longtemps"
+    },
+    "general": {
+        "title": "Tableau de bord",
+        "welcome": "Bienvenue dans Ollama Pro",
+        "ollamaStatus": "État du service Ollama",
+        "modelOverview": "Aperçu des modèles",
+        "systemResources": "Ressources système",
+        "activityLog": "Journal d'activité",
+        "totalModels": "Total des modèles",
+        "activeModel": "Modèle actif",
+        "storageUsed": "Stockage utilisé",
+        "memoryUsage": "Utilisation mémoire",
+        "cpuUsage": "Utilisation CPU",
+        "diskUsage": "Utilisation disque"
+    },
+    "dashboard": {
+        "systemResources": {
+            "title": "Surveillance des ressources système",
+            "overview": "Aperçu du système",
+            "resources": {
+                "cpu": "CPU",
+                "gpu": "GPU",
+                "memory": "Mémoire",
+                "disk": "Disque"
+            },
+            "usageUnavailable": "Utilisation indisponible",
+      "refreshSuccess": "Surveillance des ressources système actualisée avec succès - CPU: {{cpu}}%, Mémoire: {{memory}}%",
+      "errors": {
+                "fetchFailed": "Échec de récupération des ressources système",
+                "unavailable": "Données non disponibles"
+            },
+            "activities": {
+                "resourcesUpdated": "Données des ressources système mises à jour"
+            },
+            "metrics": {
+                "cpu": "Utilisation CPU",
+                "gpu": "Utilisation GPU",
+                "memory": "Utilisation mémoire",
+                "disk": "Utilisation disque"
+            },
+            "recentLogs": {
+                "title": "Journaux récents",
+                "viewAll": "Voir tous les journaux"
+            },
+            "logLevels": {
+                "info": "INFO",
+                "warning": "AVERTISSEMENT",
+                "error": "ERREUR"
+            }
+        },
+        "ollamaService": {
+            "title": "État du service Ollama",
+            "version": "Version Ollama",
+            "checkUpdate": "Vérifier les mises à jour",
+            "serviceStatus": "État du service",
+            "listeningAddress": "Adresse d'écoute",
+            "autoStart": "Démarrage automatique",
+            "quickActions": "Actions rapides",
+            "systemLoadOverview": "Aperçu de la charge système",
+            "runningModels": "Modèles en cours",
+            "totalModels": "Total des modèles",
+            "status": {
+                "checking": "Vérification...",
+                "running": "En cours",
+                "stopped": "Arrêté"
+            },
+            "unknown": "Inconnu",
+            "errors": {
+                "connectionFailed": "Échec de connexion",
+                "serviceUnavailable": "Service indisponible",
+                "dataFetchFailed": "Échec de récupération des données"
+            },
+            "actions": {
+                "start": "Démarrer",
+                "stop": "Arrêter",
+                "restart": "Redémarrer",
+                "save": "Enregistrer",
+                "copied": "Copié",
+                "addressCopied": "Adresse du service copiée dans le presse-papiers",
+                "addressSaved": "Adresse d'écoute enregistrée",
+                "serviceStopped": "Service arrêté",
+                "serviceStoppedDesc": "Le service Ollama a été arrêté avec succès",
+                "serviceStarted": "Service démarré",
+                "serviceStartedDesc": "Le service Ollama a été démarré avec succès",
+                "serviceRestarted": "Service redémarré",
+                "restartFailed": "Échec du redémarrage",
+                "startFailed": "Échec du démarrage"
+            },
+            "quickActionLabels": {
+                "aiChat": "Chat IA",
+                "modelLibrary": "Bibliothèque de modèles",
+                "importGguf": "Importer un modèle GGUF"
+            }
+        },
+        "modelOverview": {
+            "title": "Aperçu des modèles",
+            "localModels": "Modèles locaux",
+            "viewAllModels": "Voir tous les modèles",
+            "runningModels": "Modèles en cours",
+            "noRunningModels": "Aucun modèle en cours",
+            "storageInfo": "Informations de stockage",
+            "storagePath": "Chemin de stockage",
+            "usedSpace": "Espace utilisé",
+            "totalModels": "Total des modèles",
+            "recentDownloads": "Téléchargements récents",
+            "noRecentDownloads": "Aucun téléchargement récent",
+            "status": {
+                "active": "Actif",
+                "idle": "Inactif"
+            },
+            "errors": {
+                "fetchFailed": "Échec de récupération des données de modèle",
+                "serviceUnavailable": "Service Ollama indisponible"
+            }
+        },
+        "activityLog": {
+            "title": "Journal d'activité",
+            "recentActivity": "Activité récente",
+            "viewAllActivities": "Voir toutes les activités",
+            "more": "de plus",
+            "noActivities": "Aucune activité enregistrée",
+            "confirmClear": "Êtes-vous sûr de vouloir effacer tous les enregistrements d'activité ?",
+            "timeAgo": {
+                "minutesAgo": "Il y a {{count}} minute",
+                "minutesAgo_plural": "Il y a {{count}} minutes",
+                "hoursAgo": "Il y a {{count}} heure",
+                "hoursAgo_plural": "Il y a {{count}} heures"
+            },
+            "status": {
+                "success": "succès",
+                "info": "info",
+                "warning": "avertissement",
+                "error": "erreur"
+            },
+            "messages": {
+                "modelLoaded": "Modèle {{name}} chargé avec succès",
+                "downloadStarted": "Téléchargement du modèle {{name}} commencé",
+                "serviceStarted": "Service Ollama démarré",
+                "newVersionAvailable": "Nouvelle version Ollama {{version}} disponible",
+                "memoryUsageHigh": "L'utilisation mémoire a atteint {{percent}}%"
+            }
+        }
+    }
+}

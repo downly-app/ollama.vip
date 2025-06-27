@@ -1,0 +1,433 @@
+{
+  "app": {
+    "title": "Ollama Web Client",
+    "description": "Professional Ollama Web Interface"
+  },
+  "navigation": {
+    "general": "General",
+    "chat": "Chat",
+    "models": "Models",
+    "onlineModels": "Online Models",
+    "localModels": "Local Models",
+    "settings": "Settings",
+    "profile": "Profile"
+  },
+  "chat": {
+    "title": "Chat",
+    "newConversation": "New Conversation",
+    "searchConversations": "Search conversations...",
+    "noConversations": "No conversations yet",
+    "createFirstConversation": "Create your first conversation",
+    "typeMessage": "Type a message...",
+    "inputTip": "Type your message here...",
+    "characters": "characters",
+    "recording": "Recording...",
+    "send": "Send",
+    "resend": "Resend",
+    "editMessage": "Edit message",
+    "deleteMessage": "Delete message",
+    "copyMessage": "Copy message",
+    "messageCount": "{{count}} messages",
+    "messageCount_plural": "{{count}} messages",
+    "selectModel": "Select Model",
+    "apiSettings": "API Settings",
+    "needApiKey": "API Key Required",
+    "needApiKeyDescription": "Please configure your API Key in settings to use chat functionality.",
+    "goToSettings": "Go to Settings",
+    "conversationDeleted": "Conversation deleted",
+    "messageCopied": "Message copied to clipboard",
+    "messageEdited": "Message edited",
+    "messageDeleted": "Message deleted",
+    "startNewConversation": "Start a new conversation",
+    "sendMessageToStart": "Send a message to start the conversation",
+    "selectConversation": "Select a conversation",
+    "selectConversationDescription": "Select a conversation from the left to start chatting, or create a new one",
+    "apiKeyRequired": "API Key Required",
+    "apiKeyRequiredDescription": "Please configure your API key before starting a conversation.",
+    "typing": "AI is typing...",
+    "modelConfigRequired": "Model Configuration Required",
+    "modelConfigRequiredDescription": "Please configure API key or download local models",
+    "localModelNotAvailable": "Local model not available, please download models or select another model",
+    "configureApiKey": "Please configure API key or download local models",
+    "noModelsConfigured": "Please download local models or configure API key",
+    "noAvailableModels": "No available models",
+    "noModelsAvailable": "No models available",
+    "configureModels": "Configure Models",
+    "modelSelectorFooter": "Local models are prioritized",
+    "noMatchingConversations": "No matching conversations found"
+  },
+  "models": {
+    "title": "Model Management",
+    "searchModels": "Search models...",
+    "noModels": "No models found",
+    "download": "Download",
+    "install": "Install",
+    "installNow": "Install Now",
+    "delete": "Delete",
+    "select": "Select",
+    "selected": "Selected",
+    "downloading": "Downloading...",
+    "installing": "Installing...",
+    "modelName": "Model Name",
+    "description": "Description",
+    "type": "Type",
+    "size": "Size",
+    "tags": "Tags",
+    "downloads": "Downloads",
+    "updated": "Updated",
+    "actions": "Actions",
+    "filterByType": "Filter by Type",
+    "sortBy": "Sort by",
+    "popular": "Popular",
+    "newest": "Newest",
+    "embedding": "Embedding",
+    "vision": "Vision",
+    "tools": "Tools",
+    "thinking": "Thinking",
+    "downloadProgress": "Download Progress",
+    "downloadComplete": "Download Complete",
+    "downloadFailed": "Download Failed"
+  },
+  "localModels": {
+    "title": "Local Model Management",
+    "modelsCount": "{{count}} models",
+    "searchPlaceholder": "Search models...",
+    "downloadNewModel": "Download New Model",
+    "modelNamePlaceholder": "Enter model name (e.g., llama3.2:3b)",
+    "localModelsList": "Local Models List",
+    "loading": "Loading...",
+    "noModelsFound": "No matching models found",
+    "noLocalModels": "No local models",
+    "adjustSearchCriteria": "Try adjusting search criteria",
+    "useDownloadFunction": "Use the download function above to add models",
+    "size": "Size",
+    "parameters": "Parameters",
+    "modifiedTime": "Modified",
+    "details": "Details",
+    "modelInfo": "Model Information",
+    "viewDetailedInfo": "View detailed model information and configuration",
+    "basicInfo": "Basic Information",
+    "family": "Family",
+    "format": "Format",
+    "quantization": "Quantization",
+    "capabilities": "Capabilities",
+    "architectureInfo": "Architecture Information",
+    "parameterConfig": "Parameter Configuration",
+    "promptTemplate": "Prompt Template",
+    "modelfile": "Modelfile",
+    "failedToGetModelInfo": "Cannot get model information",
+    "confirmDeleteModel": "Confirm Delete Model",
+    "deleteConfirmation": "Are you sure you want to delete model {{modelName}}? This action cannot be undone and will free up {{size}} of storage space.",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "deleteSuccess": "Delete Successful",
+    "deleteSuccessMessage": "Model {{modelName}} has been successfully deleted",
+    "deleteFailed": "Delete Failed",
+    "deleteFailedMessage": "Unable to delete model {{modelName}}",
+    "fetchFailed": "Failed to fetch models",
+    "fetchFailedMessage": "Unable to get local model list, please check if Ollama service is running",
+    "getInfoFailed": "Failed to get information",
+    "getInfoFailedMessage": "Unable to get detailed information for model {{modelName}}",
+    "enterModelName": "Please enter model name",
+    "enterModelNameMessage": "Please enter the name of the model to download"
+  },
+  "settings": {
+    "title": "Settings",
+    "aiModelSettings": "AI Model Settings",
+    "currentModel": "Current Model",
+    "theme": "Theme",
+    "provider": "Provider",
+    "model": "Model",
+    "apiKey": "API Key",
+    "temperature": "Temperature",
+    "enterApiKey": "Enter API Key",
+    "enterTemperature": "Enter temperature (0.0 - 2.0)",
+    "saveSettings": "Save Settings",
+    "settingsSaved": "Settings saved successfully",
+    "languageSettings": "Language Settings",
+    "selectLanguage": "Select Language",
+    "temperatureError": "Temperature must be between 0 and 2",
+    "temperatureInvalid": "Please enter a valid number",
+    "temperatureRange": "Temperature must be between 0 and 2",
+    "themes": {
+      "midnight": "Midnight Blue",
+      "rose": "Rose Purple",
+      "starlight": "Starlight Purple",
+      "sunset": "Sunset Orange",
+      "ocean": "Ocean Blue",
+      "forest": "Forest Green"
+    },
+    "languages": {
+      "en": "English",
+      "zh": "中文",
+      "ja": "日本語",
+      "ko": "한국어",
+      "fr": "Français"
+    },
+    "selectProvider": "Provider",
+    "selectProviderPlaceholder": "Please select an AI provider",
+    "configured": "Configured",
+    "notConfigured": "Not Configured",
+    "visitWebsite": "Visit Website",
+    "defaultUrl": "Default URL",
+    "providers": {
+      "openai": {
+        "description": "OpenAI is a leading AI research company that develops advanced large language models including GPT and o-series, excelling in natural language processing and reasoning capabilities."
+      },
+      "anthropic": {
+        "description": "Anthropic focuses on AI safety research and develops Claude series models that excel in conversational understanding, reasoning, and safety, with support for long-context processing."
+      },
+      "deepseek": {
+        "description": "DeepSeek is a leading Chinese AI company specializing in high-performance large language models with strong capabilities in reasoning, programming, and multilingual processing."
+      },
+      "google": {
+        "description": "Google's Gemini series models integrate advanced multimodal capabilities, excelling in text, image, and code understanding across various application scenarios."
+      },
+      "meta": {
+        "description": "Meta's Llama series represents leading open-source large language models, excelling in natural language understanding, code generation, and multilingual support."
+      },
+      "xai": {
+        "description": "xAI, founded by Elon Musk, develops Grok models with unique personality and real-time information processing capabilities."
+      },
+      "alibaba": {
+        "description": "Alibaba's Qwen series models demonstrate significant advantages in Chinese language understanding, multimodal processing, and enterprise applications."
+      }
+    }
+  },
+  "auth": {
+    "login": "Login",
+    "register": "Register",
+    "email": "Email",
+    "password": "Password",
+    "username": "Username",
+    "logout": "Logout",
+    "profile": "Profile"
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "copy": "Copy",
+    "search": "Search",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "confirm": "Confirm",
+    "close": "Close",
+    "settings": "Settings",
+    "language": "Language",
+    "refresh": "Refresh"
+  },
+  "general": {
+    "title": "Dashboard",
+    "welcome": "Welcome to Ollama Pro",
+    "ollamaStatus": "Ollama Service Status",
+    "modelOverview": "Model Overview",
+    "systemResources": "System Resources",
+    "activityLog": "Activity Log",
+    "totalModels": "Total Models",
+    "activeModel": "Active Model",
+    "storageUsed": "Storage Used",
+    "memoryUsage": "Memory Usage",
+    "cpuUsage": "CPU Usage",
+    "diskUsage": "Disk Usage"
+  },
+  "dashboard": {
+    "systemResources": {
+      "title": "System Resource Monitoring",
+      "overview": "System Overview",
+      "resources": {
+        "cpu": "CPU",
+        "gpu": "GPU",
+        "memory": "Memory",
+        "disk": "Disk"
+      },
+      "usageUnavailable": "Usage unavailable",
+      "refreshSuccess": "System resource monitoring refreshed successfully - CPU: {cpu}%, Memory: {memory}%",
+      "errors": {
+        "fetchFailed": "Failed to fetch system resources",
+        "unavailable": "Data unavailable"
+      },
+      "activities": {
+        "resourcesUpdated": "System resource data updated"
+      }
+    },
+    "ollamaService": {
+      "title": "Ollama Service Status",
+      "version": "Ollama Version",
+      "checkUpdate": "Check Update",
+      "serviceStatus": "Service Status",
+      "listeningAddress": "Listening Address",
+      "autoStart": "Auto Start",
+      "quickActions": "Quick Actions",
+      "systemLoadOverview": "System Load Overview",
+      "runningModels": "Running Models",
+      "totalModels": "Total Models",
+      "status": {
+        "checking": "Checking...",
+        "running": "Running",
+        "stopped": "Stopped"
+      },
+      "errors": {
+        "connectionFailed": "Connection failed",
+        "serviceUnavailable": "Service unavailable",
+        "dataFetchFailed": "Failed to fetch data"
+      },
+      "unknown": "Unknown",
+      "actions": {
+        "copied": "Copied",
+        "addressCopied": "Service address copied to clipboard",
+        "save": "Save",
+        "addressSaved": "Listening address saved",
+        "serviceStopped": "Service stopped",
+        "serviceStoppedDesc": "Ollama service has been successfully stopped",
+        "serviceStarted": "Service started",
+        "serviceStartedDesc": "Ollama service has been successfully started",
+        "restart": "Restart",
+        "serviceRestarted": "Service restarted",
+        "start": "Start",
+        "stop": "Stop",
+        "restartFailed": "Restart Failed",
+        "startFailed": "Start Failed"
+      },
+      "quickActionLabels": {
+        "aiChat": "AI Chat",
+        "modelLibrary": "Model Library",
+        "importGguf": "Import GGUF Model"
+      }
+    },
+    "modelOverview": {
+      "title": "Model Overview",
+      "localModels": "Local Models",
+      "viewAllModels": "View All Models",
+      "runningModels": "Running Models",
+      "noRunningModels": "No models running",
+      "storageInfo": "Storage Info",
+      "storagePath": "Storage Path",
+      "usedSpace": "Used Space",
+      "totalModels": "Total Models",
+      "recentDownloads": "Recent Downloads",
+      "noRecentDownloads": "No recent downloads",
+      "status": {
+        "active": "Active",
+        "idle": "Idle"
+      },
+      "errors": {
+        "fetchFailed": "Failed to fetch model data",
+        "serviceUnavailable": "Ollama service unavailable"
+      }
+    },
+    "activityLog": {
+      "title": "Activity Log",
+      "recentActivity": "Recent Activity",
+      "viewAllActivities": "View All Activities",
+      "more": "more",
+      "noActivities": "No activities recorded",
+      "confirmClear": "Are you sure you want to clear all activity records?",
+      "timeAgo": {
+        "minutesAgo": "{{count}} minute ago",
+        "minutesAgo_plural": "{{count}} minutes ago",
+        "hoursAgo": "{{count}} hour ago",
+        "hoursAgo_plural": "{{count}} hours ago"
+      },
+      "status": {
+        "success": "success",
+        "info": "info",
+        "warning": "warning",
+        "error": "error"
+      },
+      "messages": {
+        "modelLoaded": "Model {{name}} loaded successfully",
+        "downloadStarted": "Started downloading model {{name}}",
+        "serviceStarted": "Ollama service started",
+        "newVersionAvailable": "New version Ollama {{version}} available",
+        "memoryUsageHigh": "Memory usage reached {{percent}}%"
+      }
+    },
+    "systemResources": {
+      "title": "System Resource Monitoring",
+      "overview": "System Overview",
+      "usageUnavailable": "Usage data unavailable",
+      "refreshSuccess": "Resource data refreshed successfully",
+      "metrics": {
+        "cpu": "CPU Usage",
+        "gpu": "GPU Usage",
+        "memory": "Memory Usage",
+        "disk": "Disk Usage"
+      },
+      "recentLogs": {
+        "title": "Recent Logs",
+        "viewAll": "View All Logs"
+      },
+      "resources": {
+        "cpu": "CPU",
+        "gpu": "GPU",
+        "memory": "Memory",
+        "disk": "Disk"
+      },
+      "errors": {
+        "fetchFailed": "Failed to fetch system resources",
+        "unavailable": "System resources unavailable"
+      },
+      "activities": {
+        "resourcesUpdated": "System resources updated"
+      },
+      "logLevels": {
+        "info": "INFO",
+        "warning": "WARNING",
+        "error": "ERROR"
+      }
+    }
+  },
+  "profile": {
+    "title": "Profile",
+    "username": "Username",
+    "email": "Email",
+    "avatar": "Avatar",
+    "preferences": "Preferences",
+    "account": "Account",
+    "privacy": "Privacy",
+    "notifications": "Notifications"
+  },
+  "errors": {
+    "networkError": "Network error occurred",
+    "apiError": "API error occurred",
+    "invalidApiKey": "Invalid API Key",
+    "modelNotFound": "Model not found",
+    "downloadFailed": "Download failed",
+    "uploadFailed": "Upload failed",
+    "fileNotSupported": "File type not supported",
+    "fileTooLarge": "File too large",
+    "unknownError": "Unknown error occurred"
+  },
+  "tooltips": {
+    "refresh": "Refresh",
+    "minimize": "Minimize",
+    "maximize": "Maximize",
+    "close": "Close",
+    "openFolder": "Open Folder",
+    "copyPath": "Copy Path",
+    "viewDetails": "View Details"
+  },
+  "pages": {
+    "general": "General",
+    "models": "Models",
+    "localModels": "Local Models",
+    "notFound": {
+      "title": "404",
+      "message": "Oops! Page not found",
+      "returnHome": "Return to Home"
+    }
+  },
+  "time": {
+    "justNow": "Just now",
+    "minutesAgo": "{{count}} minute ago",
+    "minutesAgo_plural": "{{count}} minutes ago",
+    "hoursAgo": "{{count}} hour ago",
+    "hoursAgo_plural": "{{count}} hours ago",
+    "daysAgo": "{{count}} day ago",
+    "daysAgo_plural": "{{count}} days ago",
+    "longTimeAgo": "Long time ago"
+  }
+}

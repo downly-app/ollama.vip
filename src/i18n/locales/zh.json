@@ -1,0 +1,414 @@
+{
+  "app": {
+    "title": "Ollama Web 客户端",
+    "description": "专业的 Ollama Web 界面"
+  },
+  "navigation": {
+    "general": "概览",
+    "chat": "聊天",
+    "models": "模型",
+    "onlineModels": "在线模型",
+    "localModels": "本地模型",
+    "settings": "设置",
+    "profile": "个人资料"
+  },
+  "chat": {
+    "title": "聊天",
+    "newConversation": "新建对话",
+    "searchConversations": "搜索对话...",
+    "noConversations": "暂无对话",
+    "createFirstConversation": "创建您的第一个对话",
+    "typeMessage": "输入消息...",
+    "send": "发送",
+    "resend": "重新发送",
+    "editMessage": "编辑消息",
+    "deleteMessage": "删除消息",
+    "copyMessage": "复制消息",
+    "messageCount": "{{count}} 条消息",
+    "messageCount_plural": "{{count}}条消息",
+    "selectModel": "选择模型",
+    "apiSettings": "API设置",
+    "needApiKey": "需要配置API Key",
+    "needApiKeyDescription": "请先在设置中配置您的API Key才能使用聊天功能。",
+    "goToSettings": "去设置",
+    "conversationDeleted": "对话已删除",
+    "messageCopied": "消息已复制到剪贴板",
+    "messageEdited": "消息已编辑",
+    "messageDeleted": "消息已删除",
+    "startNewConversation": "开始新对话",
+    "sendMessageToStart": "发送消息开始对话",
+    "selectConversation": "选择对话",
+    "selectConversationDescription": "从左侧选择一个对话开始聊天，或创建新对话",
+    "apiKeyRequired": "需要API密钥",
+    "apiKeyRequiredDescription": "请先配置API密钥才能开始对话。",
+    "typing": "正在输入...",
+    "modelConfigRequired": "模型配置必需",
+    "modelConfigRequiredDescription": "请配置API密钥或下载本地模型",
+    "localModelNotAvailable": "本地模型不可用，请下载模型或选择其他模型",
+    "configureApiKey": "请配置API密钥或下载本地模型",
+    "noModelsConfigured": "请下载本地模型或配置API密钥",
+    "noAvailableModels": "没有可用的模型",
+    "noModelsAvailable": "没有可用的模型",
+    "configureModels": "配置模型",
+    "modelSelectorFooter": "本地模型优先显示",
+    "noMatchingConversations": "未找到匹配的对话",
+    "inputTip": "按 Enter 发送，Shift+Enter 换行",
+    "characters": "字符",
+    "recording": "正在录音..."
+  },
+  "models": {
+    "title": "模型管理",
+    "searchModels": "搜索模型...",
+    "noModels": "未找到模型",
+    "download": "下载",
+    "install": "安装",
+    "installNow": "立即安装",
+    "delete": "删除",
+    "select": "选择",
+    "selected": "已选择",
+    "downloading": "下载中...",
+    "installing": "安装中...",
+    "modelName": "模型名称",
+    "description": "描述",
+    "type": "类型",
+    "size": "大小",
+    "tags": "标签",
+    "downloads": "下载量",
+    "updated": "更新时间",
+    "actions": "操作",
+    "filterByType": "按类型筛选",
+    "sortBy": "排序方式",
+    "popular": "热门",
+    "newest": "最新",
+    "embedding": "嵌入",
+    "vision": "视觉",
+    "tools": "工具",
+    "thinking": "思考",
+    "downloadProgress": "下载进度",
+    "downloadComplete": "下载完成",
+    "downloadFailed": "下载失败"
+  },
+  "localModels": {
+    "title": "本地模型管理",
+    "modelsCount": "{{count}} 个模型",
+    "searchPlaceholder": "搜索模型...",
+    "downloadNewModel": "下载新模型",
+    "modelNamePlaceholder": "输入模型名称 (例如: llama3.2:3b)",
+    "localModelsList": "本地模型列表",
+    "loading": "加载中...",
+    "noModelsFound": "未找到匹配的模型",
+    "noLocalModels": "暂无本地模型",
+    "adjustSearchCriteria": "尝试调整搜索条件",
+    "useDownloadFunction": "使用上方的下载功能添加模型",
+    "size": "大小",
+    "parameters": "参数",
+    "modifiedTime": "修改时间",
+    "details": "详情",
+    "modelInfo": "模型信息",
+    "viewDetailedInfo": "查看模型的详细信息和配置",
+    "basicInfo": "基本信息",
+    "family": "家族",
+    "format": "格式",
+    "quantization": "量化",
+    "capabilities": "能力",
+    "architectureInfo": "架构信息",
+    "parameterConfig": "参数配置",
+    "promptTemplate": "提示模板",
+    "modelfile": "Modelfile",
+    "failedToGetModelInfo": "无法获取模型信息",
+    "confirmDeleteModel": "确认删除模型",
+    "deleteConfirmation": "您确定要删除模型 {{modelName}} 吗？此操作不可撤销，将释放 {{size}} 的存储空间。",
+    "cancel": "取消",
+    "delete": "删除",
+    "deleteSuccess": "删除成功",
+    "deleteSuccessMessage": "模型 {{modelName}} 已成功删除",
+    "deleteFailed": "删除失败",
+    "deleteFailedMessage": "无法删除模型 {{modelName}}",
+    "fetchFailed": "获取模型失败",
+    "fetchFailedMessage": "无法获取本地模型列表，请检查Ollama服务是否运行",
+    "getInfoFailed": "获取信息失败",
+    "getInfoFailedMessage": "无法获取模型 {{modelName}} 的详细信息",
+    "enterModelName": "请输入模型名称",
+    "enterModelNameMessage": "请输入要下载的模型名称"
+  },
+  "settings": {
+    "title": "设置",
+    "aiModelSettings": "AI 模型设置",
+    "currentModel": "当前模型",
+    "theme": "主题",
+    "provider": "提供商",
+    "model": "模型",
+    "apiKey": "API Key",
+    "temperature": "温度",
+    "enterApiKey": "输入API密钥",
+    "enterTemperature": "输入温度值 (0.0 - 2.0)",
+    "saveSettings": "保存设置",
+    "settingsSaved": "设置保存成功",
+    "languageSettings": "语言设置",
+    "selectLanguage": "选择语言",
+    "temperatureError": "温度值必须在 0 到 2 之间",
+    "temperatureInvalid": "请输入有效的数字",
+    "temperatureRange": "温度值必须在 0 到 2 之间",
+    "themes": {
+      "midnight": "午夜深蓝",
+      "rose": "玫瑰紫霞",
+      "starlight": "星空紫影",
+      "sunset": "日落橙光",
+      "ocean": "海洋蓝调",
+      "forest": "森林绿意"
+    },
+    "languages": {
+      "en": "English",
+      "zh": "中文",
+      "ja": "日本語",
+      "ko": "한국어",
+      "fr": "Français"
+    },
+    "selectProvider": "提供商",
+    "selectProviderPlaceholder": "请选择AI提供商",
+    "configured": "已配置",
+    "notConfigured": "未配置",
+    "visitWebsite": "访问官网",
+    "defaultUrl": "默认地址",
+    "providers": {
+      "openai": {
+        "description": "OpenAI 是领先的AI研究公司，开发了包括GPT和o系列在内的先进大语言模型，在自然语言处理和推理能力方面表现卓越。"
+      },
+      "anthropic": {
+        "description": "Anthropic 专注于AI安全研究，开发的Claude系列模型在对话理解、推理和安全性方面表现出色，支持长上下文处理。"
+      },
+      "deepseek": {
+        "description": "DeepSeek 是中国领先的AI公司，专注于高性能大语言模型，在推理、编程和多语言处理方面具有强大能力。"
+      },
+      "google": {
+        "description": "Google的Gemini系列模型集成了先进的多模态能力，在文本、图像和代码理解等各种应用场景中表现出色。"
+      },
+      "meta": {
+        "description": "Meta的Llama系列代表了领先的开源大语言模型，在自然语言理解、代码生成和多语言支持方面表现卓越。"
+      },
+      "xai": {
+        "description": "xAI由埃隆·马斯克创立，开发具有独特个性和实时信息处理能力的Grok模型。"
+      },
+      "alibaba": {
+        "description": "阿里巴巴的通义千问系列模型在中文语言理解、多模态处理和企业应用方面展现出显著优势。"
+      }
+    }
+  },
+  "auth": {
+    "login": "登录",
+    "register": "注册",
+    "email": "邮箱",
+    "password": "密码",
+    "username": "用户名",
+    "logout": "登出",
+    "profile": "个人资料"
+  },
+  "common": {
+    "save": "保存",
+    "cancel": "取消",
+    "delete": "删除",
+    "edit": "编辑",
+    "copy": "复制",
+    "search": "搜索",
+    "loading": "加载中...",
+    "error": "错误",
+    "success": "成功",
+    "confirm": "确认",
+    "close": "关闭",
+    "settings": "设置",
+    "language": "语言",
+    "refresh": "刷新"
+  },
+  "general": {
+    "title": "仪表板",
+    "welcome": "欢迎使用 Ollama Pro",
+    "ollamaStatus": "Ollama 服务状态",
+    "modelOverview": "模型概览",
+    "systemResources": "系统资源",
+    "activityLog": "活动日志",
+    "totalModels": "模型总数",
+    "activeModel": "活跃模型",
+    "storageUsed": "存储使用",
+    "memoryUsage": "内存使用",
+    "cpuUsage": "CPU使用",
+    "diskUsage": "磁盘使用"
+  },
+  "dashboard": {
+    "systemResources": {
+      "title": "系统资源监控",
+      "overview": "系统概览",
+      "resources": {
+        "cpu": "CPU",
+        "gpu": "GPU",
+        "memory": "内存",
+        "disk": "磁盘"
+      },
+      "usageUnavailable": "使用率不可用",
+      "refreshSuccess": "系统资源监控刷新成功 - CPU: {{cpu}}%, 内存: {{memory}}%",
+      "errors": {
+        "fetchFailed": "获取系统资源失败",
+        "unavailable": "数据不可用"
+      },
+      "activities": {
+        "resourcesUpdated": "系统资源数据已更新"
+      },
+      "metrics": {
+        "cpu": "CPU使用率",
+        "gpu": "GPU使用率",
+        "memory": "内存使用率",
+        "disk": "磁盘使用率"
+      },
+      "recentLogs": {
+        "title": "最近日志",
+        "viewAll": "查看所有日志"
+      },
+      "logLevels": {
+        "info": "信息",
+        "warning": "警告",
+        "error": "错误"
+      }
+    },
+    "ollamaService": {
+      "title": "Ollama 服务状态",
+      "version": "Ollama 版本",
+      "checkUpdate": "检查更新",
+      "serviceStatus": "服务状态",
+      "listeningAddress": "监听地址",
+      "autoStart": "自动启动",
+      "quickActions": "快捷操作",
+      "systemLoadOverview": "系统负载概览",
+      "runningModels": "运行中的模型",
+      "totalModels": "模型总数",
+      "status": {
+        "checking": "检查中...",
+        "running": "运行中",
+        "stopped": "已停止"
+      },
+      "errors": {
+        "connectionFailed": "连接失败",
+        "serviceUnavailable": "服务不可用",
+        "dataFetchFailed": "数据获取失败"
+      },
+      "unknown": "未知",
+      "actions": {
+        "copied": "已复制",
+        "addressCopied": "服务地址已复制到剪贴板",
+        "save": "保存",
+        "addressSaved": "监听地址已保存",
+        "serviceStopped": "服务已停止",
+        "serviceStoppedDesc": "Ollama 服务已成功停止",
+        "serviceStarted": "服务已启动",
+        "serviceStartedDesc": "Ollama 服务已成功启动",
+        "restart": "重启",
+        "serviceRestarted": "服务已重启",
+        "start": "启动",
+        "stop": "停止",
+        "restartFailed": "重启失败",
+        "startFailed": "启动失败"
+      },
+      "quickActionLabels": {
+        "aiChat": "AI 聊天",
+        "modelLibrary": "模型库",
+        "importGguf": "导入 GGUF 模型"
+      }
+    },
+    "modelOverview": {
+      "title": "模型概览",
+      "localModels": "本地模型",
+      "viewAllModels": "查看所有模型",
+      "runningModels": "运行中的模型",
+      "noRunningModels": "没有运行中的模型",
+      "storageInfo": "存储信息",
+      "storagePath": "存储路径",
+      "usedSpace": "已用空间",
+      "totalModels": "模型总数",
+      "recentDownloads": "最近下载",
+      "noRecentDownloads": "暂无最近下载",
+      "status": {
+        "active": "活跃",
+        "idle": "空闲"
+      },
+      "errors": {
+        "fetchFailed": "获取模型数据失败",
+        "serviceUnavailable": "Ollama 服务不可用"
+      }
+    },
+    "activityLog": {
+      "title": "活动日志",
+      "recentActivity": "最近活动",
+      "viewAllActivities": "查看所有活动",
+      "more": "更多",
+      "noActivities": "暂无活动记录",
+      "confirmClear": "确定要清除所有活动记录吗？",
+      "timeAgo": {
+        "minutesAgo": "{{count}}分钟前",
+        "minutesAgo_plural": "{{count}}分钟前",
+        "hoursAgo": "{{count}}小时前",
+        "hoursAgo_plural": "{{count}}小时前"
+      },
+      "status": {
+        "success": "成功",
+        "info": "信息",
+        "warning": "警告",
+        "error": "错误"
+      },
+      "messages": {
+        "modelLoaded": "模型 {{name}} 加载成功",
+        "downloadStarted": "开始下载模型 {{name}}",
+        "serviceStarted": "Ollama 服务已启动",
+        "newVersionAvailable": "新版本 Ollama {{version}} 可用",
+        "memoryUsageHigh": "内存使用率达到 {{percent}}%"
+      }
+    }
+  },
+  "profile": {
+    "title": "个人资料",
+    "username": "用户名",
+    "email": "邮箱",
+    "avatar": "头像",
+    "preferences": "偏好设置",
+    "account": "账户",
+    "privacy": "隐私",
+    "notifications": "通知"
+  },
+  "errors": {
+    "networkError": "网络错误",
+    "apiError": "API错误",
+    "invalidApiKey": "无效的API Key",
+    "modelNotFound": "模型未找到",
+    "downloadFailed": "下载失败",
+    "uploadFailed": "上传失败",
+    "fileNotSupported": "不支持的文件类型",
+    "fileTooLarge": "文件过大",
+    "unknownError": "未知错误"
+  },
+  "tooltips": {
+    "refresh": "刷新",
+    "minimize": "最小化",
+    "maximize": "最大化",
+    "close": "关闭",
+    "openFolder": "打开文件夹",
+    "copyPath": "复制路径",
+    "viewDetails": "查看详情"
+  },
+  "pages": {
+    "general": "概览",
+    "models": "模型",
+    "localModels": "本地模型",
+    "notFound": {
+      "title": "404",
+      "message": "哎呀！页面未找到",
+      "returnHome": "返回首页"
+    }
+  },
+  "time": {
+    "justNow": "刚刚",
+    "minutesAgo": "{{count}}分钟前",
+    "minutesAgo_plural": "{{count}}分钟前",
+    "hoursAgo": "{{count}}小时前",
+    "hoursAgo_plural": "{{count}}小时前",
+    "daysAgo": "{{count}}天前",
+    "daysAgo_plural": "{{count}}天前",
+    "longTimeAgo": "很久以前"
+  }
+}

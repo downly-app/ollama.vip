@@ -1,0 +1,420 @@
+{
+    "auth": {
+        "login": "ログイン",
+        "register": "登録",
+        "email": "メール",
+        "password": "パスワード",
+        "username": "ユーザー名",
+        "logout": "ログアウト",
+        "profile": "プロフィール"
+    },
+    "common": {
+        "save": "保存",
+        "cancel": "キャンセル",
+        "delete": "削除",
+        "edit": "編集",
+        "copy": "コピー",
+        "search": "検索",
+        "loading": "読み込み中...",
+        "error": "エラー",
+        "success": "成功",
+        "confirm": "確認",
+        "close": "閉じる",
+        "settings": "設定",
+        "language": "言語",
+        "refresh": "更新"
+    },
+    "app": {
+        "title": "Ollama Webクライアント",
+        "description": "プロフェッショナルOllama Webインターフェース"
+    },
+    "navigation": {
+        "general": "一般",
+        "chat": "チャット",
+        "models": "モデル",
+        "profile": "プロフィール",
+        "onlineModels": "オンラインモデル",
+        "localModels": "ローカルモデル",
+        "settings": "設定"
+    },
+    "chat": {
+        "title": "チャット",
+        "newConversation": "新しい会話",
+        "searchConversations": "会話を検索...",
+        "noConversations": "会話がありません",
+        "createFirstConversation": "最初の会話を作成",
+        "typeMessage": "メッセージを入力...",
+        "inputTip": "ここにメッセージを入力してください...",
+        "characters": "文字",
+        "recording": "録音中...",
+        "send": "送信",
+        "resend": "再送信",
+        "editMessage": "メッセージを編集",
+        "deleteMessage": "メッセージを削除",
+        "copyMessage": "メッセージをコピー",
+        "messageCount": "{{count}} 件のメッセージ",
+        "selectModel": "モデルを選択",
+        "apiSettings": "API設定",
+        "needApiKey": "APIキーが必要",
+        "needApiKeyDescription": "チャット機能を使用するには、設定でAPIキーを設定してください。",
+        "goToSettings": "設定へ",
+        "conversationDeleted": "会話が削除されました",
+        "messageCopied": "メッセージがクリップボードにコピーされました",
+        "messageEdited": "メッセージが編集されました",
+        "messageDeleted": "メッセージが削除されました",
+        "selectConversation": "会話を選択",
+        "selectConversationDescription": "左側から会話を選択してチャットを開始するか、新しい会話を作成してください",
+        "modelConfigRequired": "モデル設定が必要",
+        "modelConfigRequiredDescription": "APIキーを設定するかローカルモデルをダウンロードしてください",
+        "messageCount_plural": "{{count}}件のメッセージ",
+        "startNewConversation": "新しい会話を開始",
+        "sendMessageToStart": "メッセージを送信して会話を開始",
+        "apiKeyRequired": "APIキーが必要",
+        "apiKeyRequiredDescription": "会話を開始する前にAPIキーを設定してください。",
+        "typing": "AIが入力中...",
+        "localModelNotAvailable": "ローカルモデルが利用できません。モデルをダウンロードするか別のモデルを選択してください",
+        "configureApiKey": "APIキーを設定するかローカルモデルをダウンロードしてください",
+        "noModelsConfigured": "ローカルモデルをダウンロードするかAPIキーを設定してください",
+        "noAvailableModels": "利用可能なモデルがありません",
+        "noModelsAvailable": "利用可能なモデルがありません",
+        "configureModels": "モデルを設定",
+        "modelSelectorFooter": "ローカルモデルが優先表示されます",
+        "noMatchingConversations": "一致する会話が見つかりません"
+    },
+    "models": {
+        "title": "モデル管理",
+        "searchModels": "モデルを検索...",
+        "noModels": "モデルが見つかりません",
+        "download": "ダウンロード",
+        "install": "インストール",
+        "installNow": "今すぐインストール",
+        "delete": "削除",
+        "select": "選択",
+        "selected": "選択済み",
+        "downloading": "ダウンロード中...",
+        "installing": "インストール中...",
+        "modelName": "モデル名",
+        "description": "説明",
+        "type": "タイプ",
+        "size": "サイズ",
+        "tags": "タグ",
+        "downloads": "ダウンロード数",
+        "updated": "更新日",
+        "actions": "アクション",
+        "filterByType": "タイプで絞り込み",
+        "sortBy": "並び順",
+        "popular": "人気",
+        "newest": "最新",
+        "embedding": "埋め込み",
+        "vision": "ビジョン",
+        "tools": "ツール",
+        "thinking": "思考",
+        "downloadProgress": "ダウンロード進行状況",
+        "downloadComplete": "ダウンロード完了",
+        "downloadFailed": "ダウンロード失敗"
+    },
+    "localModels": {
+        "title": "ローカルモデル管理",
+        "modelsCount": "{{count}} モデル",
+        "searchPlaceholder": "モデルを検索...",
+        "downloadNewModel": "新しいモデルをダウンロード",
+        "modelNamePlaceholder": "モデル名を入力 (例: llama3.2:3b)",
+        "localModelsList": "ローカルモデルリスト",
+        "loading": "読み込み中...",
+        "noModelsFound": "一致するモデルが見つかりません",
+        "noLocalModels": "ローカルモデルがありません",
+        "adjustSearchCriteria": "検索条件を調整してください",
+        "useDownloadFunction": "上記のダウンロード機能を使用してモデルを追加",
+        "size": "サイズ",
+        "parameters": "パラメータ",
+        "modifiedTime": "更新日時",
+        "details": "詳細",
+        "modelInfo": "モデル情報",
+        "viewDetailedInfo": "モデルの詳細情報と設定を表示",
+        "basicInfo": "基本情報",
+        "family": "ファミリー",
+        "format": "フォーマット",
+        "quantization": "量子化",
+        "capabilities": "機能",
+        "architectureInfo": "アーキテクチャ情報",
+        "parameterConfig": "パラメータ設定",
+        "promptTemplate": "プロンプトテンプレート",
+        "modelfile": "Modelfile",
+        "failedToGetModelInfo": "モデル情報を取得できません",
+        "confirmDeleteModel": "モデル削除の確認",
+        "deleteConfirmation": "モデル {{modelName}} を削除してもよろしいですか？この操作は元に戻せず、{{size}} のストレージ容量が解放されます。",
+        "cancel": "キャンセル",
+        "delete": "削除",
+        "deleteSuccess": "削除成功",
+        "deleteSuccessMessage": "モデル {{modelName}} が正常に削除されました",
+        "deleteFailed": "削除失敗",
+        "deleteFailedMessage": "モデル {{modelName}} を削除できません",
+        "fetchFailed": "モデル取得失敗",
+        "fetchFailedMessage": "ローカルモデルリストを取得できません。Ollamaサービスが実行されているか確認してください",
+        "getInfoFailed": "情報取得失敗",
+        "getInfoFailedMessage": "モデル {{modelName}} の詳細情報を取得できません",
+        "enterModelName": "モデル名を入力してください",
+        "enterModelNameMessage": "ダウンロードするモデル名を入力してください"
+    },
+    "settings": {
+        "title": "設定",
+        "aiModelSettings": "AIモデル設定",
+        "currentModel": "現在のモデル",
+        "theme": "テーマ",
+        "provider": "プロバイダー",
+        "model": "モデル",
+        "apiKey": "APIキー",
+        "temperature": "温度",
+        "enterApiKey": "APIキーを入力",
+        "enterTemperature": "温度を入力 (0.0 - 2.0)",
+        "saveSettings": "設定を保存",
+        "settingsSaved": "設定が保存されました",
+        "languageSettings": "言語設定",
+        "selectLanguage": "言語を選択",
+        "temperatureError": "温度は0から2の間である必要があります",
+        "temperatureInvalid": "有効な数値を入力してください",
+        "temperatureRange": "温度は0から2の間である必要があります",
+        "themes": {
+            "midnight": "ミッドナイトブルー",
+            "rose": "ローズパープル",
+            "starlight": "スターライトパープル",
+            "sunset": "サンセットオレンジ",
+            "ocean": "オーシャンブルー",
+            "forest": "フォレストグリーン"
+        },
+        "languages": {
+            "en": "English",
+            "zh": "中文",
+            "ja": "日本語",
+            "ko": "한국어",
+            "fr": "Français"
+        },
+        "selectProvider": "プロバイダー",
+        "selectProviderPlaceholder": "AIプロバイダーを選択してください",
+        "configured": "設定済み",
+        "notConfigured": "未設定",
+        "visitWebsite": "ウェブサイトを訪問",
+        "defaultUrl": "デフォルトURL",
+        "providers": {
+            "openai": {
+                "description": "OpenAIは、様々な自然言語処理タスクのためのGPT-4などの高度なAIモデルを提供しています。"
+            },
+            "anthropic": {
+                "description": "Anthropicは、Claudeモデルシリーズを含む安全で有益なAIシステムを開発しています。"
+            },
+            "deepseek": {
+                "description": "DeepSeekは、コーディングと一般的なタスクのための高性能AIモデルを提供しています。"
+            },
+            "google": {
+                "description": "Googleは、様々なアプリケーション向けのGeminiなどの高度なAIモデルを提供しています。"
+            },
+            "meta": {
+                "description": "Metaは、研究と商用アプリケーション向けのLlamaなどのオープンソースAIモデルを開発しています。"
+            },
+            "xai": {
+                "description": "xAIは、Grokモデルを含む宇宙を理解するためのAIシステムを開発しています。"
+            },
+            "alibaba": {
+                "description": "Alibabaは、Qwenシリーズを含む様々なアプリケーション向けの高性能AIモデルを提供しています。"
+            }
+        }
+    },
+    "profile": {
+        "title": "プロフィール",
+        "username": "ユーザー名",
+        "email": "メール",
+        "avatar": "アバター",
+        "preferences": "設定",
+        "account": "アカウント",
+        "privacy": "プライバシー",
+        "notifications": "通知"
+    },
+    "errors": {
+        "networkError": "ネットワークエラーが発生しました",
+        "apiError": "APIエラーが発生しました",
+        "invalidApiKey": "無効なAPIキー",
+        "modelNotFound": "モデルが見つかりません",
+        "downloadFailed": "ダウンロードに失敗しました",
+        "uploadFailed": "アップロードに失敗しました",
+        "fileNotSupported": "サポートされていないファイル形式",
+        "fileTooLarge": "ファイルが大きすぎます",
+        "unknownError": "不明なエラーが発生しました"
+    },
+    "tooltips": {
+        "refresh": "更新",
+        "minimize": "最小化",
+        "maximize": "最大化",
+        "close": "閉じる",
+        "openFolder": "フォルダを開く",
+        "copyPath": "パスをコピー",
+        "viewDetails": "詳細を表示"
+    },
+    "pages": {
+        "general": "一般",
+        "models": "モデル管理",
+        "localModels": "ローカルモデル",
+        "notFound": {
+            "title": "404",
+            "message": "おっと！ページが見つかりません",
+            "returnHome": "ホームに戻る"
+        }
+    },
+    "time": {
+        "justNow": "たった今",
+        "minutesAgo": "{{count}}分前",
+        "minutesAgo_plural": "{{count}}分前",
+        "hoursAgo": "{{count}}時間前",
+        "hoursAgo_plural": "{{count}}時間前",
+        "daysAgo": "{{count}}日前",
+        "daysAgo_plural": "{{count}}日前",
+        "longTimeAgo": "ずっと前"
+    },
+    "general": {
+        "title": "ダッシュボード",
+        "welcome": "Ollama Proへようこそ",
+        "ollamaStatus": "Ollamaサービス状態",
+        "modelOverview": "モデル概要",
+        "systemResources": "システムリソース",
+        "activityLog": "アクティビティログ",
+        "totalModels": "総モデル数",
+        "activeModel": "アクティブモデル",
+        "storageUsed": "使用ストレージ",
+        "memoryUsage": "メモリ使用量",
+        "cpuUsage": "CPU使用量",
+        "diskUsage": "ディスク使用量"
+    },
+    "dashboard": {
+        "systemResources": {
+            "title": "システムリソース監視",
+            "overview": "システム概要",
+            "resources": {
+                "cpu": "CPU",
+                "gpu": "GPU",
+                "memory": "メモリ",
+                "disk": "ディスク"
+            },
+            "usageUnavailable": "使用率不明",
+            "refreshSuccess": "システムリソース監視の更新が成功しました - CPU: {{cpu}}%, メモリ: {{memory}}%",
+            "errors": {
+                "fetchFailed": "システムリソースの取得に失敗しました",
+                "unavailable": "データが利用できません"
+            },
+            "activities": {
+                "resourcesUpdated": "システムリソースデータが更新されました"
+            },
+            "metrics": {
+                "cpu": "CPU使用量",
+                "gpu": "GPU使用量",
+                "memory": "メモリ使用量",
+                "disk": "ディスク使用量"
+            },
+            "recentLogs": {
+                "title": "最近のログ",
+                "viewAll": "すべてのログを表示"
+            },
+            "logLevels": {
+                "info": "情報",
+                "warning": "警告",
+                "error": "エラー"
+            }
+        },
+        "ollamaService": {
+            "title": "Ollamaサービス状態",
+            "version": "Ollamaバージョン",
+            "checkUpdate": "更新確認",
+            "serviceStatus": "サービス状態",
+            "listeningAddress": "リスニングアドレス",
+            "autoStart": "自動開始",
+            "quickActions": "クイックアクション",
+            "systemLoadOverview": "システム負荷概要",
+            "runningModels": "実行中モデル",
+            "totalModels": "総モデル数",
+            "status": {
+                "checking": "確認中...",
+                "running": "実行中",
+                "stopped": "停止中"
+            },
+            "unknown": "不明",
+            "errors": {
+                "connectionFailed": "接続に失敗しました",
+                "serviceUnavailable": "サービスが利用できません",
+                "dataFetchFailed": "データの取得に失敗しました"
+            },
+            "actions": {
+                "start": "開始",
+                "stop": "停止",
+                "restart": "再起動",
+                "save": "保存",
+                "copied": "コピー済み",
+                "addressCopied": "サービスアドレスをクリップボードにコピーしました",
+                "addressSaved": "リスニングアドレスが保存されました",
+                "serviceStopped": "サービス停止",
+                "serviceStoppedDesc": "Ollamaサービスが正常に停止されました",
+                "serviceStarted": "サービス開始",
+                "serviceStartedDesc": "Ollamaサービスが正常に開始されました",
+                "serviceRestarted": "サービス再起動",
+                "restartFailed": "再起動に失敗しました",
+                "startFailed": "開始に失敗しました"
+            },
+            "quickActionLabels": {
+                "aiChat": "AIチャット",
+                "modelLibrary": "モデルライブラリ",
+                "importGguf": "GGUFモデルをインポート"
+            }
+        },
+        "modelOverview": {
+            "title": "モデル概要",
+            "localModels": "ローカルモデル",
+            "viewAllModels": "すべてのモデルを表示",
+            "runningModels": "実行中モデル",
+            "noRunningModels": "実行中のモデルはありません",
+            "storageInfo": "ストレージ情報",
+            "storagePath": "ストレージパス",
+            "usedSpace": "使用容量",
+            "totalModels": "総モデル数",
+            "recentDownloads": "最近のダウンロード",
+            "noRecentDownloads": "最近のダウンロードはありません",
+            "status": {
+                "active": "アクティブ",
+                "idle": "アイドル"
+            },
+            "errors": {
+                "fetchFailed": "モデルデータの取得に失敗しました",
+                "serviceUnavailable": "Ollamaサービスが利用できません"
+            }
+        },
+        "activityLog": {
+            "title": "アクティビティログ",
+            "recentActivity": "最近のアクティビティ",
+            "viewAllActivities": "すべてのアクティビティを表示",
+            "more": "件以上",
+            "noActivities": "記録されたアクティビティはありません",
+            "confirmClear": "すべてのアクティビティ記録を削除してもよろしいですか？",
+            "timeAgo": {
+                "minutesAgo": "{{count}}分前",
+                "minutesAgo_plural": "{{count}}分前",
+                "hoursAgo": "{{count}}時間前",
+                "hoursAgo_plural": "{{count}}時間前"
+            },
+            "status": {
+                "success": "成功",
+                "info": "情報",
+                "warning": "警告",
+                "error": "エラー"
+            },
+            "messages": {
+                "modelLoaded": "モデル{{name}}が正常に読み込まれました",
+                "downloadStarted": "モデル{{name}}のダウンロードを開始しました",
+                "serviceStarted": "Ollamaサービスが開始されました",
+                "newVersionAvailable": "新しいバージョンOllama {{version}}が利用可能です",
+                "memoryUsageHigh": "メモリ使用量が{{percent}}%に達しました"
+            }
+        },
+        "apiKeyRequired": "APIキーが必要です",
+        "apiKeyRequiredDescription": "会話を開始する前にAPIキーを設定してください。",
+        "typing": "AIが入力中...",
+        "downloadProgress": "ダウンロード進行状況",
+        "downloadComplete": "ダウンロード完了",
+        "downloadFailed": "ダウンロード失敗"
+    }
+}

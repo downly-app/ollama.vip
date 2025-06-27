@@ -1,0 +1,107 @@
+/* Define draggable region */
+.drag-region {
+  -webkit-app-region: drag;
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: default;
+}
+
+/* Define non-draggable region for interactive elements like buttons */
+.no-drag {
+  -webkit-app-region: no-drag;
+  -webkit-user-select: auto;
+  user-select: auto;
+  cursor: default;
+}
+
+/* App container style - implements rounded corner effect */
+.app-container {
+  height: 100vh;
+  width: 100vw;
+  border-radius: 12px;
+  /* border: 1px solid rgba(255, 255, 255, 0.1); */
+  background: rgba(0, 0, 0, 0.02); /* Add very light background color to avoid transparent areas */
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  /* Ensure rounded corners are properly clipped */
+  -webkit-mask: radial-gradient(circle at center, white 100%, transparent 100%);
+  mask: radial-gradient(circle at center, white 100%, transparent 100%);
+}
+
+/* Title bar style */
+.title-bar {
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  background: rgba(0, 0, 0, 0.05);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+
+/* Window control button style */
+.window-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.window-button {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.window-button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 1);
+}
+
+.window-button.close:hover {
+  background: rgba(239, 68, 68, 0.8);
+  color: white;
+}
+
+/* Main content area */
+.main-content {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Ensure transparent background */
+html, body {
+  background: transparent !important;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+#root {
+  background: transparent !important;
+  height: 100vh;
+  width: 100vw;
+}
+
+/* Ensure all child elements follow rounded corner clipping */
+.app-container > * {
+  border-radius: inherit;
+}
+
+/* Add rounded corners for gradient background components */
+.app-container .h-full.w-full.relative.overflow-hidden {
+  border-radius: 12px;
+}

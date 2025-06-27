@@ -1,0 +1,175 @@
+# This is the recommended GitHub Actions workflow for building and releasing a Tauri application.
+# It is designed to work in tandem with a local release script that pushes a version tag.
+#
+# On `v*` tag push, this workflow will:
+# 1. Build the application for Windows, macOS, and Linux in parallel.
+# 2. Use the official `tauri-apps/tauri-action` to handle all build complexities.
+# 3. Create a single DRAFT GitHub Release.
+# 4. Upload all platform-specific artifacts (.msi, .dmg, .deb, etc.) to that draft release.
+#
+# After the workflow completes, you can review the draft release on GitHub and manually publish it.
+
+name: Release Build & Upload
+
+on:
+  push:
+    tags:
+      - 'v*' # This workflow runs only when a version tag is pushed.
+
+jobs:
+  build-and-upload:
+    # Add the necessary permissions for the action to create a release and upload assets.
+    permissions:
+      contents: write
+    strategy:
+      fail-fast: false
+      matrix:
+        # Define the platforms and architectures to build on.
+        include:
+          # Windows 64-bit
+          - platform: windows-latest
+            arch: x86_64
+            rust-target: x86_64-pc-windows-msvc
+          # Windows 32-bit
+          - platform: windows-latest
+            arch: i686
+            rust-target: i686-pc-windows-msvc
+          # macOS 64-bit Intel
+          - platform: macos-latest
+            arch: x86_64
+            rust-target: x86_64-apple-darwin
+          # macOS ARM64 (Apple Silicon) - 原生构建
+          - platform: macos-latest
+            arch: aarch64
+            rust-target: aarch64-apple-darwin
+          # Linux 64-bit
+          - platform: ubuntu-22.04
+            arch: x86_64
+            rust-target: x86_64-unknown-linux-gnu
+          # Linux ARM64 - 使用GitHub Actions原生ARM64运行器
+          - platform: ubuntu-22.04-arm
+            arch: aarch64
+            rust-target: aarch64-unknown-linux-gnu
+    runs-on: ${{ matrix.platform }}
+
+    env:
+      RUST_TARGET: ${{ matrix.rust-target }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'yarn'
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.rust-target }}
+
+      - name: Cache Rust dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            src-tauri/target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+
+      - name: Install dependencies (ubuntu only)
+        if: matrix.platform == 'ubuntu-22.04'
+        run: |
+          sudo apt-get update
+          
+          # Install base dependencies
+          sudo apt-get install -y \
+            libwebkit2gtk-4.0-dev \
+            libjavascriptcoregtk-4.0-dev \
+            libappindicator3-dev \
+            librsvg2-dev \
+            patchelf \
+            libsoup2.4-dev \
+            libglib2.0-dev \
+            libgtk-3-dev \
+            libgdk-pixbuf2.0-dev \
+            libpango1.0-dev \
+            libatk1.0-dev \
+            libcairo-gobject2 \
+            libgtk-3-0 \
+            libgdk-pixbuf2.0-0 \
+            libdrm-dev \
+            libdrm-amdgpu1 \
+            build-essential \
+            pkg-config
+
+      - name: Verify system dependencies
+        if: matrix.platform == 'ubuntu-22.04'
+        run: |
+          echo "Verifying system dependencies for Ubuntu 22.04..."
+           pkg-config --exists gtk+-3.0 && echo "✅ GTK3 found" || echo "❌ GTK3 missing"
+           pkg-config --exists webkit2gtk-4.0 && echo "✅ WebKit2GTK 4.0 found" || echo "❌ WebKit2GTK 4.0 missing"
+           pkg-config --exists javascriptcoregtk-4.0 && echo "✅ JavaScriptCore 4.0 found" || echo "❌ JavaScriptCore 4.0 missing"
+           pkg-config --exists glib-2.0 && echo "✅ GLib 2.0 found" || echo "❌ GLib 2.0 missing"
+           pkg-config --exists gdk-pixbuf-2.0 && echo "✅ GDK-PixBuf found" || echo "❌ GDK-PixBuf missing"
+          echo "Available WebKit/GTK packages:"
+          pkg-config --list-all | grep -E "(webkit|gtk|javascript)" | head -10
+
+      - name: Install frontend dependencies
+        run: yarn install --frozen-lockfile --registry https://registry.yarnpkg.com
+
+      - name: Build the frontend
+        run: yarn build
+
+      - name: Verify dist directory exists
+        shell: bash
+        run: |
+          ls -R
+          if [ ! -d "dist" ]; then
+            echo "❌ The 'dist' directory was not found. The frontend build might have failed."
+            exit 1
+          fi
+          echo "✅ The 'dist' directory exists and contains files."
+
+      # The official Tauri Action handles everything from here.
+      # It will now use the pre-built frontend assets from the 'dist' directory.
+      - name: Build and upload release assets
+        uses: tauri-apps/tauri-action@v0
+        env:
+          # This token is required for the action to create a GitHub Release.
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          # Automatically publish the release after all builds complete
+          releaseDraft: false
+          # Extract tag name from the git reference
+          tagName: ${{ github.ref_name }}
+          # Use tag name as release name
+          releaseName: 'Release ${{ github.ref_name }}'
+          # Only specify target for cross-compilation when needed
+          args: ${{ matrix.rust-target != 'x86_64-pc-windows-msvc' && matrix.rust-target != 'x86_64-apple-darwin' && matrix.rust-target != 'x86_64-unknown-linux-gnu' && format('--target {0}', matrix.rust-target) || '' }}
+          # Generate release notes from commits
+          releaseBody: |
+            ## What's Changed
+            
+            This release includes the latest features and bug fixes with support for multiple architectures.
+            
+            ### Downloads
+            - **Windows**: Download the `.msi` or `.exe` installer (x64/x86)
+            - **macOS**: Download the `.dmg` file or `.app` bundle (Intel/Apple Silicon)
+            - **Linux**: Download the `.deb`, `.rpm`, or `.AppImage` package (x64/ARM64)
+            
+            ### Platform-specific Files:
+            - **Windows x64**: `ollama-pro_${{ github.ref_name }}_x64_en-US.msi`, `ollama-pro_${{ github.ref_name }}_x64-setup.exe`
+            - **Windows x86**: `ollama-pro_${{ github.ref_name }}_x86_en-US.msi`, `ollama-pro_${{ github.ref_name }}_x86-setup.exe`
+            - **macOS Intel**: `ollama-pro_${{ github.ref_name }}_x64.dmg`
+            - **macOS Apple Silicon**: `ollama-pro_${{ github.ref_name }}_aarch64.dmg`
+            - **Linux x64**: `ollama-pro_${{ github.ref_name }}_amd64.deb`, `ollama-pro_${{ github.ref_name }}_amd64.AppImage`
+            - **Linux ARM64**: `ollama-pro_${{ github.ref_name }}_arm64.deb`, `ollama-pro_${{ github.ref_name }}_arm64.AppImage`
+            
+            Full Changelog: https://github.com/${{ github.repository }}/releases/tag/${{ github.ref_name }}

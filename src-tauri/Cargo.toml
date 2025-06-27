@@ -1,0 +1,77 @@
+[package]
+name = "ollama-pro"
+version = "1.3.6"
+description = "A Tauri App"
+authors = ["yzmm"]
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[build-dependencies]
+tauri-build = { version = "1.5", features = [] }
+
+[dependencies]
+tauri = { version = "1.5", features = [ "macos-private-api", "window-start-dragging", "window-minimize", "window-maximize", "window-show", "window-unminimize", "window-close", "window-hide", "window-unmaximize"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+dirs = "5.0"
+tokio = { version = "1", features = ["full"] }
+config = "0.14"
+toml = "0.8"
+
+# System monitoring dependencies with conditional compilation
+sysinfo = { version = "0.29.11", features = ["serde"] }
+num_cpus = "1.16.0"
+cfg-if = "1.0"
+anyhow = "1.0.75"
+
+# GPU monitoring dependencies (optional for better compatibility)
+# Note: Ubuntu 22.04 supports webkit2gtk-4.0, which provides better compatibility
+[target.'cfg(target_os = "linux")'.dependencies]
+gfxinfo = { version = "0.1.2", default-features = false, features = ["gpu_info", "nvidia", "amd"], optional = true }
+nvml-wrapper = { version = "0.11", optional = true }
+
+[target.'cfg(target_os = "windows")'.dependencies]
+gfxinfo = { version = "0.1.2", default-features = false, features = ["gpu_info", "nvidia", "amd"] }
+nvml-wrapper = "0.11"
+
+[target.'cfg(target_os = "macos")'.dependencies]
+gfxinfo = { version = "0.1.2", default-features = false, features = ["gpu_info"] }
+nvml-wrapper = { version = "0.11", optional = true }
+
+[features]
+# this feature is used for production builds or when `devPath` points to the filesystem
+# DO NOT REMOVE!!
+default = ["custom-protocol", "gpu-monitoring"]
+custom-protocol = ["tauri/custom-protocol"]
+# Optional GPU monitoring features for better compatibility
+gpu-monitoring = ["dep:gfxinfo", "dep:nvml-wrapper"]
+gpu-nvidia = ["gpu-monitoring"]
+gpu-amd = ["gpu-monitoring"]
+
+# Release profile optimizations
+[profile.release]
+opt-level = "z"     # Optimize for size
+lto = true          # Link-time optimization
+codegen-units = 1   # Reduce code generation units
+panic = "abort"     # Reduce binary size
+strip = true        # Remove debug symbols
+
+# Development profile optimizations
+[profile.dev]
+opt-level = 1       # Some optimization for faster builds
+debug = true        # Keep debug info for development
+
+
+
+
+
+
+
+
+
+
+
+
+
+
