@@ -1,4 +1,4 @@
-# This is the recommended GitHub Actions workflow for building and releasing a Tauri application.
+# GitHub Actions workflow for building and releasing the Tauri application.
 # It is designed to work in tandem with a local release script that pushes a version tag.
 #
 # On `v*` tag push, this workflow will:
@@ -23,6 +23,7 @@ jobs:
       contents: write
     strategy:
       fail-fast: false
+      max-parallel: 6
       matrix:
         # Define the platforms and architectures to build on.
         include:
@@ -30,30 +31,40 @@ jobs:
           - platform: windows-latest
             arch: x86_64
             rust-target: x86_64-pc-windows-msvc
+            artifact-suffix: x64
           # Windows 32-bit
           - platform: windows-latest
             arch: i686
             rust-target: i686-pc-windows-msvc
+            artifact-suffix: x86
           # macOS 64-bit Intel
-          - platform: macos-latest
+          - platform: macos-13
             arch: x86_64
             rust-target: x86_64-apple-darwin
-          # macOS ARM64 (Apple Silicon) - 原生构建
-          - platform: macos-latest
+            artifact-suffix: x64
+            bundle-identifier-suffix: intel
+          # macOS ARM64 (Apple Silicon)
+          - platform: macos-14
             arch: aarch64
             rust-target: aarch64-apple-darwin
+            artifact-suffix: aarch64
+            bundle-identifier-suffix: silicon
           # Linux 64-bit
           - platform: ubuntu-22.04
             arch: x86_64
             rust-target: x86_64-unknown-linux-gnu
-          # Linux ARM64 - 使用GitHub Actions原生ARM64运行器
+            artifact-suffix: amd64
+          # Linux ARM64
           - platform: ubuntu-22.04-arm
             arch: aarch64
             rust-target: aarch64-unknown-linux-gnu
+            artifact-suffix: arm64
     runs-on: ${{ matrix.platform }}
 
     env:
       RUST_TARGET: ${{ matrix.rust-target }}
+      # Set Different Bundle Identifiers for macOS to Avoid Conflicts
+      TAURI_BUNDLE_IDENTIFIER: ${{ matrix.bundle-identifier-suffix && format('com.ollama.pro.{0}', matrix.bundle-identifier-suffix) || 'com.ollama.pro' }}
 
     steps:
       - name: Checkout repository
@@ -79,16 +90,17 @@ jobs:
             ~/.cargo/registry/cache/
             ~/.cargo/git/db/
             src-tauri/target/
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          key: ${{ runner.os }}-${{ matrix.arch }}-cargo-${{ hashFiles('**/Cargo.lock') }}
           restore-keys: |
+            ${{ runner.os }}-${{ matrix.arch }}-cargo-
             ${{ runner.os }}-cargo-
 
-      - name: Install dependencies (ubuntu only)
+      - name: Install dependencies (Ubuntu x64)
         if: matrix.platform == 'ubuntu-22.04'
         run: |
           sudo apt-get update
           
-          # Install base dependencies
+          # Install base dependencies for x64
           sudo apt-get install -y \
             libwebkit2gtk-4.0-dev \
             libjavascriptcoregtk-4.0-dev \
@@ -109,17 +121,43 @@ jobs:
             build-essential \
             pkg-config
 
-      - name: Verify system dependencies
-        if: matrix.platform == 'ubuntu-22.04'
+      - name: Install dependencies (Ubuntu ARM64)
+        if: matrix.platform == 'ubuntu-22.04-arm'
         run: |
-          echo "Verifying system dependencies for Ubuntu 22.04..."
-           pkg-config --exists gtk+-3.0 && echo "✅ GTK3 found" || echo "❌ GTK3 missing"
-           pkg-config --exists webkit2gtk-4.0 && echo "✅ WebKit2GTK 4.0 found" || echo "❌ WebKit2GTK 4.0 missing"
-           pkg-config --exists javascriptcoregtk-4.0 && echo "✅ JavaScriptCore 4.0 found" || echo "❌ JavaScriptCore 4.0 missing"
-           pkg-config --exists glib-2.0 && echo "✅ GLib 2.0 found" || echo "❌ GLib 2.0 missing"
-           pkg-config --exists gdk-pixbuf-2.0 && echo "✅ GDK-PixBuf found" || echo "❌ GDK-PixBuf missing"
+          sudo apt-get update
+          
+          # Install base dependencies for ARM64
+          sudo apt-get install -y \
+            libwebkit2gtk-4.0-dev \
+            libjavascriptcoregtk-4.0-dev \
+            libappindicator3-dev \
+            librsvg2-dev \
+            patchelf \
+            libsoup2.4-dev \
+            libglib2.0-dev \
+            libgtk-3-dev \
+            libgdk-pixbuf2.0-dev \
+            libpango1.0-dev \
+            libatk1.0-dev \
+            libcairo-gobject2 \
+            libgtk-3-0 \
+            libgdk-pixbuf2.0-0 \
+            libdrm-dev \
+            build-essential \
+            pkg-config
+
+      - name: Verify system dependencies
+        if: startsWith(matrix.platform, 'ubuntu-')
+        run: |
+          echo "Verifying system dependencies for ${{ matrix.platform }}..."
+          pkg-config --exists gtk+-3.0 && echo "✅ GTK3 found" || echo "❌ GTK3 missing"
+          pkg-config --exists webkit2gtk-4.0 && echo "✅ WebKit2GTK 4.0 found" || echo "❌ WebKit2GTK 4.0 missing"
+          pkg-config --exists javascriptcoregtk-4.0 && echo "✅ JavaScriptCore 4.0 found" || echo "❌ JavaScriptCore 4.0 missing"
+          pkg-config --exists glib-2.0 && echo "✅ GLib 2.0 found" || echo "❌ GLib 2.0 missing"
+          pkg-config --exists gdk-pixbuf-2.0 && echo "✅ GDK-PixBuf found" || echo "❌ GDK-PixBuf missing"
           echo "Available WebKit/GTK packages:"
           pkg-config --list-all | grep -E "(webkit|gtk|javascript)" | head -10
+          echo "Architecture: $(uname -m)"
 
       - name: Install frontend dependencies
         run: yarn install --frozen-lockfile --registry https://registry.yarnpkg.com
@@ -130,12 +168,13 @@ jobs:
       - name: Verify dist directory exists
         shell: bash
         run: |
-          ls -R
           if [ ! -d "dist" ]; then
             echo "❌ The 'dist' directory was not found. The frontend build might have failed."
             exit 1
           fi
           echo "✅ The 'dist' directory exists and contains files."
+          echo "Build artifacts:"
+          ls -la dist/
 
       # The official Tauri Action handles everything from here.
       # It will now use the pre-built frontend assets from the 'dist' directory.
@@ -145,8 +184,8 @@ jobs:
           # This token is required for the action to create a GitHub Release.
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          # Automatically publish the release after all builds complete
-          releaseDraft: false
+          # Create draft release for manual review
+          releaseDraft: true
           # Extract tag name from the git reference
           tagName: ${{ github.ref_name }}
           # Use tag name as release name
@@ -173,3 +212,10 @@ jobs:
             - **Linux ARM64**: `ollama-pro_${{ github.ref_name }}_arm64.deb`, `ollama-pro_${{ github.ref_name }}_arm64.AppImage`
             
             Full Changelog: https://github.com/${{ github.repository }}/releases/tag/${{ github.ref_name }}
+
+      - name: Verify build artifacts
+        if: always()
+        shell: bash
+        run: |
+          echo "Build completed for ${{ matrix.platform }} (${{ matrix.arch }})"
+          echo "Expected artifacts should be uploaded to the release."
