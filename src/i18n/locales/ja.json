@@ -29,9 +29,10 @@
         "description": "プロフェッショナルOllama Webインターフェース"
     },
     "navigation": {
-        "general": "一般",
+        "general": "概要",
         "chat": "チャット",
         "models": "モデル",
+        "downloads": "ダウンロード管理",
         "profile": "プロフィール",
         "onlineModels": "オンラインモデル",
         "localModels": "ローカルモデル",
@@ -99,12 +100,14 @@
         "size": "サイズ",
         "tags": "タグ",
         "downloads": "ダウンロード数",
-        "updated": "更新日",
+        "updatedAt": "更新日時",
+        "specs": "仕様",
         "actions": "アクション",
         "filterByType": "タイプで絞り込み",
-        "sortBy": "並び順",
+        "sortBy": "並び替え",
+        "sort": "並び替え",
         "popular": "人気",
-        "newest": "最新",
+        "newest": "新着",
         "embedding": "埋め込み",
         "vision": "ビジョン",
         "tools": "ツール",
@@ -115,19 +118,19 @@
     },
     "localModels": {
         "title": "ローカルモデル管理",
-        "modelsCount": "{{count}} モデル",
+        "modelsCount": "{{count}} 個のモデル",
         "searchPlaceholder": "モデルを検索...",
         "downloadNewModel": "新しいモデルをダウンロード",
         "modelNamePlaceholder": "モデル名を入力 (例: llama3.2:3b)",
         "localModelsList": "ローカルモデルリスト",
         "loading": "読み込み中...",
         "noModelsFound": "一致するモデルが見つかりません",
-        "noLocalModels": "ローカルモデルがありません",
-        "adjustSearchCriteria": "検索条件を調整してください",
-        "useDownloadFunction": "上記のダウンロード機能を使用してモデルを追加",
+        "noLocalModels": "ローカルモデルはまだありません",
+        "adjustSearchCriteria": "検索条件を調整してみてください",
+        "browseOnlineModels": "上のダウンロード機能を使ってモデルを追加するか、<0>オンラインモデルマーケットプレイス</0>で探してインストールしてください。",
         "size": "サイズ",
         "parameters": "パラメータ",
-        "modifiedTime": "更新日時",
+        "modifiedTime": "変更日時",
         "details": "詳細",
         "modelInfo": "モデル情報",
         "viewDetailedInfo": "モデルの詳細情報と設定を表示",
@@ -154,7 +157,18 @@
         "getInfoFailed": "情報取得失敗",
         "getInfoFailedMessage": "モデル {{modelName}} の詳細情報を取得できません",
         "enterModelName": "モデル名を入力してください",
-        "enterModelNameMessage": "ダウンロードするモデル名を入力してください"
+        "enterModelNameMessage": "ダウンロードするモデル名を入力してください",
+        "status": {
+            "downloading": "ダウンロード中",
+            "paused": "一時停止中",
+            "completed": "完了",
+            "error": "エラー",
+            "pending": "待機中",
+            "finalizing": "完了処理中"
+        },
+        "clearCompleted": "完了済みをクリア",
+        "noDownloadingJobs": "アクティブなダウンロードジョブはありません。",
+        "noCompletedJobs": "完了したダウンロードはありません"
     },
     "settings": {
         "title": "設定",
@@ -416,5 +430,35 @@
         "downloadProgress": "ダウンロード進行状況",
         "downloadComplete": "ダウンロード完了",
         "downloadFailed": "ダウンロード失敗"
+    },
+    "downloads": {
+        "title": "ダウンロード管理",
+        "downloading": "ダウンロード中",
+        "completed": "完了済み",
+        "pause": "一時停止",
+        "resume": "再開",
+        "retry": "再試行",
+        "cancel": "キャンセル",
+        "delete": "削除",
+        "fileName": "ファイル名",
+        "size": "サイズ",
+        "progress": "進行状況",
+        "speed": "速度",
+        "remainingTime": "残り時間",
+        "status": {
+            "downloading": "ダウンロード中",
+            "paused": "一時停止",
+            "completed": "完了",
+            "error": "エラー",
+            "pending": "待機中",
+            "finalizing": "完了処理中"
+        },
+        "toast": {
+            "downloadCompleteTitle": "ダウンロード完了",
+            "downloadCompleteMessage": "{{modelName}} のダウンロードが正常に完了しました。"
+        },
+        "actions": "操作",
+        "noDownloadingJobs": "アクティブなダウンロードジョブはありません。",
+        "noCompletedJobs": "完了したダウンロードはありません"
     }
 }

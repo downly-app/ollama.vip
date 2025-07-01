@@ -7,7 +7,8 @@ import {
   Database,
   Home,
   MessageCircle,
-  HardDrive
+  HardDrive,
+  Download
 } from 'lucide-react';
 import { useTheme } from '@/contexts/ThemeContext';
 import AISettings from '@/components/AISettings';
@@ -27,6 +28,7 @@ const Toolbar = () => {
     if (location.pathname === '/chat') return 'chat';
     if (location.pathname === '/models') return 'models';
     if (location.pathname === '/local-models') return 'local-models';
+    if (location.pathname === '/downloads') return 'downloads';
     if (location.pathname.startsWith('/model/')) return 'models';
     return 'general';
   };
@@ -38,6 +40,7 @@ const Toolbar = () => {
     { icon: MessageCircle, label: t('navigation.chat'), view: 'chat', path: '/chat' },
     { icon: HardDrive, label: t('navigation.localModels'), view: 'local-models', path: '/local-models' },
     { icon: Database, label: t('navigation.onlineModels'), view: 'models', path: '/models' },
+    { icon: Download, label: t('navigation.downloads'), view: 'downloads', path: '/downloads' },
   ];
 
   const handleNavigation = (path: string) => {

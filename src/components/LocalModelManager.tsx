@@ -29,8 +29,9 @@ import {
 import { useTheme } from '@/contexts/ThemeContext';
 import { useToast } from '@/hooks/use-toast';
 import { ollamaApi } from '@/services/ollamaApi';
-import DownloadProgress from '@/components/DownloadProgress';
-import { useDownloadManager } from '@/hooks/useDownloadManager';
+import { useDownloadStore } from '@/stores/downloadStore';
+import { Trans } from 'react-i18next';
+import LocalModelInfoDialog from '@/components/dialogs/LocalModelInfoDialog';
 
 interface LocalModel {
   name: string;
@@ -68,15 +69,13 @@ const LocalModelManager = () => {
   const { t } = useTranslation();
   const { currentTheme } = useTheme();
   const { toast } = useToast();
-  const { downloads, startDownload, cancelDownload, dismissDownload } = useDownloadManager();
+  const { startDownload } = useDownloadStore();
 
   const [localModels, setLocalModels] = useState<LocalModel[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [pullModelName, setPullModelName] = useState('');
-  const [selectedModel, setSelectedModel] = useState<LocalModel | null>(null);
-  const [modelInfo, setModelInfo] = useState<ModelInfo | null>(null);
-  const [isLoadingInfo, setIsLoadingInfo] = useState(false);
+  const [infoModelName, setInfoModelName] = useState<string | null>(null);
 
   const fetchLocalModels = async () => {
     setIsLoading(true);
@@ -118,26 +117,6 @@ const LocalModelManager = () => {
     }
   };
 
-  // Get model detailed information
-  const handleShowModelInfo = async (model: LocalModel) => {
-    setSelectedModel(model);
-    setIsLoadingInfo(true);
-    try {
-      const info = await ollamaApi.showModelInfo(model.name, true);
-      setModelInfo(info);
-    } catch (error) {
-      console.error('Failed to get model info:', error);
-      toast({
-        title: t('localModels.getInfoFailed'),
-        description: t('localModels.getInfoFailedMessage', { modelName: model.name }),
-        variant: 'destructive',
-        className: 'bg-red-900/80 backdrop-blur-sm border-red-500/20 text-white',
-      });
-    } finally {
-      setIsLoadingInfo(false);
-    }
-  };
-
   const handlePullModel = async () => {
     if (!pullModelName.trim()) {
       toast({
@@ -149,12 +128,8 @@ const LocalModelManager = () => {
       return;
     }
 
-    startDownload(pullModelName);
+    startDownload({ name: pullModelName, size: 0 });
     setPullModelName('');
-    // Refresh local model list after download completion
-    setTimeout(() => {
-      fetchLocalModels();
-    }, 1000);
   };
 
   const formatSize = (bytes: number) => {
@@ -252,19 +227,22 @@ const LocalModelManager = () => {
         </CardHeader>
         <CardContent>
           {isLoading ? (
-            <div className="flex items-center justify-center py-12">
-              <RefreshCw className="w-6 h-6 text-white/50 animate-spin mr-2" />
-              <span className="text-white/70">{t('localModels.loading')}</span>
-            </div>
+            <div className="text-center text-white/70 py-8">{t('localModels.loading')}</div>
           ) : filteredModels.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-12 text-white/50">
-              <HardDrive className="w-12 h-12 mb-4" />
-              <p className="text-lg mb-2">
-                {searchQuery ? t('localModels.noModelsFound') : t('localModels.noLocalModels')}
-              </p>
-              <p className="text-sm">
-                {searchQuery ? t('localModels.adjustSearchCriteria') : t('localModels.useDownloadFunction')}
-              </p>
+            <div className="text-center text-white/70 py-8 space-y-2">
+              <p>{searchQuery ? t('localModels.noModelsFound') : t('localModels.noLocalModels')}</p>
+              {searchQuery ? (
+                <p className="text-sm text-white/50">{t('localModels.adjustSearchCriteria')}</p>
+              ) : (
+                <p className="text-sm text-white/50">
+                  <Trans
+                    i18nKey="localModels.browseOnlineModels"
+                    components={[
+                      <Link to="/models" className={`text-sky-400 hover:underline`} />,
+                    ]}
+                  />
+                </p>
+              )}
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -299,143 +277,24 @@ const LocalModelManager = () => {
 
                   <div className="flex gap-2">
                     {/* Model details button */}
-                    <Dialog>
-                      <DialogTrigger asChild>
-                        <Button
-                          size="sm"
-                          onClick={() => handleShowModelInfo(model)}
-                          className={`bg-gradient-to-r ${currentTheme.colors.primary} text-white border-0 hover:opacity-90 text-xs flex-1`}
-                        >
-                          <Info size={12} className="mr-1" />
-                          {t('localModels.details')}
-                        </Button>
-                      </DialogTrigger>
-                      <DialogContent className="bg-gray-900/95 backdrop-blur-sm border-white/20 text-white max-w-4xl max-h-[80vh]">
-                        <DialogHeader>
-                          <DialogTitle className="flex items-center gap-2">
-                            <Info className="w-5 h-5" />
-                            {t('localModels.modelInfo')} - {selectedModel?.name}
-                          </DialogTitle>
-                          <DialogDescription className="text-white/70">
-                            {t('localModels.viewDetailedInfo')}
-                          </DialogDescription>
-                        </DialogHeader>
-
-                        {isLoadingInfo ? (
-                          <div className="flex items-center justify-center py-8">
-                            <RefreshCw className="w-6 h-6 animate-spin mr-2" />
-                            <span>{t('localModels.loading')}</span>
-                          </div>
-                        ) : modelInfo ? (
-                          <ScrollArea className="max-h-[60vh]">
-                            <div className="space-y-6">
-                              {/* Basic information */}
-                              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div>
-                                  <h4 className="font-medium mb-3 text-white">{t('localModels.basicInfo')}</h4>
-                                  <div className="space-y-2 text-sm">
-                                    <div className="flex justify-between">
-                                        <span className="text-white/50">{t('localModels.family')}:</span>
-                                        <span className="text-white">{selectedModel?.details.family}</span>
-                                      </div>
-                                      <div className="flex justify-between">
-                                        <span className="text-white/50">{t('localModels.format')}:</span>
-                                        <span className="text-white">{selectedModel?.details.format}</span>
-                                      </div>
-                                      <div className="flex justify-between">
-                                        <span className="text-white/50">{t('localModels.parameters')}:</span>
-                                        <span className="text-white">{selectedModel?.details.parameter_size}</span>
-                                      </div>
-                                      <div className="flex justify-between">
-                                        <span className="text-white/50">{t('localModels.quantization')}:</span>
-                                        <span className="text-white">{selectedModel?.details.quantization_level}</span>
-                                      </div>
-                                      <div className="flex justify-between">
-                                        <span className="text-white/50">{t('localModels.size')}:</span>
-                                        <span className="text-white">{formatSize(selectedModel?.size || 0)}</span>
-                                      </div>
-                                  </div>
-                                </div>
-                                <div>
-                                    <h4 className="font-medium mb-3 text-white">{t('localModels.capabilities')}</h4>
-                                  <div className="flex flex-wrap gap-2">
-                                    {modelInfo.capabilities?.map((cap, index) => (
-                                      <Badge key={index} variant="outline" className="text-xs border-white/20 text-white/70 bg-white/5">
-                                        {cap}
-                                      </Badge>
-                                    ))}
-                                  </div>
-                                </div>
-                              </div>
-
-                              {/* Model architecture information */}
-                              {modelInfo.model_info && (
-                                <div>
-                                  <h4 className="font-medium mb-3 text-white">
-                                  {t('localModels.architectureInfo')} - {modelInfo.model_info['general.architecture'] || 'Unknown'}
-                                </h4>
-                                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                                    {Object.entries(modelInfo.model_info)
-                                      .filter(([key]) => !key.includes('tokens') && !key.includes('merges') && !key.includes('token_type'))
-                                      .slice(0, 12)
-                                      .map(([key, value]) => (
-                                        <div key={key} className="flex justify-between">
-                                          <span className="text-white/50 truncate mr-2">{key.replace('general.', '').replace('llama.', '').replace('_', ' ')}:</span>
-                                          <span className="text-white text-right">{typeof value === 'number' ? value.toLocaleString() : String(value)}</span>
-                                        </div>
-                                      ))}
-                                  </div>
-                                </div>
-                              )}
-
-                              {/* Parameter configuration */}
-                              {modelInfo.parameters && (
-                                <div>
-                                  <h4 className="font-medium mb-3 text-white">{t('localModels.parameterConfig')}</h4>
-                                  <pre className="text-xs bg-white/5 p-3 rounded overflow-x-auto text-white/80 whitespace-pre-wrap">
-                                    {modelInfo.parameters}
-                                  </pre>
-                                </div>
-                              )}
-
-                              {/* Template */}
-                              {modelInfo.template && (
-                                <div>
-                                  <h4 className="font-medium mb-3 text-white">{t('localModels.promptTemplate')}</h4>
-                                  <pre className="text-xs bg-white/5 p-3 rounded overflow-x-auto text-white/80 whitespace-pre-wrap">
-                                    {modelInfo.template}
-                                  </pre>
-                                </div>
-                              )}
-
-                              {/* Modelfile */}
-                              {modelInfo.modelfile && (
-                                <div>
-                                  <h4 className="font-medium mb-3 text-white">{t('localModels.modelfile')}</h4>
-                                  <pre className="text-xs bg-white/5 p-3 rounded overflow-x-auto text-white/80 whitespace-pre-wrap">
-                                    {modelInfo.modelfile}
-                                  </pre>
-                                </div>
-                              )}
-                            </div>
-                          </ScrollArea>
-                        ) : (
-                            <div className="text-center py-8 text-white/50">
-                              {t('localModels.failedToGetModelInfo')}
-                            </div>
-                          )}
-                      </DialogContent>
-                    </Dialog>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="text-white/70 hover:bg-white/10 hover:text-white"
+                      onClick={() => setInfoModelName(model.name)}
+                    >
+                      <Info className="w-4 h-4" />
+                    </Button>
 
                     {/* Delete button */}
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
                         <Button
-                          size="sm"
-                          variant="outline"
-                          className="border-red-500/30 text-red-400 hover:bg-red-500/20 hover:border-red-500/50 bg-red-500/10 text-xs hover:text-red-300"
+                          variant="ghost"
+                          size="icon"
+                          className="text-red-400/70 hover:bg-red-500/10 hover:text-red-400"
                         >
-                          <Trash2 size={12} />
+                          <Trash2 className="w-4 h-4" />
                         </Button>
                       </AlertDialogTrigger>
                       <AlertDialogContent className="bg-gray-900/95 backdrop-blur-sm border-white/20 text-white">
@@ -468,11 +327,10 @@ const LocalModelManager = () => {
           )}
         </CardContent>
       </Card>
-
-      <DownloadProgress
-        downloads={downloads}
-        onCancel={cancelDownload}
-        onDismiss={dismissDownload}
+      <LocalModelInfoDialog
+        modelName={infoModelName}
+        open={!!infoModelName}
+        onClose={() => setInfoModelName(null)}
       />
     </div>
   );

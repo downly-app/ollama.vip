@@ -13,6 +13,7 @@ import General from "./pages/General";
 import Chat from "./pages/Chat";
 import ModelDetail from "./pages/ModelDetail";
 import NotFound from "./pages/NotFound";
+import Downloads from "./pages/Downloads";
 import "@/styles/titlebar.css";
 
 const App = () => {
@@ -46,8 +47,9 @@ const App = () => {
                 </AppLayout>
               } />
               <Route path="/models" element={<Models />} />
+              <Route path="/models/:modelName" element={<ModelDetail />} />
               <Route path="/local-models" element={<LocalModels />} />
-              <Route path="/model/:modelName" element={<ModelDetail />} />
+              <Route path="/downloads" element={<Downloads />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>

@@ -14,7 +14,8 @@ import { AppLayout, Sidebar, TitleBar } from '@/components/layouts';
 import Toolbar from '@/components/Toolbar';
 import { preprocessImageUrls } from '@/utils/imageUtils';
 import DownloadProgress from '@/components/DownloadProgress';
-import { useDownloadManager } from '@/hooks/useDownloadManager';
+import { useDownloadStore } from '@/stores/downloadStore';
+import { toast } from '@/components/ui/use-toast';
 
 const ModelDetail = () => {
   const { modelName } = useParams<{ modelName: string }>();
@@ -22,8 +23,7 @@ const ModelDetail = () => {
   const { currentTheme } = useTheme();
   const { t } = useTranslation();
   const [showAllTags, setShowAllTags] = useState(false);
-  const { downloadModel } = useModelStore();
-  const { downloads, startDownload, cancelDownload, dismissDownload } = useDownloadManager();
+  const { startDownload } = useDownloadStore();
 
   const { data: modelDetail, isLoading, error } = useQuery({
     queryKey: ['modelDetail', modelName],
@@ -54,8 +54,17 @@ const ModelDetail = () => {
     navigator.clipboard.writeText(text);
   };
 
-  const handleDownload = (tagName: string) => {
-    startDownload(tagName);
+  const handleDownload = async (tagName: string, size: number) => {
+    if (!tagName) {
+      console.error('Model tag name is not available.');
+      toast({
+        title: 'Error',
+        description: 'Cannot download model without a tag name.',
+        variant: 'destructive',
+      });
+      return;
+    }
+    await startDownload({ name: tagName, size });
   };
 
   const renderContent = () => {
@@ -77,6 +86,8 @@ const ModelDetail = () => {
 
     const { data: model } = modelDetail;
     const tagsToShow = showAllTags ? model.all_tags : model.tags;
+
+    const latestTag = model.tags.find(tag => tag.tag === 'latest') || model.tags[0];
 
     return (
       <div className="flex-1 overflow-y-auto p-6 custom-scrollbar">
@@ -106,7 +117,7 @@ const ModelDetail = () => {
                   </div>
                   <Button
                     size="sm"
-                    onClick={() => handleDownload(model.name)}
+                    onClick={() => handleDownload(latestTag.name, Number(latestTag.size) || 0)}
                     className={`bg-gradient-to-r ${currentTheme.colors.primary} text-white border-0 hover:opacity-90 px-4 py-2 rounded-lg font-medium shadow-lg transition-all duration-200 whitespace-nowrap`}
                   >
                     <Download size={14} className="mr-2" />
@@ -191,7 +202,7 @@ const ModelDetail = () => {
                             </Button>
                             <Button
                               size="sm"
-                              onClick={() => handleDownload(tag.name)}
+                              onClick={() => handleDownload(tag.name, Number(tag.size) || 0)}
                               className={`bg-gradient-to-r ${currentTheme.colors.primary} text-white border-0 hover:opacity-90 px-3 py-1 text-xs`}
                             >
                               <Download size={12} className="mr-1" />
@@ -294,11 +305,7 @@ const ModelDetail = () => {
         {renderContent()}
       </div>
       
-      <DownloadProgress 
-        downloads={downloads}
-        onCancel={cancelDownload}
-        onDismiss={dismissDownload}
-      />
+      <DownloadProgress />
     </AppLayout>
   );
 };

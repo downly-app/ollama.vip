@@ -29,7 +29,7 @@ import {
 import { useModelStore } from '@/stores/modelStore';
 import { useTheme } from '@/contexts/ThemeContext';
 import DownloadProgress from '@/components/DownloadProgress';
-import { useDownloadManager } from '@/hooks/useDownloadManager';
+import { useDownloadStore } from '@/stores/downloadStore';
 
 const ModelManager = () => {
   const { t } = useTranslation();
@@ -46,15 +46,21 @@ const ModelManager = () => {
     error,
     pagination,
     fetchModels, 
-    downloadModel, 
     deleteModel, 
     setCurrentModel 
   } = useModelStore();
-  const { downloads, startDownload, cancelDownload, dismissDownload } = useDownloadManager();
+  const { startDownload } = useDownloadStore();
 
   useEffect(() => {
     fetchModels(currentPage, searchQuery, selectedCategories, sortOrder);
   }, [fetchModels, currentPage, selectedCategories, sortOrder]);
+
+  const modelCategories = [
+    { value: 'embedding', className: 'data-[state=on]:bg-green-500/20 data-[state=on]:text-green-300 data-[state=on]:border-green-500/30' },
+    { value: 'vision', className: 'data-[state=on]:bg-blue-500/20 data-[state=on]:text-blue-300 data-[state=on]:border-blue-500/30' },
+    { value: 'tools', className: 'data-[state=on]:bg-orange-500/20 data-[state=on]:text-orange-300 data-[state=on]:border-orange-500/30' },
+    { value: 'thinking', className: 'data-[state=on]:bg-purple-500/20 data-[state=on]:text-purple-300 data-[state=on]:border-purple-500/30' },
+  ];
 
   const handleSearch = () => {
     setCurrentPage(1);
@@ -76,7 +82,8 @@ const ModelManager = () => {
     setCurrentPage(1);
   };
 
-  const formatNumber = (num: number) => {
+  const formatNumber = (num: number | undefined | null) => {
+    if (num === undefined || num === null) return '-';
     if (num >= 1000000) {
       return `${(num / 1000000).toFixed(1)}M`;
     } else if (num >= 1000) {
@@ -85,9 +92,13 @@ const ModelManager = () => {
     return num.toString();
   };
 
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US');
+  const formatDate = (dateString: string | undefined | null) => {
+    if (!dateString) return '-';
+    try {
+      return new Date(dateString).toLocaleDateString('en-US');
+    } catch (e) {
+      return '-';
+    }
   };
 
   const getTypeColor = (type: string) => {
@@ -97,20 +108,6 @@ const ModelManager = () => {
       case 'embedding': return 'bg-green-500/20 text-green-300 border-green-500/30';
       case 'tools': return 'bg-orange-500/20 text-orange-300 border-orange-500/30';
       default: return 'bg-white/10 text-white/70 border-white/20';
-    }
-  };
-
-  const handleModelAction = async (modelName: string, action: 'download' | 'delete' | 'select') => {
-    switch (action) {
-      case 'download':
-        startDownload(modelName);
-        break;
-      case 'delete':
-        await deleteModel(modelName);
-        break;
-      case 'select':
-        setCurrentModel(modelName);
-        break;
     }
   };
 
@@ -162,34 +159,16 @@ const ModelManager = () => {
               onValueChange={handleCategoryChange}
               className="gap-1 flex-wrap"
             >
-              <ToggleGroupItem 
-                value="embedding" 
-                size="sm"
-                className="text-xs bg-white/5 border-white/20 text-white/90 data-[state=on]:bg-green-500/20 data-[state=on]:text-green-300 data-[state=on]:border-green-500/30"
-              >
-                Embedding
-              </ToggleGroupItem>
-              <ToggleGroupItem 
-                value="vision" 
-                size="sm"
-                className="text-xs bg-white/5 border-white/20 text-white/90 data-[state=on]:bg-blue-500/20 data-[state=on]:text-blue-300 data-[state=on]:border-blue-500/30"
-              >
-                Vision
-              </ToggleGroupItem>
-              <ToggleGroupItem 
-                value="tools" 
-                size="sm"
-                className="text-xs bg-white/5 border-white/20 text-white/90 data-[state=on]:bg-orange-500/20 data-[state=on]:text-orange-300 data-[state=on]:border-orange-500/30"
-              >
-                Tools
-              </ToggleGroupItem>
-              <ToggleGroupItem 
-                value="thinking" 
-                size="sm"
-                className="text-xs bg-white/5 border-white/20 text-white/90 data-[state=on]:bg-purple-500/20 data-[state=on]:text-purple-300 data-[state=on]:border-purple-500/30"
-              >
-                Thinking
-              </ToggleGroupItem>
+              {modelCategories.map((category) => (
+                <ToggleGroupItem
+                  key={category.value}
+                  value={category.value}
+                  size="sm"
+                  className={`px-4 text-xs bg-white/5 border-white/20 text-white/90 hover:bg-white/10 hover:text-white ${category.className}`}
+                >
+                  {t(`models.${category.value}`)}
+                </ToggleGroupItem>
+              ))}
             </ToggleGroup>
           </div>
 
@@ -248,88 +227,46 @@ const ModelManager = () => {
                         <TableRow key={model.name} className="border-white/10 hover:bg-white/5">
                           <TableCell>
                             <Link 
-                              to={`/model/${model.name}`}
-                              className="font-bold text-white text-sm hover:text-white/80 transition-colors"
+                              to={`/models/${model.name}`} 
+                              className="font-medium text-sky-400 hover:underline"
                             >
                               {model.name}
                             </Link>
                           </TableCell>
-                          <TableCell className="hidden md:table-cell">
-                            <div className="max-w-xs text-white/70 text-sm truncate" title={model.description}>
-                              {model.description}
-                            </div>
-                          </TableCell>
-                          <TableCell>
+                          <TableCell className="text-white/70 text-xs max-w-xs truncate hidden md:table-cell">{model.description}</TableCell>
+                          <TableCell className="text-white/70">
                             <div className="flex flex-wrap gap-1">
-                              {model.types.map((type) => (
+                              {model.types.map((type: string) => (
                                 <Badge key={type} className={`${getTypeColor(type)} border text-xs`}>
-                                  {type}
+                                  {t(`models.types.${type.toLowerCase()}`, { defaultValue: type })}
                                 </Badge>
                               ))}
                             </div>
                           </TableCell>
-                          <TableCell className="hidden lg:table-cell">
-                            <div className="text-white/70 text-sm">
-                              {model.sizes.join(', ')}
-                            </div>
+                          <TableCell className="text-white/70 hidden lg:table-cell">
+                             {`${model.specs.parameter} / ${model.specs.size}`}
                           </TableCell>
-                          <TableCell className="hidden xl:table-cell">
-                            <div className="text-white/70 text-sm">
-                              {model.tags}
-                            </div>
-                          </TableCell>
-                          <TableCell className="hidden lg:table-cell">
-                            <div className="text-white/70 text-sm">
-                              {formatNumber(model.pulls)}
-                            </div>
-                          </TableCell>
-                          <TableCell className="hidden xl:table-cell">
-                            <div className="text-white/70 text-sm">
-                              {formatDate(model.updated_at)}
-                            </div>
-                          </TableCell>
+                          <TableCell className="text-white/70 text-sm hidden xl:table-cell">{model.tags}</TableCell>
+                          <TableCell className="text-white/70 text-sm hidden lg:table-cell">{formatNumber(model.downloads)}</TableCell>
+                          <TableCell className="text-white/70 text-sm hidden xl:table-cell">{formatDate(model.updatedAt)}</TableCell>
                           <TableCell>
                             <div className="flex items-center gap-2">
-                              {model.status === 'downloading' && model.downloadProgress !== undefined ? (
-                                <div className="flex items-center gap-2 min-w-[120px]">
-                                  <Progress value={model.downloadProgress} className="h-2 bg-white/20 flex-1" />
-                                  <span className="text-xs text-white">{model.downloadProgress}%</span>
-                                </div>
-                              ) : model.isLocal ? (
-                                <>
-                                  <Button
-                                    size="sm"
-                                    variant={currentModel === model.name ? "default" : "outline"}
-                                    onClick={() => handleModelAction(model.name, 'select')}
-                                    className={currentModel === model.name ? 
-                                      `bg-gradient-to-r ${currentTheme.colors.primary} text-white border-0 hover:opacity-90 text-xs` : 
-                                      "border-white/30 text-white/90 hover:bg-white/10 hover:text-white bg-white/5 text-xs"
-                                    }
-                                  >
-                                    <Play size={12} className="mr-1" />
-                                    {currentModel === model.name ? t('models.selected') : t('models.select')}
-                                  </Button>
-                                  <Button
-                                    size="sm"
-                                    variant="outline"
-                                    onClick={() => handleModelAction(model.name, 'delete')}
-                                    className="border-red-500/30 text-red-400 hover:bg-red-500/20 hover:border-red-500/50 bg-red-500/10 text-xs"
-                                  >
-                                    <Trash2 size={12} className="mr-1" />
-                                    {t('common.delete')}
-                                  </Button>
-                                </>
-                              ) : (
-                                <Button
-                                  size="sm"
-                                  onClick={() => handleModelAction(model.name, 'download')}
-                                  disabled={model.status === 'downloading'}
-                                  className={`bg-gradient-to-r ${currentTheme.colors.primary} text-white border-0 hover:opacity-90 disabled:opacity-50 text-xs`}
-                                >
-                                  <Download size={12} className="mr-1" />
-                                  {t('models.download')}
-                                </Button>
-                              )}
+                              <Button
+                                size="sm"
+                                variant="ghost"
+                                className="px-2 py-1 h-auto bg-transparent text-white/70 hover:bg-white/10 hover:text-white"
+                                onClick={() => startDownload({ name: model.name, size: model.downloads || 0 })}
+                              >
+                                <Download className="w-4 h-4" />
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="ghost"
+                                className="px-2 py-1 h-auto bg-transparent text-red-400/70 hover:bg-red-500/10 hover:text-red-400"
+                                onClick={() => deleteModel(model.name)}
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </Button>
                             </div>
                           </TableCell>
                         </TableRow>
@@ -342,39 +279,42 @@ const ModelManager = () => {
 
             {/* Pagination */}
             {pagination && pagination.total_pages > 1 && (
-              <div className="mt-6 flex justify-center shrink-0">
+              <div className="flex justify-center items-center mt-6 shrink-0">
                 <Pagination>
                   <PaginationContent>
                     <PaginationItem>
-                      <PaginationPrevious 
-                        onClick={() => pagination.has_previous && handlePageChange(currentPage - 1)}
-                        className={`text-white hover:bg-white/10 ${!pagination.has_previous ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+                      <PaginationPrevious
+                        href="#"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          if (currentPage > 1) handlePageChange(currentPage - 1);
+                        }}
+                        className={currentPage === 1 ? 'pointer-events-none text-white/30' : 'text-white/80 hover:text-white'}
                       />
                     </PaginationItem>
-                    
-                    {Array.from({ length: Math.min(5, pagination.total_pages) }, (_, i) => {
-                      const pageNum = Math.max(1, currentPage - 2) + i;
-                      if (pageNum > pagination.total_pages) return null;
-                      
-                      return (
-                        <PaginationItem key={pageNum}>
-                          <PaginationLink
-                            onClick={() => handlePageChange(pageNum)}
-                            isActive={pageNum === currentPage}
-                            className={`text-white hover:bg-white/10 cursor-pointer ${
-                              pageNum === currentPage ? `bg-gradient-to-r ${currentTheme.colors.primary}` : ''
-                            }`}
-                          >
-                            {pageNum}
-                          </PaginationLink>
-                        </PaginationItem>
-                      );
-                    })}
-                    
+                    {[...Array(pagination.total_pages)].map((_, i) => (
+                      <PaginationItem key={i}>
+                        <PaginationLink
+                          href="#"
+                          isActive={currentPage === i + 1}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handlePageChange(i + 1);
+                          }}
+                          className={currentPage === i + 1 ? `bg-gradient-to-r ${currentTheme.colors.primary} text-white border-0` : 'text-white/80 hover:text-white'}
+                        >
+                          {i + 1}
+                        </PaginationLink>
+                      </PaginationItem>
+                    ))}
                     <PaginationItem>
-                      <PaginationNext 
-                        onClick={() => pagination.has_next && handlePageChange(currentPage + 1)}
-                        className={`text-white hover:bg-white/10 ${!pagination.has_next ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+                      <PaginationNext
+                        href="#"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          if (currentPage < pagination.total_pages) handlePageChange(currentPage + 1);
+                        }}
+                        className={currentPage === pagination.total_pages ? 'pointer-events-none text-white/30' : 'text-white/80 hover:text-white'}
                       />
                     </PaginationItem>
                   </PaginationContent>
@@ -385,11 +325,10 @@ const ModelManager = () => {
         )}
       </div>
       
-      <DownloadProgress 
-        downloads={downloads}
-        onCancel={cancelDownload}
-        onDismiss={dismissDownload}
-      />
+      {/* Download progress toasts */}
+      <div className="absolute bottom-4 right-4 space-y-2">
+        <DownloadProgress />
+      </div>
     </div>
   );
 };

@@ -1,4 +1,3 @@
-
 import { create } from 'zustand';
 import { getModelsApiUrl } from '../config/apiConfig';
 
@@ -6,10 +5,13 @@ interface Model {
   name: string;
   description: string;
   types: string[];
-  sizes: string[];
-  pulls: number;
+  downloads: number;
   tags: number;
-  updated_at: string;
+  updatedAt: string;
+  specs: {
+    parameter: string;
+    size: string;
+  };
   status?: 'running' | 'idle' | 'error' | 'downloading';
   downloadProgress?: number;
   isLocal?: boolean;
@@ -66,8 +68,21 @@ export const useModelStore = create<ModelState>((set, get) => ({
       
       const data = await response.json();
       
+      const transformedModels = (data.data || []).map((apiModel: any) => ({
+        name: apiModel.name || 'Unknown Model',
+        description: apiModel.description || '',
+        types: apiModel.types || [],
+        downloads: apiModel.downloads || apiModel.pulls || 0,
+        tags: apiModel.tags || 0,
+        updatedAt: apiModel.updatedAt || apiModel.updated_at || '',
+        specs: apiModel.specs || { parameter: '-', size: '-' },
+        status: apiModel.status,
+        downloadProgress: apiModel.downloadProgress,
+        isLocal: apiModel.isLocal,
+      }));
+      
       set({ 
-        models: data.data || [], 
+        models: transformedModels,
         pagination: data.pagination || null,
         isLoading: false 
       });

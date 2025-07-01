@@ -304,61 +304,67 @@ class OllamaAPI {
 
   // Delete model
   async deleteModel(modelName: string): Promise<boolean> {
-    try {
-      const baseUrl = await this.getBaseUrl();
-      const response = await fetch(`${baseUrl}/api/delete`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ model: modelName }),
-      });
-      return response.ok;
-    } catch (error) {
-      console.error('Failed to delete model:', error);
-      return false;
+    const baseUrl = await this.getBaseUrl();
+    const response = await fetch(`${baseUrl}/api/delete`, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model: modelName }),
+    });
+
+    if (!response.ok && response.status !== 404) {
+      throw new Error(`Failed to delete model: ${response.statusText}`);
     }
+    return response.ok;
   }
 
   // Pull model
-  async pullModel(modelName: string, onProgress?: (progress: any) => void): Promise<void> {
+  async pullModel(
+    modelName: string,
+    onProgress?: (progress: any) => void,
+    signal?: AbortSignal
+  ): Promise<void> {
     const baseUrl = await this.getBaseUrl();
     const response = await fetch(`${baseUrl}/api/pull`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ model: modelName, stream: true }),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: modelName, stream: true }),
+      signal, // Pass signal to fetch
     });
 
     if (!response.ok) {
-      throw new Error(`Failed to pull model: ${response.statusText}`);
+      const errorText = await response.text();
+      throw new Error(`Failed to pull model: ${response.statusText} - ${errorText}`);
     }
 
-    const reader = response.body?.getReader();
-    if (!reader) return;
+    if (!response.body) {
+      throw new Error('Response body is null');
+    }
 
-    try {
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
 
-        const chunk = new TextDecoder().decode(value);
-        const lines = chunk.split('\n').filter(line => line.trim());
+    let buffer = '';
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) {
+        break;
+      }
 
-        for (const line of lines) {
-          try {
-            const data = JSON.parse(line);
-            if (onProgress) {
-              onProgress(data);
-            }
-          } catch (e) {
-            // Ignore invalid JSON lines
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split('\n');
+      buffer = lines.pop() || ''; // Keep the last, possibly incomplete, line
+
+      for (const line of lines) {
+        if (line.trim() === '') continue;
+        try {
+          const progressData = JSON.parse(line);
+          if (onProgress) {
+            onProgress(progressData);
           }
+        } catch (error) {
+          console.error('Failed to parse progress update:', error);
         }
       }
-    } finally {
-      reader.releaseLock();
     }
   }
 
