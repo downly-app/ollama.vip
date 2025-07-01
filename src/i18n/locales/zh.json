@@ -135,7 +135,35 @@
     "getInfoFailed": "获取信息失败",
     "getInfoFailedMessage": "无法获取模型 {{modelName}} 的详细信息",
     "enterModelName": "请输入模型名称",
-    "enterModelNameMessage": "请输入要下载的模型名称"
+    "enterModelNameMessage": "请输入要下载的模型名称",
+    "dialog": {
+      "tabs": {
+        "overview": "概览",
+        "architecture": "架构",
+        "parameters": "参数",
+        "configuration": "配置"
+      },
+      "overview": {
+        "basicInfo": "基本信息",
+        "format": "格式",
+        "family": "模型族",
+        "parameterSize": "参数规模",
+        "quantizationLevel": "量化级别",
+        "supportedFamilies": "支持的模型族",
+        "modelCapabilities": "模型能力"
+      },
+      "architecture": {
+        "coreArchitectureInfo": "核心架构信息",
+        "detailedConfigInfo": "详细配置信息"
+      },
+      "parameters": {
+        "runtimeParameters": "运行时参数"
+      },
+      "configuration": {
+        "modelfileConfig": "Modelfile 配置",
+        "templateConfig": "模板配置"
+      }
+    }
   },
   "settings": {
     "title": "设置",

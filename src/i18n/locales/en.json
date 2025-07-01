@@ -132,7 +132,35 @@
     "getInfoFailed": "Failed to get information",
     "getInfoFailedMessage": "Unable to get detailed information for model {{modelName}}",
     "enterModelName": "Please enter model name",
-    "enterModelNameMessage": "Please enter the name of the model to download"
+    "enterModelNameMessage": "Please enter the name of the model to download",
+    "dialog": {
+      "tabs": {
+        "overview": "Overview",
+        "architecture": "Architecture",
+        "parameters": "Parameters",
+        "configuration": "Configuration"
+      },
+      "overview": {
+        "basicInfo": "Basic Information",
+        "format": "Format",
+        "family": "Family",
+        "parameterSize": "Parameter Size",
+        "quantizationLevel": "Quantization Level",
+        "supportedFamilies": "Supported Families",
+        "modelCapabilities": "Model Capabilities"
+      },
+      "architecture": {
+        "coreArchitectureInfo": "Core Architecture Information",
+        "detailedConfigInfo": "Detailed Configuration Information"
+      },
+      "parameters": {
+        "runtimeParameters": "Runtime Parameters"
+      },
+      "configuration": {
+        "modelfileConfig": "Modelfile Configuration",
+        "templateConfig": "Template Configuration"
+      }
+    }
   },
   "settings": {
     "title": "Settings",

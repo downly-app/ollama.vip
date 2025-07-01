@@ -167,7 +167,29 @@
         "getInfoFailed": "Échec d'obtention des informations",
         "getInfoFailedMessage": "Impossible d'obtenir les informations détaillées du modèle {{modelName}}",
         "enterModelName": "Veuillez entrer le nom du modèle",
-        "enterModelNameMessage": "Veuillez entrer le nom du modèle à télécharger"
+        "enterModelNameMessage": "Veuillez entrer le nom du modèle à télécharger",
+        "dialog": {
+            "tabs": {
+                "overview": "Aperçu",
+                "architecture": "Architecture",
+                "parameters": "Paramètres",
+                "configuration": "Configuration"
+            },
+            "content": {
+                "basicInfo": "Informations de base",
+                "format": "Format",
+                "family": "Famille",
+                "parameterSize": "Taille des paramètres",
+                "quantizationLevel": "Niveau de quantification",
+                "supportedFamilies": "Familles de modèles supportées",
+                "runtimeParameters": "Paramètres d'exécution",
+                "modelfileConfig": "Configuration Modelfile",
+                "templateConfig": "Configuration du modèle",
+                "coreArchitectureInfo": "Informations d'architecture principale",
+                "detailedConfigInfo": "Informations de configuration détaillées",
+                "modelCapabilities": "Capacités du modèle"
+            }
+        }
     },
     "settings": {
         "title": "Paramètres",

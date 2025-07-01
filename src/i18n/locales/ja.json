@@ -158,6 +158,34 @@
         "getInfoFailedMessage": "モデル {{modelName}} の詳細情報を取得できません",
         "enterModelName": "モデル名を入力してください",
         "enterModelNameMessage": "ダウンロードするモデル名を入力してください",
+        "dialog": {
+            "tabs": {
+                "overview": "概要",
+                "architecture": "アーキテクチャ",
+                "parameters": "パラメータ",
+                "configuration": "設定"
+            },
+            "overview": {
+                "basicInfo": "基本情報",
+                "format": "フォーマット",
+                "family": "ファミリー",
+                "parameterSize": "パラメータサイズ",
+                "quantizationLevel": "量子化レベル",
+                "supportedFamilies": "サポートされているファミリー",
+                "modelCapabilities": "モデル機能"
+            },
+            "architecture": {
+                "coreArchitectureInfo": "コアアーキテクチャ情報",
+                "detailedConfigInfo": "詳細設定情報"
+            },
+            "parameters": {
+                "runtimeParameters": "ランタイムパラメータ"
+            },
+            "configuration": {
+                "modelfileConfig": "Modelfile設定",
+                "templateConfig": "テンプレート設定"
+            }
+        },
         "status": {
             "downloading": "ダウンロード中",
             "paused": "一時停止中",

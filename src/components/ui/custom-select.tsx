@@ -76,7 +76,7 @@ const CustomSelect = ({
           <SelectValue placeholder={placeholder} className="text-white" />
         </SelectTrigger>
         <SelectContent
-          className="bg-white/10 backdrop-blur-xl border border-white/20 text-white shadow-2xl rounded-xl min-w-[280px] z-[9999]"
+          className="bg-white/10 backdrop-blur-xl border border-white/20 text-white shadow-2xl rounded-xl z-[9999]"
           position="popper"
           sideOffset={4}
         >

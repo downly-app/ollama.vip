@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
-import { ArrowLeft, Download, Copy, ExternalLink } from 'lucide-react';
+import { ArrowLeft, Download, Copy, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { useTheme } from '@/contexts/ThemeContext';
 import { fetchModelDetail } from '@/services/modelDetailApi';
-import { useModelStore } from '@/stores/modelStore';
 import { AppLayout, Sidebar, TitleBar } from '@/components/layouts';
 import Toolbar from '@/components/Toolbar';
 import { preprocessImageUrls } from '@/utils/imageUtils';
@@ -99,8 +98,14 @@ const ModelDetail = () => {
                 <div className="flex-1 min-w-0">
                   <CardTitle className="text-xl lg:text-2xl font-bold text-white mb-2 break-words">{model.name}</CardTitle>
                   <div className="flex flex-wrap items-center gap-2 lg:gap-4 text-white/70 text-sm mb-4">
-                    <span>💾 {formatNumber(model.pulls)} Downloads</span>
-                    <span>🕒 Updated {model.updated_at}</span>
+                    <span className="flex items-center gap-1">
+                      <Download size={14} />
+                      {formatNumber(model.pulls)} Downloads
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <Clock size={14} />
+                      Updated {model.updated_at}
+                    </span>
                   </div>
                 </div>
                 <div className="flex flex-col gap-3 shrink-0">

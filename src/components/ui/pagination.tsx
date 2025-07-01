@@ -52,6 +52,10 @@ const PaginationLink = ({
         variant: isActive ? "outline" : "ghost",
         size,
       }),
+      // Optimize pagination button hover styles
+      isActive 
+        ? "hover:bg-primary/10 hover:text-primary hover:border-primary/30" 
+        : "hover:bg-primary/10 hover:text-primary",
       className
     )}
     {...props}

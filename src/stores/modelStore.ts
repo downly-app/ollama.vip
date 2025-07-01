@@ -8,10 +8,7 @@ interface Model {
   downloads: number;
   tags: number;
   updatedAt: string;
-  specs: {
-    parameter: string;
-    size: string;
-  };
+  specs: string;
   status?: 'running' | 'idle' | 'error' | 'downloading';
   downloadProgress?: number;
   isLocal?: boolean;
@@ -75,7 +72,7 @@ export const useModelStore = create<ModelState>((set, get) => ({
         downloads: apiModel.downloads || apiModel.pulls || 0,
         tags: apiModel.tags || 0,
         updatedAt: apiModel.updatedAt || apiModel.updated_at || '',
-        specs: apiModel.specs || { parameter: '-', size: '-' },
+        specs: apiModel.sizes ? apiModel.sizes.join(', ') : '-',
         status: apiModel.status,
         downloadProgress: apiModel.downloadProgress,
         isLocal: apiModel.isLocal,

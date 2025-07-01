@@ -415,7 +415,29 @@
         "enterModelNameMessage": "다운로드할 모델 이름을 입력하세요",
         "downloadProgress": "다운로드 진행률",
         "downloadComplete": "다운로드 완료",
-        "downloadFailed": "다운로드 실패"
+        "downloadFailed": "다운로드 실패",
+        "dialog": {
+            "tabs": {
+                "overview": "개요",
+                "architecture": "아키텍처",
+                "parameters": "매개변수",
+                "configuration": "구성"
+            },
+            "content": {
+                "basicInfo": "기본 정보",
+                "format": "형식",
+                "family": "패밀리",
+                "parameterSize": "매개변수 규모",
+                "quantizationLevel": "양자화 수준",
+                "supportedFamilies": "지원되는 모델 패밀리",
+                "runtimeParameters": "런타임 매개변수",
+                "modelfileConfig": "Modelfile 구성",
+                "templateConfig": "템플릿 구성",
+                "coreArchitectureInfo": "핵심 아키텍처 정보",
+                "detailedConfigInfo": "상세 구성 정보",
+                "modelCapabilities": "모델 기능"
+            }
+        }
     },
     "apiKeyRequired": "API 키가 필요합니다",
     "apiKeyRequiredDescription": "대화를 시작하기 전에 API 키를 설정해주세요.",

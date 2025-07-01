@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Download, Trash2, Play, RefreshCw, Search, Filter } from 'lucide-react';
+import { Info, Search, Filter } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
@@ -29,7 +28,7 @@ import {
 import { useModelStore } from '@/stores/modelStore';
 import { useTheme } from '@/contexts/ThemeContext';
 import DownloadProgress from '@/components/DownloadProgress';
-import { useDownloadStore } from '@/stores/downloadStore';
+
 
 const ModelManager = () => {
   const { t } = useTranslation();
@@ -49,7 +48,7 @@ const ModelManager = () => {
     deleteModel, 
     setCurrentModel 
   } = useModelStore();
-  const { startDownload } = useDownloadStore();
+
 
   useEffect(() => {
     fetchModels(currentPage, searchQuery, selectedCategories, sortOrder);
@@ -244,29 +243,22 @@ const ModelManager = () => {
                             </div>
                           </TableCell>
                           <TableCell className="text-white/70 hidden lg:table-cell">
-                             {`${model.specs.parameter} / ${model.specs.size}`}
+                            {model.specs}
                           </TableCell>
                           <TableCell className="text-white/70 text-sm hidden xl:table-cell">{model.tags}</TableCell>
                           <TableCell className="text-white/70 text-sm hidden lg:table-cell">{formatNumber(model.downloads)}</TableCell>
                           <TableCell className="text-white/70 text-sm hidden xl:table-cell">{formatDate(model.updatedAt)}</TableCell>
                           <TableCell>
                             <div className="flex items-center gap-2">
-                              <Button
-                                size="sm"
-                                variant="ghost"
-                                className="px-2 py-1 h-auto bg-transparent text-white/70 hover:bg-white/10 hover:text-white"
-                                onClick={() => startDownload({ name: model.name, size: model.downloads || 0 })}
-                              >
-                                <Download className="w-4 h-4" />
-                              </Button>
-                              <Button
-                                size="sm"
-                                variant="ghost"
-                                className="px-2 py-1 h-auto bg-transparent text-red-400/70 hover:bg-red-500/10 hover:text-red-400"
-                                onClick={() => deleteModel(model.name)}
-                              >
-                                <Trash2 className="w-4 h-4" />
-                              </Button>
+                              <Link to={`/models/${model.name}`}>
+                                <Button
+                                  size="sm"
+                                  variant="ghost"
+                                  className="px-2 py-1 h-auto bg-transparent text-white/70 hover:bg-white/10 hover:text-white"
+                                >
+                                  <Info className="w-4 h-4" />
+                                </Button>
+                              </Link>
                             </div>
                           </TableCell>
                         </TableRow>
