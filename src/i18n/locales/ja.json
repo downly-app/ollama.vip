@@ -136,6 +136,7 @@
         "viewDetailedInfo": "モデルの詳細情報と設定を表示",
         "basicInfo": "基本情報",
         "family": "ファミリー",
+        "allFamilies": "すべてのファミリー",
         "format": "フォーマット",
         "quantization": "量子化",
         "capabilities": "機能",
@@ -158,6 +159,7 @@
         "getInfoFailedMessage": "モデル {{modelName}} の詳細情報を取得できません",
         "enterModelName": "モデル名を入力してください",
         "enterModelNameMessage": "ダウンロードするモデル名を入力してください",
+        "installed": "インストール済み",
         "dialog": {
             "tabs": {
                 "overview": "概要",
@@ -487,6 +489,7 @@
         },
         "actions": "操作",
         "noDownloadingJobs": "アクティブなダウンロードジョブはありません。",
-        "noCompletedJobs": "完了したダウンロードはありません"
+        "noCompletedJobs": "完了したダウンロードはありません",
+        "clearCompleted": "完了済みをクリア"
     }
 }

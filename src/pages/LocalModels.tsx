@@ -24,7 +24,7 @@ const LocalModels = () => {
           </div>
         </TitleBar>
 
-        <div className="flex-1 p-6 overflow-y-auto">
+        <div className="flex-1 p-6 overflow-y-auto overflow-x-hidden custom-scrollbar">
           <LocalModelManager />
         </div>
       </div>
@@ -32,4 +32,4 @@ const LocalModels = () => {
   );
 };
 
-export default LocalModels; 
+export default LocalModels;

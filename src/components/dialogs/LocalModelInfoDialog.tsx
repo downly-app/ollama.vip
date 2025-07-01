@@ -126,7 +126,7 @@ const LocalModelInfoDialog: React.FC<LocalModelInfoDialogProps> = ({ modelName, 
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <ScrollArea className="h-32 custom-scrollbar">
+              <ScrollArea className="h-48 custom-scrollbar">
                 <div className="space-y-2 pr-3">
                   {otherFields.slice(0, 20).map(field => {
                     const value = modelInfo.model_info[field];
@@ -210,7 +210,9 @@ const LocalModelInfoDialog: React.FC<LocalModelInfoDialogProps> = ({ modelName, 
           </TabsTrigger>
         </TabsList>
         
-        <TabsContent value="overview" className="mt-4 h-[400px] overflow-y-auto pr-3">
+        <TabsContent value="overview" className="mt-4 h-[400px]">
+          <ScrollArea className="h-full custom-scrollbar">
+            <div className="pr-3">
           <div className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <Card className="bg-white/5 backdrop-blur-sm border-white/10">
@@ -254,21 +256,31 @@ const LocalModelInfoDialog: React.FC<LocalModelInfoDialogProps> = ({ modelName, 
             </div>
             
             {renderCapabilities()}
-          </div>
+            </div>
+            </div>
+          </ScrollArea>
         </TabsContent>
         
-        <TabsContent value="architecture" className="mt-4 h-[400px] overflow-y-auto pr-3">
-          {renderModelInfo()}
+        <TabsContent value="architecture" className="mt-4 h-[400px]">
+          <ScrollArea className="h-full custom-scrollbar">
+            <div className="pr-3">
+              {renderModelInfo()}
+            </div>
+          </ScrollArea>
         </TabsContent>
         
-        <TabsContent value="parameters" className="mt-4 h-[400px] overflow-y-auto pr-3">
-          <div className="space-y-3">
-            <h4 className="font-semibold text-white/90 flex items-center gap-2">
-              <Settings className="w-4 h-4" />
-              {t('localModels.dialog.parameters.runtimeParameters')}
-            </h4>
-            {renderParameters()}
-          </div>
+        <TabsContent value="parameters" className="mt-4 h-[400px]">
+          <ScrollArea className="h-full custom-scrollbar">
+            <div className="pr-3">
+              <div className="space-y-3">
+                <h4 className="font-semibold text-white/90 flex items-center gap-2">
+                  <Settings className="w-4 h-4" />
+                  {t('localModels.dialog.parameters.runtimeParameters')}
+                </h4>
+                {renderParameters()}
+              </div>
+            </div>
+          </ScrollArea>
         </TabsContent>
         
         <TabsContent value="modelfile" className="mt-4 h-[400px]">
@@ -298,7 +310,7 @@ const LocalModelInfoDialog: React.FC<LocalModelInfoDialogProps> = ({ modelName, 
 
   return (
     <Dialog open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
-      <DialogContent className="max-w-4xl max-h-[90vh] bg-black/40 backdrop-blur-md border-white/10 text-white">
+      <DialogContent className="max-w-4xl max-h-[90vh] bg-black/20 backdrop-blur-xl border-white/10 text-white shadow-2xl">
         <DialogHeader>
           <DialogTitle className="break-all text-lg font-semibold">{modelName}</DialogTitle>
           {modelInfo && (

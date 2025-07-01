@@ -146,6 +146,7 @@
         "viewDetailedInfo": "Voir les informations détaillées et la configuration du modèle",
         "basicInfo": "Informations de base",
         "family": "Famille",
+        "allFamilies": "Toutes les familles",
         "format": "Format",
         "quantization": "Quantification",
         "capabilities": "Capacités",
@@ -168,6 +169,7 @@
         "getInfoFailedMessage": "Impossible d'obtenir les informations détaillées du modèle {{modelName}}",
         "enterModelName": "Veuillez entrer le nom du modèle",
         "enterModelNameMessage": "Veuillez entrer le nom du modèle à télécharger",
+        "installed": "Installé",
         "dialog": {
             "tabs": {
                 "overview": "Aperçu",

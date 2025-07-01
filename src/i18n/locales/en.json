@@ -133,6 +133,9 @@
     "getInfoFailedMessage": "Unable to get detailed information for model {{modelName}}",
     "enterModelName": "Please enter model name",
     "enterModelNameMessage": "Please enter the name of the model to download",
+    "installed": "Installed",
+    "allFamilies": "All Families",
+    "filteredCount": "{{count}} filtered",
     "dialog": {
       "tabs": {
         "overview": "Overview",
@@ -485,6 +488,9 @@
     "actions": "Actions",
     "noDownloadingJobs": "No active download jobs.",
     "noCompletedJobs": "No completed jobs.",
-    "clearCompleted": "Clear Completed"
+    "clearCompleted": "Clear Completed",
+    "pause": "Pause",
+    "resume": "Resume",
+    "retry": "Retry"
   }
 }

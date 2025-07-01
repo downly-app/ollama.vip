@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDownloadStore } from '@/stores/downloadStore';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -9,10 +9,13 @@ import { X, Pause, Play, RotateCw, Loader2 } from 'lucide-react';
 const DownloadProgress = () => {
   const { t } = useTranslation();
   const { tasks, pauseDownload, retryDownload, clearTask } = useDownloadStore();
+  const [hiddenTasks, setHiddenTasks] = useState<Set<string>>(new Set());
 
   const activeTasks = useMemo(() => {
-    return Object.values(tasks).filter(task => task.status !== 'completed');
-  }, [tasks]);
+    return Object.values(tasks).filter(task => 
+      task.status !== 'completed' && !hiddenTasks.has(task.id)
+    );
+  }, [tasks, hiddenTasks]);
 
   const formatBytes = (bytes: number | undefined | null) => {
     if (bytes === undefined || bytes === null || isNaN(bytes)) return '0 Bytes';
@@ -33,7 +36,13 @@ const DownloadProgress = () => {
         <Card key={task.id} className="bg-gray-800/80 backdrop-blur-sm border-white/20 text-white shadow-lg">
           <CardHeader className="flex flex-row items-center justify-between p-2">
             <CardTitle className="text-sm font-medium">{t('models.downloading')} - {task.modelName}</CardTitle>
-            <Button variant="ghost" size="icon" className="w-6 h-6" onClick={() => clearTask(task.id)}>
+            <Button variant="ghost" size="icon" className="w-6 h-6" onClick={() => {
+              if (task.status === 'completed' || task.status === 'error') {
+                clearTask(task.id);
+              } else {
+                setHiddenTasks(prev => new Set(prev).add(task.id));
+              }
+            }}>
               <X className="w-4 h-4" />
             </Button>
           </CardHeader>
@@ -48,9 +57,9 @@ const DownloadProgress = () => {
                 <div className="text-xs text-white/70 mb-1">
                   {t(`downloads.status.${task.status}`)}
                 </div>
-                <Progress value={task.progress} className="h-2 bg-black/20 [&>div]:bg-purple-500" />
+                <Progress value={task.progress || 0} className="h-2 bg-black/20 [&>div]:bg-purple-500" />
                 <div className="flex justify-between items-center text-xs mt-1 text-white/70">
-                  <span>{task.progress.toFixed(1)}%</span>
+                  <span>{(task.progress || 0).toFixed(1)}%</span>
                   <span>{formatBytes(task.completed)} / {formatBytes(task.total)}</span>
                   <span>{formatBytes(task.speed)}/s</span>
                 </div>

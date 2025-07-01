@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
-import { ArrowLeft, Download, Copy, Clock } from 'lucide-react';
+import { ArrowLeft, Download, Copy, Clock, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -15,6 +15,7 @@ import { preprocessImageUrls } from '@/utils/imageUtils';
 import DownloadProgress from '@/components/DownloadProgress';
 import { useDownloadStore } from '@/stores/downloadStore';
 import { toast } from '@/components/ui/use-toast';
+import { modelService } from '@/services/modelService';
 
 const ModelDetail = () => {
   const { modelName } = useParams<{ modelName: string }>();
@@ -28,6 +29,13 @@ const ModelDetail = () => {
     queryKey: ['modelDetail', modelName],
     queryFn: () => fetchModelDetail(modelName!),
     enabled: !!modelName,
+  });
+
+  // Get local models list to check if models are already installed
+  const { data: localModels = [] } = useQuery({
+    queryKey: ['localModels'],
+    queryFn: () => modelService.fetchLocalModels(),
+    staleTime: 30000, // Cache for 30 seconds
   });
 
   const getTypeColor = (type: string) => {
@@ -51,6 +59,11 @@ const ModelDetail = () => {
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
+  };
+
+  // Check if a model is already installed locally
+  const isModelInstalled = (modelName: string): boolean => {
+    return localModels.some(localModel => localModel.name === modelName);
   };
 
   const handleDownload = async (tagName: string, size: number) => {
@@ -120,14 +133,25 @@ const ModelDetail = () => {
                       <Copy size={12} />
                     </Button>
                   </div>
-                  <Button
-                    size="sm"
-                    onClick={() => handleDownload(latestTag.name, Number(latestTag.size) || 0)}
-                    className={`bg-gradient-to-r ${currentTheme.colors.primary} text-white border-0 hover:opacity-90 px-4 py-2 rounded-lg font-medium shadow-lg transition-all duration-200 whitespace-nowrap`}
-                  >
-                    <Download size={14} className="mr-2" />
-                    {t('models.installNow')}
-                  </Button>
+                  {isModelInstalled(latestTag.name) ? (
+                    <Button
+                      size="sm"
+                      disabled
+                      className={`bg-gradient-to-r ${currentTheme.colors.primary}/30 text-white/70 border-0 px-4 py-2 rounded-lg font-medium shadow-lg transition-all duration-200 whitespace-nowrap cursor-not-allowed min-w-[120px]`}
+                    >
+                      <Check size={14} className="mr-2" />
+                      {t('localModels.installed')}
+                    </Button>
+                  ) : (
+                    <Button
+                      size="sm"
+                      onClick={() => handleDownload(latestTag.name, Number(latestTag.size) || 0)}
+                      className={`bg-gradient-to-r ${currentTheme.colors.primary} text-white border-0 hover:opacity-90 px-4 py-2 rounded-lg font-medium shadow-lg transition-all duration-200 whitespace-nowrap min-w-[120px]`}
+                    >
+                      <Download size={14} className="mr-2" />
+                      {t('models.installNow')}
+                    </Button>
+                  )}
                 </div>
               </div>
 
@@ -205,14 +229,25 @@ const ModelDetail = () => {
                             >
                               <Copy size={14} />
                             </Button>
-                            <Button
-                              size="sm"
-                              onClick={() => handleDownload(tag.name, Number(tag.size) || 0)}
-                              className={`bg-gradient-to-r ${currentTheme.colors.primary} text-white border-0 hover:opacity-90 px-3 py-1 text-xs`}
-                            >
-                              <Download size={12} className="mr-1" />
-                              {t('models.install')}
-                            </Button>
+                            {isModelInstalled(tag.name) ? (
+                              <Button
+                                size="sm"
+                                disabled
+                                className={`bg-gradient-to-r ${currentTheme.colors.primary}/30 text-white/70 border-0 px-3 py-1 text-xs cursor-not-allowed min-w-[90px]`}
+                              >
+                                <Check size={12} className="mr-1" />
+                                {t('localModels.installed')}
+                              </Button>
+                            ) : (
+                              <Button
+                                size="sm"
+                                onClick={() => handleDownload(tag.name, Number(tag.size) || 0)}
+                                className={`bg-gradient-to-r ${currentTheme.colors.primary} text-white border-0 hover:opacity-90 px-3 py-1 text-xs min-w-[90px]`}
+                              >
+                                <Download size={12} className="mr-1" />
+                                {t('models.install')}
+                              </Button>
+                            )}
                           </div>
                         </TableCell>
                       </TableRow>

@@ -136,6 +136,9 @@
     "getInfoFailedMessage": "无法获取模型 {{modelName}} 的详细信息",
     "enterModelName": "请输入模型名称",
     "enterModelNameMessage": "请输入要下载的模型名称",
+    "installed": "已安装",
+    "allFamilies": "所有家族",
+    "filteredCount": "筛选后 {{count}} 个",
     "dialog": {
       "tabs": {
         "overview": "概览",
@@ -469,6 +472,9 @@
     "actions": "操作",
     "noDownloadingJobs": "没有正在下载的任务。",
     "noCompletedJobs": "没有已完成的任务。",
-    "clearCompleted": "清除已完成"
+    "clearCompleted": "清除已完成",
+    "pause": "暂停",
+    "resume": "继续",
+    "retry": "重试"
   }
 }
