@@ -130,7 +130,7 @@
         "browseOnlineModels": "上のダウンロード機能を使ってモデルを追加するか、<0>オンラインモデルマーケットプレイス</0>で探してインストールしてください。",
         "size": "サイズ",
         "parameters": "パラメータ",
-        "modifiedTime": "変更日時",
+        "installedTime": "インストール日時",
         "details": "詳細",
         "modelInfo": "モデル情報",
         "viewDetailedInfo": "モデルの詳細情報と設定を表示",

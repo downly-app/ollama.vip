@@ -324,7 +324,7 @@ const LocalModelManager = () => {
                   className="text-white hover:bg-white/20 focus:bg-white/20 focus:text-white cursor-pointer rounded-lg mx-1 my-0.5 px-3 py-2 text-sm data-[highlighted]:bg-white/20 data-[highlighted]:text-white"
                 >
                   <div className="flex items-center justify-between w-full">
-                    <span>Modified</span>
+                    <span>Installed</span>
                     <div className="flex items-center gap-1">
                       {sortBy === 'modified' && (
                         <div className="w-2 h-2 rounded-full bg-blue-400 flex-shrink-0"></div>
@@ -484,7 +484,7 @@ const LocalModelManager = () => {
                           <span className="font-mono">{model.details.parameter_size}</span>
                         </div>
                         <div className="flex justify-between">
-                          <span>{t('localModels.modifiedTime')}:</span>
+                          <span>{t('localModels.installedTime')}:</span>
                           <span className="font-mono text-xs">{formatDate(model.modified_at)}</span>
                         </div>
                       </div>
@@ -562,7 +562,7 @@ const LocalModelManager = () => {
                             </div>
                             <div className="text-center">
                               <div className="font-mono text-xs">{formatDate(model.modified_at)}</div>
-                              <div className="text-xs text-white/40">Modified</div>
+                              <div className="text-xs text-white/40">Installed</div>
                             </div>
                           </div>
                         </div>

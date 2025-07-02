@@ -108,7 +108,7 @@
     "browseOnlineModels": "使用上方的下载功能添加模型，或前往 <0>在线模型市场</0> 浏览并安装。",
     "size": "大小",
     "parameters": "参数",
-    "modifiedTime": "修改时间",
+    "installedTime": "安装时间",
     "details": "详情",
     "modelInfo": "模型信息",
     "viewDetailedInfo": "查看模型的详细信息和配置",

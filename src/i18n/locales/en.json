@@ -105,7 +105,7 @@
     "browseOnlineModels": "Use the download function above to add a model, or go to the <0>Online Model Marketplace</0> to browse and install.",
     "size": "Size",
     "parameters": "Parameters",
-    "modifiedTime": "Modified Time",
+    "installedTime": "Installed Time",
     "details": "Details",
     "modelInfo": "Model Information",
     "viewDetailedInfo": "View detailed model information and configuration",

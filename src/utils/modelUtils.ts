@@ -103,3 +103,58 @@ export const handleModelIconError = (e: React.SyntheticEvent<HTMLImageElement>):
   e.currentTarget.onerror = null;
   e.currentTarget.src = DEFAULT_ICON;
 };
+
+/**
+ * Parse the file path from Modelfile FROM instruction
+ * @param modelfileContent The content of the Modelfile
+ * @returns The file path from FROM instruction, or null if not found
+ */
+export const parseModelFilePath = (modelfileContent: string): string | null => {
+  if (!modelfileContent) return null;
+
+  // Split content into lines
+  const lines = modelfileContent.split('\n');
+  
+  // Find the FROM instruction line
+  for (const line of lines) {
+    const trimmedLine = line.trim();
+    
+    // Check if line starts with FROM (case insensitive)
+    if (trimmedLine.toLowerCase().startsWith('from ')) {
+      // Extract the path after "FROM "
+      const fromContent = trimmedLine.substring(5).trim();
+      
+      // Remove any quotes if present
+      const cleanPath = fromContent.replace(/^["']|["']$/g, '');
+      
+      // Return the path if it looks like a file path (contains path separators)
+       if (cleanPath.includes('/') || cleanPath.includes('\\') || cleanPath.includes(':')) {
+         // Normalize Windows paths to use forward slashes
+         return cleanPath.replace(/\\/g, '/');
+       }
+      
+      // If it's just a model name without path, return null
+      return null;
+    }
+  }
+  
+  return null;
+};
+
+/**
+ * Parse the file path from Modelfile FROM instruction by model name
+ * This function would typically be used with a model registry or file system lookup
+ * @param modelName The name of the model
+ * @returns The file path for the model, or null if not found
+ */
+export const getModelFilePathByName = (modelName: string): string | null => {
+  // This is a placeholder implementation
+  // In a real scenario, you would:
+  // 1. Look up the model in a registry
+  // 2. Read the corresponding Modelfile
+  // 3. Parse the FROM instruction
+  
+  // For now, return null as this would require integration with Ollama's model storage
+  console.warn('getModelFilePathByName: This function requires integration with Ollama model storage');
+  return null;
+};

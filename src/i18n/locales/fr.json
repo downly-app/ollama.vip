@@ -140,7 +140,7 @@
         "browseOnlineModels": "Utilisez la fonction de téléchargement ci-dessus pour ajouter un modèle, ou allez sur le <0>Marché des Modèles en Ligne</0> pour parcourir et installer.",
         "size": "Taille",
         "parameters": "Paramètres",
-        "modifiedTime": "Date de modification",
+        "installedTime": "Date d'installation",
         "details": "Détails",
         "modelInfo": "Informations du modèle",
         "viewDetailedInfo": "Voir les informations détaillées et la configuration du modèle",

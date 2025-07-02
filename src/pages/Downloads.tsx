@@ -31,7 +31,9 @@ const Downloads = () => {
     , [tasks]);
 
   const completedTasks = useMemo(() =>
-      Object.values(tasks).filter(task => task.status === 'completed')
+      Object.values(tasks)
+        .filter(task => task.status === 'completed')
+        .sort((a, b) => (b.completedAt || 0) - (a.completedAt || 0))
     , [tasks]);
 
   const formatBytes = (bytes: number, decimals = 2) => {
@@ -115,12 +117,17 @@ const Downloads = () => {
                       </>
                     ) : (
                       <>
-                         <span>
+                        <span>
                           {`${formatBytes(task.completed)} / ${formatBytes(task.total)}`}
                         </span>
+                        {task.status === 'downloading' && (
+                          <span className="min-w-[60px] text-right">
+                            {task.speed > 0 ? `${formatBytes(task.speed)}/s` : '--'}
+                          </span>
+                        )}
                         <span className="flex items-center gap-1">
                           <StatusIcon status={task.status} />
-                           {t(`downloads.status.${task.status}`, { defaultValue: task.status })}
+                          {t(`downloads.status.${task.status}`, { defaultValue: task.status })}
                         </span>
                       </>
                     )}
@@ -204,4 +211,4 @@ const Downloads = () => {
   );
 };
 
-export default Downloads; 
+export default Downloads;

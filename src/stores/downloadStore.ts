@@ -82,6 +82,8 @@ export const useDownloadStore = create<DownloadState>()(
 
         let lastProgressTime = Date.now();
         let lastCompleted = 0;
+        let lastUpdateTime = 0;
+        const UPDATE_INTERVAL = 500; // Update UI every 500ms to reduce flickering
 
         try {
           await ollamaApi.pullModel(modelName, (progress) => {
@@ -101,14 +103,18 @@ export const useDownloadStore = create<DownloadState>()(
             const remainingBytes = progress.total - progress.completed;
             const remainingTime = speed > 0 ? remainingBytes / speed : Infinity;
             
-            updateTaskState(modelName, {
-              status: 'downloading',
-              total: progress.total || 0,
-              completed: progress.completed || 0,
-              progress: (progress.total || 0) > 0 ? ((progress.completed || 0) / (progress.total || 1)) * 100 : 0,
-              speed,
-              remainingTime,
-            });
+            // Only update UI every UPDATE_INTERVAL milliseconds to reduce flickering
+            if (now - lastUpdateTime >= UPDATE_INTERVAL || progress.completed === progress.total) {
+              updateTaskState(modelName, {
+                status: 'downloading',
+                total: progress.total || 0,
+                completed: progress.completed || 0,
+                progress: (progress.total || 0) > 0 ? ((progress.completed || 0) / (progress.total || 1)) * 100 : 0,
+                speed,
+                remainingTime,
+              });
+              lastUpdateTime = now;
+            }
 
             lastProgressTime = now;
             lastCompleted = progress.completed;
@@ -201,4 +207,4 @@ export const useDownloadStore = create<DownloadState>()(
       },
     }
   )
-); 
+);
