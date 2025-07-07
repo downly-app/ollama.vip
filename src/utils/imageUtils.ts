@@ -25,13 +25,17 @@ export const fixSvgUrl = (url: string): string => {
 const safeBase64Encode = (str: string): string => {
   try {
     // Use combination of encodeURIComponent and btoa to handle Unicode characters
-    return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (match, p1) => {
-      return String.fromCharCode(parseInt(p1, 16));
-    }));
+    return btoa(
+      encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (match, p1) => {
+        return String.fromCharCode(parseInt(p1, 16));
+      })
+    );
   } catch (error) {
     // If still fails, return a simple placeholder
-    console.warn('Base64 encoding failed:', error);
-    return btoa('<svg width="200" height="100" xmlns="http://www.w3.org/2000/svg"><rect width="100%" height="100%" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.2)" stroke-width="1" rx="8"/><text x="50%" y="50%" text-anchor="middle" dy="0.3em" fill="rgba(255,255,255,0.6)" font-family="Arial, sans-serif" font-size="12">Image Error</text></svg>');
+    // Base64 encoding failed
+    return btoa(
+      '<svg width="200" height="100" xmlns="http://www.w3.org/2000/svg"><rect width="100%" height="100%" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.2)" stroke-width="1" rx="8"/><text x="50%" y="50%" text-anchor="middle" dy="0.3em" fill="rgba(255,255,255,0.6)" font-family="Arial, sans-serif" font-size="12">Image Error</text></svg>'
+    );
   }
 };
 
@@ -78,7 +82,11 @@ export const preprocessImageUrls = (html: string): string => {
       const alt = match.match(/alt=["']([^"']*?)["']/i)?.[1] || '';
 
       // Create a simple error handling placeholder, avoid using complex base64 in HTML attributes
-      const errorPlaceholder = 'data:image/svg+xml;base64,' + btoa('<svg width="200" height="100" xmlns="http://www.w3.org/2000/svg"><rect width="100%" height="100%" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.2)" stroke-width="1" rx="8"/><text x="50%" y="50%" text-anchor="middle" dy="0.3em" fill="rgba(255,255,255,0.6)" font-family="Arial, sans-serif" font-size="12">Image Error</text></svg>');
+      const errorPlaceholder =
+        'data:image/svg+xml;base64,' +
+        btoa(
+          '<svg width="200" height="100" xmlns="http://www.w3.org/2000/svg"><rect width="100%" height="100%" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.2)" stroke-width="1" rx="8"/><text x="50%" y="50%" text-anchor="middle" dy="0.3em" fill="rgba(255,255,255,0.6)" font-family="Arial, sans-serif" font-size="12">Image Error</text></svg>'
+        );
 
       return `<img${before}src="${fixedSrc}"${after} onerror="this.src='${errorPlaceholder}'; this.style.filter='none';">`;
     }
@@ -90,10 +98,7 @@ export const preprocessImageUrls = (html: string): string => {
     '<div class="table-scroll-wrapper"><table$1>'
   );
 
-  processedHtml = processedHtml.replace(
-    /<\/table>/gi,
-    '</table></div>'
-  );
+  processedHtml = processedHtml.replace(/<\/table>/gi, '</table></div>');
 
   return processedHtml;
 };

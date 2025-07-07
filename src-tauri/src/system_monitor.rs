@@ -27,6 +27,7 @@ mod gpu_fallback {
 }
 use sysinfo::{CpuExt, CpuRefreshKind, DiskExt, RefreshKind, System, SystemExt};
 use std::time::Duration;
+use std::path::Path;
 
 #[derive(Serialize)]
 pub struct CpuInfo {
@@ -105,6 +106,15 @@ impl SystemMonitor {
         }
     }
 
+    pub fn get_system_info_for_path(&self, storage_path: &str) -> SystemInfo {
+        SystemInfo {
+            cpu: self.get_cpu_info(),
+            memory: self.get_memory_info(),
+            disks: self.get_disk_info_for_path(storage_path),
+            gpus: get_gpu_info(),
+        }
+    }
+
     fn get_cpu_info(&self) -> CpuInfo {
         let model = self.system
             .cpus()
@@ -164,6 +174,62 @@ impl SystemMonitor {
                 }
             })
             .collect()
+    }
+
+    fn get_disk_info_for_path(&self, path: &str) -> Vec<DiskInfo> {
+        // Normalize the path and find the disk that contains this path
+        let target_path = Path::new(path);
+        
+        // Find the disk with the longest matching mount point
+        let mut best_match: Option<&sysinfo::Disk> = None;
+        let mut best_match_len = 0;
+        
+        for disk in self.system.disks() {
+            let mount_point = disk.mount_point();
+            
+            // Check if the target path starts with this mount point
+            if target_path.starts_with(mount_point) {
+                let mount_point_len = mount_point.to_string_lossy().len();
+                if mount_point_len > best_match_len {
+                    best_match = Some(disk);
+                    best_match_len = mount_point_len;
+                }
+            }
+        }
+        
+        // If we found a matching disk, return its info
+        if let Some(disk) = best_match {
+            let total = disk.total_space() as f64 / 1_073_741_824.0;
+            let avail = disk.available_space() as f64 / 1_073_741_824.0;
+            let used = total - avail;
+            let pct = if total > 0.0 { used / total * 100.0 } else { 0.0 };
+            
+            vec![DiskInfo {
+                mount_point: disk.mount_point().to_string_lossy().into(),
+                disk_type: format!("{:?}", disk.kind()),
+                total_gb: total,
+                used_gb: used,
+                usage_percent: pct,
+            }]
+        } else {
+            // Fallback: return the first disk or empty if no disks
+            if let Some(disk) = self.system.disks().first() {
+                let total = disk.total_space() as f64 / 1_073_741_824.0;
+                let avail = disk.available_space() as f64 / 1_073_741_824.0;
+                let used = total - avail;
+                let pct = if total > 0.0 { used / total * 100.0 } else { 0.0 };
+                
+                vec![DiskInfo {
+                    mount_point: disk.mount_point().to_string_lossy().into(),
+                    disk_type: format!("{:?}", disk.kind()),
+                    total_gb: total,
+                    used_gb: used,
+                    usage_percent: pct,
+                }]
+            } else {
+                vec![]
+            }
+        }
     }
 }
 
@@ -359,4 +425,11 @@ pub fn get_system_info() -> Result<SystemInfo> {
     let mut monitor = SystemMonitor::new();
     monitor.refresh();
     Ok(monitor.get_system_info())
+}
+
+// Convenience function for quickly getting system information for a specific path
+pub fn get_system_info_for_path(storage_path: &str) -> Result<SystemInfo> {
+    let mut monitor = SystemMonitor::new();
+    monitor.refresh();
+    Ok(monitor.get_system_info_for_path(storage_path))
 }

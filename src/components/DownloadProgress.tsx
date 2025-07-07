@@ -1,138 +1,107 @@
-import React from 'react';
-import { Progress } from '@/components/ui/progress';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Download, X, CheckCircle, AlertCircle } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Loader2, Pause, Play, RotateCw, X } from 'lucide-react';
+
+import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-export interface DownloadProgressData {
-  id: string;
-  modelName: string;
-  status: 'pulling manifest' | 'downloading' | 'verifying sha256 digest' | 'writing manifest' | 'removing any unused layers' | 'success' | 'error';
-  digest?: string;
-  total?: number;
-  completed?: number;
-  error?: string;
-}
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
+import { useDownloadStore } from '@/stores/downloadStore';
 
-interface DownloadProgressProps {
-  downloads: DownloadProgressData[];
-  onCancel?: (id: string) => void;
-  onDismiss?: (id: string) => void;
-}
-
-const DownloadProgress: React.FC<DownloadProgressProps> = ({ downloads, onCancel, onDismiss }) => {
+const DownloadProgress = () => {
   const { t } = useTranslation();
+  const { tasks, pauseDownload, retryDownload, clearTask } = useDownloadStore();
+  const [hiddenTasks, setHiddenTasks] = useState<Set<string>>(new Set());
 
-  const getStatusText = (status: string) => {
-    switch (status) {
-      case 'pulling manifest':
-        return 'Pulling manifest...';
-      case 'downloading':
-        return 'Downloading...';
-      case 'verifying sha256 digest':
-        return 'Verifying file...';
-      case 'writing manifest':
-        return 'Writing manifest...';
-      case 'removing any unused layers':
-        return 'Cleaning up...';
-      case 'success':
-        return 'Download completed';
-      case 'error':
-        return 'Download failed'
-      default:
-        return status;
-    }
-  };
+  const activeTasks = useMemo(() => {
+    return Object.values(tasks).filter(
+      task => task.status !== 'completed' && !hiddenTasks.has(task.id)
+    );
+  }, [tasks, hiddenTasks]);
 
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case 'success':
-        return <CheckCircle className="w-4 h-4 text-green-400" />;
-      case 'error':
-        return <AlertCircle className="w-4 h-4 text-red-400" />;
-      default:
-        return <Download className="w-4 h-4 text-blue-400 animate-pulse" />;
-    }
-  };
-
-  const formatBytes = (bytes: number) => {
-    if (bytes === 0) return '0 B';
+  const formatBytes = (bytes: number | undefined | null) => {
+    if (bytes === undefined || bytes === null || isNaN(bytes)) return '0 Bytes';
+    if (bytes === 0) return '0 Bytes';
     const k = 1024;
-    const sizes = ['B', 'KB', 'MB', 'GB'];
+    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   };
 
-  const getProgress = (download: DownloadProgressData) => {
-    if (download.status === 'success') return 100;
-    if (download.status === 'error') return 0;
-    if (download.total && download.completed) {
-      return Math.round((download.completed / download.total) * 100);
-    }
-    return 0;
-  };
-
-  if (downloads.length === 0) return null;
+  if (activeTasks.length === 0) {
+    return null;
+  }
 
   return (
-    <div className="fixed bottom-4 right-4 z-50 space-y-2 max-w-sm w-full">
-      {downloads.map((download) => (
-        <Card key={download.id} className="bg-black/90 backdrop-blur-sm border-white/20 text-white">
-          <CardHeader className="pb-2">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                {getStatusIcon(download.status)}
-                <CardTitle className="text-sm font-medium truncate">
-                  {download.modelName}
-                </CardTitle>
-              </div>
-              <div className="flex items-center space-x-1">
-                {download.status !== 'success' && download.status !== 'error' && onCancel && (
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    onClick={() => onCancel(download.id)}
-                    className="h-6 w-6 p-0 text-white/70 hover:text-white hover:bg-white/10"
-                  >
-                    <X size={12} />
-                  </Button>
-                )}
-                {(download.status === 'success' || download.status === 'error') && onDismiss && (
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    onClick={() => onDismiss(download.id)}
-                    className="h-6 w-6 p-0 text-white/70 hover:text-white hover:bg-white/10"
-                  >
-                    <X size={12} />
-                  </Button>
-                )}
-              </div>
-            </div>
+    <div className='fixed bottom-4 right-4 w-80 space-y-2 z-50'>
+      {activeTasks.map(task => (
+        <Card
+          key={task.id}
+          className='bg-gray-800/80 backdrop-blur-sm border-white/20 text-white shadow-lg'
+        >
+          <CardHeader className='flex flex-row items-center justify-between p-2'>
+            <CardTitle className='text-sm font-medium'>
+              {t('models.downloading')} - {task.modelName}
+            </CardTitle>
+            <Button
+              variant='ghost'
+              size='icon'
+              className='w-6 h-6'
+              onClick={() => {
+                if (task.status === 'completed' || task.status === 'error') {
+                  clearTask(task.id);
+                } else {
+                  setHiddenTasks(prev => new Set(prev).add(task.id));
+                }
+              }}
+            >
+              <X className='w-4 h-4' />
+            </Button>
           </CardHeader>
-          <CardContent className="pt-0">
-            <div className="space-y-2">
-              <div className="flex items-center justify-between text-xs text-white/70">
-                <span>{getStatusText(download.status)}</span>
-                {download.total && download.completed && (
-                  <span>
-                    {formatBytes(download.completed)} / {formatBytes(download.total)}
-                  </span>
-                )}
+          <CardContent className='p-2'>
+            {task.status === 'finalizing' ? (
+              <div className='flex items-center text-xs text-white/70'>
+                <Loader2 className='w-4 h-4 mr-2 animate-spin' />
+                {t('downloads.status.finalizing')}...
               </div>
-              {download.status === 'downloading' && download.total && download.completed && (
-                <Progress 
-                  value={getProgress(download)} 
-                  className="h-2 bg-white/10"
-                />
-              )}
-              {download.status === 'error' && download.error && (
-                <div className="text-xs text-red-400 mt-1">
-                  {download.error}
+            ) : (
+              <>
+                <div className='text-xs text-white/70 mb-1'>
+                  {t(`downloads.status.${task.status}`)}
                 </div>
-              )}
-            </div>
+                <Progress
+                  value={task.progress || 0}
+                  className='h-2 bg-black/20 [&>div]:bg-purple-500'
+                />
+                <div className='flex justify-between items-center text-xs mt-1 text-white/70'>
+                  <span>{(task.progress || 0).toFixed(1)}%</span>
+                  <span>
+                    {formatBytes(task.completed)} / {formatBytes(task.total)}
+                  </span>
+                  <span>{formatBytes(task.speed)}/s</span>
+                </div>
+                <div className='flex items-center justify-end mt-1'>
+                  {task.status === 'downloading' && (
+                    <Button variant='ghost' size='sm' onClick={() => pauseDownload(task.id)}>
+                      <Pause className='w-4 h-4 mr-1' />
+                      {t('downloads.pause')}
+                    </Button>
+                  )}
+                  {task.status === 'paused' && (
+                    <Button variant='ghost' size='sm' onClick={() => retryDownload(task.id)}>
+                      <Play className='w-4 h-4 mr-1' />
+                      {t('downloads.resume')}
+                    </Button>
+                  )}
+                  {task.status === 'error' && (
+                    <Button variant='ghost' size='sm' onClick={() => retryDownload(task.id)}>
+                      <RotateCw className='w-4 h-4 mr-1' />
+                      {t('downloads.retry')}
+                    </Button>
+                  )}
+                </div>
+              </>
+            )}
           </CardContent>
         </Card>
       ))}

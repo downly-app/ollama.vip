@@ -1,6 +1,7 @@
-import {AIConfig, MODEL_PROVIDERS, RemoteModelProvider} from '@/types/ai';
+import { AIConfig, MODEL_PROVIDERS, RemoteModelProvider } from '@/types/ai';
+
 import configApi from './configApi';
-import {modelService} from './modelService';
+import { modelService } from './modelService';
 
 export interface ChatMessage {
   id: string;
@@ -23,7 +24,7 @@ class AIApiService {
   ): Promise<Response> {
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
-      ...(options.headers as Record<string, string> || {}),
+      ...((options.headers as Record<string, string>) || {}),
     };
 
     // Only remote APIs need authentication headers
@@ -46,9 +47,9 @@ class AIApiService {
             break;
         }
 
-        console.log(`AIApiService: Adding authentication header for ${config.provider}`);
+        // Adding authentication header
       } else {
-        console.warn(`AIApiService: ${config.provider} missing API Key configuration`);
+        // Missing API Key configuration
       }
     }
 
@@ -85,16 +86,16 @@ class AIApiService {
   ): Promise<string> {
     const apiMessages = messages.map(msg => ({
       role: msg.sender === 'user' ? 'user' : 'assistant',
-      content: msg.content
+      content: msg.content,
     }));
 
     // Ensure using complete model name
     const modelName = config.model;
-    console.log('Original model name:', modelName);
+    // Original model name logged
 
     // If model name doesn't contain colon, it might be incomplete, need to log warning
     if (!modelName.includes(':')) {
-      console.warn('Model name might be incomplete, missing format suffix:', modelName);
+      // Model name might be incomplete
     }
 
     const requestBody = {
@@ -103,27 +104,26 @@ class AIApiService {
       stream: !!onChunk,
       options: {
         temperature: config.temperature || 0.7,
-      }
+      },
     };
 
     const baseURL = await this.getBaseURL(config);
     const url = `${baseURL}/api/chat`;
 
-    try {
-      const response = await this.makeRequest(url, {
+    const response = await this.makeRequest(
+      url,
+      {
         method: 'POST',
         body: JSON.stringify(requestBody),
-      }, config);
+      },
+      config
+    );
 
-      if (onChunk) {
-        return await this.handleOllamaStreamResponse(response, onChunk);
-      } else {
-        const data = await response.json();
-        return data.message?.content || '';
-      }
-    } catch (error) {
-      console.error('Ollama API Error:', error);
-      throw error;
+    if (onChunk) {
+      return await this.handleOllamaStreamResponse(response, onChunk);
+    } else {
+      const data = await response.json();
+      return data.message?.content || '';
     }
   }
 
@@ -134,7 +134,7 @@ class AIApiService {
   ): Promise<string> {
     const apiMessages = messages.map(msg => ({
       role: msg.sender === 'user' ? 'user' : 'assistant',
-      content: msg.content
+      content: msg.content,
     }));
 
     const requestBody = {
@@ -146,24 +146,23 @@ class AIApiService {
     };
 
     const baseURL = await this.getBaseURL(config);
-    console.log(`Using ${config.provider} API address:`, baseURL);
+    // Using API address
     const url = `${baseURL}/chat/completions`;
 
-    try {
-      const response = await this.makeRequest(url, {
+    const response = await this.makeRequest(
+      url,
+      {
         method: 'POST',
         body: JSON.stringify(requestBody),
-      }, config);
+      },
+      config
+    );
 
-      if (onChunk) {
-        return await this.handleOpenAIStreamResponse(response, onChunk);
-      } else {
-        const data = await response.json();
-        return data.choices[0]?.message?.content || '';
-      }
-    } catch (error) {
-      console.error(`${config.provider} API Error:`, error);
-      throw error;
+    if (onChunk) {
+      return await this.handleOpenAIStreamResponse(response, onChunk);
+    } else {
+      const data = await response.json();
+      return data.choices[0]?.message?.content || '';
     }
   }
 
@@ -264,10 +263,10 @@ class AIApiService {
     if (config.provider === 'ollama') {
       try {
         const ollamaHost = await configApi.getOllamaHost();
-        console.log('AIApiService: Using ollama host from configApi:', ollamaHost);
+        // Using ollama host from configApi
         return ollamaHost.replace(/\/$/, '');
       } catch (error) {
-        console.error('AIApiService: Failed to get ollama host from configApi:', error);
+        // Failed to get ollama host from configApi
         // If there's baseURL in config, use it as fallback option
         if (config.baseURL) {
           return config.baseURL.replace(/\/$/, '');
@@ -279,20 +278,20 @@ class AIApiService {
     // For remote API providers, get custom API URL from new configuration system
     const apiConfig = modelService.getRemoteApiConfig(config.provider as RemoteModelProvider);
     if (apiConfig?.baseURL) {
-      console.log(`AIApiService: Using configured ${config.provider} API URL:`, apiConfig.baseURL);
+      // Using configured API URL
       return apiConfig.baseURL.replace(/\/$/, '');
     }
 
     // For remote API providers, prioritize baseURL in config (if available)
     if (config.baseURL) {
-      console.log(`AIApiService: Using configured ${config.provider} baseURL:`, config.baseURL);
+      // Using configured baseURL
       return config.baseURL.replace(/\/$/, '');
     }
 
     // Get default API address from MODEL_PROVIDERS
     if (MODEL_PROVIDERS[config.provider]) {
       const baseURL = MODEL_PROVIDERS[config.provider].baseURL;
-      console.log(`AIApiService: Using ${config.provider} default API address:`, baseURL);
+      // Using default API address
       return baseURL.replace(/\/$/, '');
     }
 
@@ -306,7 +305,7 @@ class AIApiService {
   ): AsyncGenerator<string, void, unknown> {
     const apiMessages = messages.map(msg => ({
       role: msg.sender === 'user' ? 'user' : 'assistant',
-      content: msg.content
+      content: msg.content,
     }));
 
     const requestBody = {
@@ -320,10 +319,14 @@ class AIApiService {
     const baseURL = await this.getBaseURL(config);
     const url = `${baseURL}/chat/completions`;
 
-    const response = await this.makeRequest(url, {
-      method: 'POST',
-      body: JSON.stringify(requestBody),
-    }, config);
+    const response = await this.makeRequest(
+      url,
+      {
+        method: 'POST',
+        body: JSON.stringify(requestBody),
+      },
+      config
+    );
 
     const reader = response.body?.getReader();
     if (!reader) {
@@ -370,9 +373,13 @@ class AIApiService {
       const baseURL = await this.getBaseURL(config);
       const url = `${baseURL}/models`;
 
-      const response = await this.makeRequest(url, {
-        method: 'GET',
-      }, config);
+      const response = await this.makeRequest(
+        url,
+        {
+          method: 'GET',
+        },
+        config
+      );
 
       return response.ok;
     } catch (error) {
@@ -386,14 +393,18 @@ class AIApiService {
       const baseURL = await this.getBaseURL(config);
       const url = `${baseURL}/models`;
 
-      const response = await this.makeRequest(url, {
-        method: 'GET',
-      }, config);
+      const response = await this.makeRequest(
+        url,
+        {
+          method: 'GET',
+        },
+        config
+      );
 
       const data = await response.json();
       return data.data?.map((model: { id: string }) => model.id) || [];
     } catch (error) {
-      console.error('Failed to fetch models:', error);
+      // Failed to fetch models
       return [];
     }
   }
@@ -402,18 +413,9 @@ class AIApiService {
   getRecommendedModels(provider: string): string[] {
     switch (provider) {
       case 'openai':
-        return [
-          'gpt-4o',
-          'gpt-4o-mini',
-          'gpt-4-turbo',
-          'gpt-4',
-          'gpt-3.5-turbo'
-        ];
+        return ['gpt-4o', 'gpt-4o-mini', 'gpt-4-turbo', 'gpt-4', 'gpt-3.5-turbo'];
       case 'deepseek':
-        return [
-          'deepseek-chat',
-          'deepseek-reasoner'
-        ];
+        return ['deepseek-chat', 'deepseek-reasoner'];
       default:
         return [];
     }
@@ -425,16 +427,14 @@ class AIApiService {
       case 'openai': {
         // Extract model ID and filter related models
         // Only return GPT models
-        return models.filter(model =>
-            model.toLowerCase().includes('gpt') ||
-            model.toLowerCase().includes('text-davinci')
+        return models.filter(
+          model =>
+            model.toLowerCase().includes('gpt') || model.toLowerCase().includes('text-davinci')
         );
       }
       case 'deepseek':
         // Return all DeepSeek models
-        return models.filter(model =>
-          model.toLowerCase().includes('deepseek')
-        );
+        return models.filter(model => model.toLowerCase().includes('deepseek'));
       default:
         return models;
     }

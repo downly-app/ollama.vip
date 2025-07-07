@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 
 export interface ThemeColors {
   primary: string;
@@ -32,11 +32,12 @@ const themes: Theme[] = [
       textSecondary: 'text-white/70',
       border: 'border-white/20',
       hover: 'hover:bg-white/15',
-      gradient: 'linear-gradient(45deg, hsl(240, 80%, 40%), hsl(260, 80%, 40%), hsl(280, 80%, 40%), hsl(220, 80%, 40%), hsl(200, 80%, 40%), hsl(180, 80%, 40%), hsl(160, 80%, 40%), hsl(140, 80%, 40%), hsl(240, 80%, 40%))',
+      gradient:
+        'linear-gradient(45deg, hsl(240, 80%, 40%), hsl(260, 80%, 40%), hsl(280, 80%, 40%), hsl(220, 80%, 40%), hsl(200, 80%, 40%), hsl(180, 80%, 40%), hsl(160, 80%, 40%), hsl(140, 80%, 40%), hsl(240, 80%, 40%))',
       gradientBackground: '400% 400%',
       scrollbar: 'bg-white/20',
-      scrollbarHover: 'hover:bg-white/30'
-    }
+      scrollbarHover: 'hover:bg-white/30',
+    },
   },
 
   {
@@ -50,12 +51,13 @@ const themes: Theme[] = [
       textSecondary: 'text-white/70',
       border: 'border-white/20',
       hover: 'hover:bg-white/15',
-      gradient: 'linear-gradient(45deg, hsl(270, 80%, 40%), hsl(250, 80%, 40%), hsl(230, 80%, 40%), hsl(210, 80%, 40%), hsl(220, 60%, 30%), hsl(240, 60%, 30%), hsl(260, 80%, 40%), hsl(280, 80%, 40%), hsl(270, 80%, 40%))',
+      gradient:
+        'linear-gradient(45deg, hsl(270, 80%, 40%), hsl(250, 80%, 40%), hsl(230, 80%, 40%), hsl(210, 80%, 40%), hsl(220, 60%, 30%), hsl(240, 60%, 30%), hsl(260, 80%, 40%), hsl(280, 80%, 40%), hsl(270, 80%, 40%))',
       gradientBackground: '400% 400%',
       scrollbar: 'bg-white/20',
-      scrollbarHover: 'hover:bg-white/30'
-    }
-  }
+      scrollbarHover: 'hover:bg-white/30',
+    },
+  },
 ];
 
 interface ThemeContextType {
@@ -68,7 +70,9 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [currentTheme, setCurrentTheme] = useState<Theme>(themes.find(t => t.id === 'starlight') || themes[0]); // Default to starlight theme
+  const [currentTheme, setCurrentTheme] = useState<Theme>(
+    themes.find(t => t.id === 'starlight') || themes[0]
+  ); // Default to starlight theme
   const [originalTheme, setOriginalTheme] = useState<Theme | undefined>(undefined);
 
   useEffect(() => {

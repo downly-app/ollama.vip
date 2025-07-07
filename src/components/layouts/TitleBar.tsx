@@ -1,6 +1,8 @@
 import React from 'react';
-import WindowControls from '@/components/WindowControls';
+
 import { invoke } from '@tauri-apps/api/tauri';
+
+import WindowControls from '@/components/WindowControls';
 import '@/styles/titlebar.css';
 
 interface TitleBarProps {
@@ -19,7 +21,7 @@ const TitleBar = ({ children, className = '' }: TitleBarProps) => {
     try {
       await invoke('start_dragging');
     } catch (error) {
-      console.error('Failed to start dragging:', error);
+      // Failed to start drag
     }
   };
 
@@ -33,7 +35,7 @@ const TitleBar = ({ children, className = '' }: TitleBarProps) => {
     try {
       await invoke('maximize_window');
     } catch (error) {
-      console.error('Failed to maximize window:', error);
+      // Failed to toggle maximize
     }
   };
 
@@ -44,16 +46,14 @@ const TitleBar = ({ children, className = '' }: TitleBarProps) => {
       onDoubleClick={handleDoubleClick}
     >
       {/* Left side custom content area - draggable */}
-      <div className="flex items-center space-x-4 drag-region flex-1">
-        {children}
-      </div>
+      <div className='flex items-center space-x-4 drag-region flex-1'>{children}</div>
 
       {/* Right side window control buttons - not draggable */}
-      <div className="flex items-center no-drag">
+      <div className='flex items-center no-drag'>
         <WindowControls />
       </div>
     </div>
   );
 };
 
-export default TitleBar; 
+export default TitleBar;

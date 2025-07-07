@@ -1,8 +1,12 @@
 // Ollama API usage example file
 // This file demonstrates how to use the extended Ollama API
-
-import { ollamaApi, type ChatMessage, type GenerateRequest, type ChatRequest } from '@/services/ollamaApi';
 import { activityLogger } from '@/components/dashboard/ActivityLogAndActions';
+import {
+  type ChatMessage,
+  type ChatRequest,
+  type GenerateRequest,
+  ollamaApi,
+} from '@/services/ollamaApi';
 
 // Example 1: Check connection status
 export async function checkOllamaConnection() {
@@ -10,15 +14,15 @@ export async function checkOllamaConnection() {
     const isConnected = await ollamaApi.checkConnection();
     if (isConnected) {
       activityLogger.addActivity('success', 'Ollama service connected successfully');
-      console.log('✅ Ollama service is running normally');
+      // Ollama service is running normally
     } else {
       activityLogger.addActivity('error', 'Ollama service connection failed');
-      console.log('❌ Ollama service connection failed');
+      // Ollama service connection failed
     }
     return isConnected;
   } catch (error) {
     activityLogger.addActivity('error', `Connection check failed: ${error}`);
-    console.error('Connection check error:', error);
+    // Connection check error
     return false;
   }
 }
@@ -29,12 +33,12 @@ export async function getOllamaVersion() {
     const versionInfo = await ollamaApi.getVersion();
     if (versionInfo) {
       activityLogger.addActivity('info', `Ollama version: ${versionInfo.version}`);
-      console.log('📋 Version info:', versionInfo);
+      // Version info retrieved
     }
     return versionInfo;
   } catch (error) {
     activityLogger.addActivity('error', `Failed to get version info: ${error}`);
-    console.error('Get version info error:', error);
+    // Get version info error
     return null;
   }
 }
@@ -44,17 +48,17 @@ export async function listAllModels() {
   try {
     const models = await ollamaApi.listModels();
     activityLogger.addActivity('info', `Found ${models.length} local models`);
-    console.log('📦 Local model list:', models);
-    
+    // Local model list retrieved
+
     // Print model information
     models.forEach(model => {
-      console.log(`- ${model.name} (${model.details.parameter_size}, ${(model.size / 1024 / 1024 / 1024).toFixed(2)} GB)`);
+      // Model: ${model.name}
     });
-    
+
     return models;
   } catch (error) {
     activityLogger.addActivity('error', `Failed to get model list: ${error}`);
-    console.error('Get model list error:', error);
+    // Get model list error
     return [];
   }
 }
@@ -64,11 +68,11 @@ export async function listRunningModels() {
   try {
     const runningModels = await ollamaApi.listRunningModels();
     activityLogger.addActivity('info', `${runningModels.length} models are running`);
-    console.log('🏃 Running models:', runningModels);
+    // Running models retrieved
     return runningModels;
   } catch (error) {
     activityLogger.addActivity('error', `Failed to get running models: ${error}`);
-    console.error('Get running models error:', error);
+    // Get running models error
     return [];
   }
 }
@@ -77,24 +81,27 @@ export async function listRunningModels() {
 export async function generateText(model: string, prompt: string) {
   try {
     activityLogger.addActivity('info', `Starting text generation - Model: ${model}`);
-    
+
     const request: GenerateRequest = {
       model,
       prompt,
       stream: false,
       options: {
         temperature: 0.7,
-        max_tokens: 100
-      }
+        max_tokens: 100,
+      },
     };
 
     const response = await ollamaApi.generateCompletion(request);
-    activityLogger.addActivity('success', `Text generation completed - ${response.length} characters`);
-    console.log('📝 Generated text:', response);
+    activityLogger.addActivity(
+      'success',
+      `Text generation completed - ${response.length} characters`
+    );
+    // Text generated successfully
     return response;
   } catch (error) {
     activityLogger.addActivity('error', `Text generation failed: ${error}`);
-    console.error('Text generation error:', error);
+    // Text generation error
     return '';
   }
 }
@@ -103,30 +110,30 @@ export async function generateText(model: string, prompt: string) {
 export async function generateTextStream(model: string, prompt: string) {
   try {
     activityLogger.addActivity('info', `Starting streaming generation - Model: ${model}`);
-    
+
     const request: GenerateRequest = {
       model,
       prompt,
       stream: true,
       options: {
-        temperature: 0.7
-      }
+        temperature: 0.7,
+      },
     };
 
     let fullResponse = '';
-    const response = await ollamaApi.generateCompletion(
-      request,
-      (chunk) => {
-        fullResponse += chunk;
-        console.log('📡 Received chunk:', chunk);
-      }
-    );
+    const response = await ollamaApi.generateCompletion(request, chunk => {
+      fullResponse += chunk;
+      // Chunk received
+    });
 
-    activityLogger.addActivity('success', `Streaming generation completed - ${fullResponse.length} characters`);
+    activityLogger.addActivity(
+      'success',
+      `Streaming generation completed - ${fullResponse.length} characters`
+    );
     return fullResponse;
   } catch (error) {
     activityLogger.addActivity('error', `Streaming generation failed: ${error}`);
-    console.error('Streaming generation error:', error);
+    // Streaming generation error
     return '';
   }
 }
@@ -134,24 +141,30 @@ export async function generateTextStream(model: string, prompt: string) {
 // Example 7: Chat conversation
 export async function chatWithModel(model: string, messages: ChatMessage[]) {
   try {
-    activityLogger.addActivity('info', `Starting chat - Model: ${model}, Message count: ${messages.length}`);
-    
+    activityLogger.addActivity(
+      'info',
+      `Starting chat - Model: ${model}, Message count: ${messages.length}`
+    );
+
     const request: ChatRequest = {
       model,
       messages,
       stream: false,
       options: {
-        temperature: 0.8
-      }
+        temperature: 0.8,
+      },
     };
 
     const response = await ollamaApi.generateChat(request);
-    activityLogger.addActivity('success', `Chat reply completed - ${response.content.length} characters`);
-    console.log('💬 AI reply:', response);
+    activityLogger.addActivity(
+      'success',
+      `Chat reply completed - ${response.content.length} characters`
+    );
+    // AI reply received
     return response;
   } catch (error) {
     activityLogger.addActivity('error', `Chat failed: ${error}`);
-    console.error('Chat error:', error);
+    // Chat error
     return null;
   }
 }
@@ -160,16 +173,16 @@ export async function chatWithModel(model: string, messages: ChatMessage[]) {
 export async function getModelDetails(modelName: string) {
   try {
     activityLogger.addActivity('info', `Getting model details: ${modelName}`);
-    
+
     const modelInfo = await ollamaApi.showModelInfo(modelName, true);
     if (modelInfo) {
-      console.log('🔍 Model details:', modelInfo);
+      // 🔍 Model details
       activityLogger.addActivity('success', `Model details retrieved successfully: ${modelName}`);
     }
     return modelInfo;
   } catch (error) {
     activityLogger.addActivity('error', `Failed to get model details: ${error}`);
-    console.error('Get model details error:', error);
+    // Get model details error
     return null;
   }
 }
@@ -178,24 +191,21 @@ export async function getModelDetails(modelName: string) {
 export async function downloadModel(modelName: string) {
   try {
     activityLogger.addActivity('info', `Starting model download: ${modelName}`);
-    
-    await ollamaApi.pullModel(
-      modelName,
-      (progress) => {
-        if (progress.status === 'downloading' && progress.completed && progress.total) {
-          const percent = (progress.completed / progress.total * 100).toFixed(1);
-          console.log(`📥 Download progress: ${percent}% (${progress.completed}/${progress.total})`);
-        } else {
-          console.log('📥 Download status:', progress.status);
-        }
+
+    await ollamaApi.pullModel(modelName, progress => {
+      if (progress.status === 'downloading' && progress.completed && progress.total) {
+        const percent = ((progress.completed / progress.total) * 100).toFixed(1);
+        // 📥 Download progress
+      } else {
+        // 📥 Download status
       }
-    );
+    });
 
     activityLogger.addActivity('success', `Model download completed: ${modelName}`);
-    console.log('✅ Model download completed');
+    // ✅ Model download completed
   } catch (error) {
     activityLogger.addActivity('error', `Model download failed: ${error}`);
-    console.error('Model download error:', error);
+    // Model download error
   }
 }
 
@@ -203,19 +213,19 @@ export async function downloadModel(modelName: string) {
 export async function removeModel(modelName: string) {
   try {
     activityLogger.addActivity('info', `Deleting model: ${modelName}`);
-    
+
     const success = await ollamaApi.deleteModel(modelName);
     if (success) {
       activityLogger.addActivity('success', `Model deleted successfully: ${modelName}`);
-      console.log('🗑️ Model deleted successfully');
+      // 🗑️ Model deleted successfully
     } else {
       activityLogger.addActivity('error', `Model deletion failed: ${modelName}`);
-      console.log('❌ Model deletion failed');
+      // ❌ Model deletion failed
     }
     return success;
   } catch (error) {
     activityLogger.addActivity('error', `Delete model error: ${error}`);
-    console.error('Delete model error:', error);
+    // Delete model error
     return false;
   }
 }
@@ -223,15 +233,21 @@ export async function removeModel(modelName: string) {
 // Example 11: Generate embeddings
 export async function generateEmbeddings(model: string, texts: string[]) {
   try {
-    activityLogger.addActivity('info', `Generating embeddings - Model: ${model}, Text count: ${texts.length}`);
-    
+    activityLogger.addActivity(
+      'info',
+      `Generating embeddings - Model: ${model}, Text count: ${texts.length}`
+    );
+
     const result = await ollamaApi.generateEmbeddings(model, texts);
-    activityLogger.addActivity('success', `Embedding generation completed - ${result.embeddings.length} vectors`);
-    console.log('🧮 Embeddings:', result);
+    activityLogger.addActivity(
+      'success',
+      `Embedding generation completed - ${result.embeddings.length} vectors`
+    );
+    // 🧮 Embeddings
     return result;
   } catch (error) {
     activityLogger.addActivity('error', `Embedding generation failed: ${error}`);
-    console.error('Embedding generation error:', error);
+    // Embedding generation error
     return null;
   }
 }
@@ -240,74 +256,74 @@ export async function generateEmbeddings(model: string, texts: string[]) {
 export async function copyModel(source: string, destination: string) {
   try {
     activityLogger.addActivity('info', `Copying model: ${source} -> ${destination}`);
-    
+
     const success = await ollamaApi.copyModel(source, destination);
     if (success) {
       activityLogger.addActivity('success', `Model copied successfully: ${destination}`);
-      console.log('📋 Model copied successfully');
+      // 📋 Model copied successfully
     } else {
       activityLogger.addActivity('error', `Model copy failed: ${source} -> ${destination}`);
-      console.log('❌ Model copy failed');
+      // ❌ Model copy failed
     }
     return success;
   } catch (error) {
     activityLogger.addActivity('error', `Copy model error: ${error}`);
-    console.error('Copy model error:', error);
+    // Copy model error
     return false;
   }
 }
 
 // Example 13: Comprehensive demonstration function
 export async function demonstrateOllamaAPI() {
-  console.log('🚀 Starting Ollama API demonstration...\n');
+  // 🚀 Starting Ollama API demonstration
 
   // 1. Check connection
-  console.log('1️⃣ Checking connection status...');
+  // 1️⃣ Checking connection status
   const isConnected = await checkOllamaConnection();
   if (!isConnected) {
-    console.log('❌ Ollama service not connected, demonstration terminated');
+    // ❌ Ollama service not connected, demonstration terminated
     return;
   }
 
   // 2. Get version
-  console.log('\n2️⃣ Getting version information...');
+  // 2️⃣ Getting version information
   await getOllamaVersion();
 
   // 3. List models
-  console.log('\n3️⃣ Listing local models...');
+  // 3️⃣ Listing local models
   const models = await listAllModels();
-  
+
   if (models.length === 0) {
-    console.log('❌ No available models, please download models first');
+    // ❌ No available models, please download models first
     return;
   }
 
   // 4. Check running models
-  console.log('\n4️⃣ Checking running models...');
+  // 4️⃣ Checking running models
   await listRunningModels();
 
   // 5. Use the first available model for conversation
   const firstModel = models[0].name;
-  console.log(`\n5️⃣ Using model ${firstModel} for conversation...`);
-  
+  // 5️⃣ Using model for conversation
+
   const messages: ChatMessage[] = [
-    { role: 'user', content: 'Hello, please briefly introduce yourself.' }
+    { role: 'user', content: 'Hello, please briefly introduce yourself.' },
   ];
-  
+
   await chatWithModel(firstModel, messages);
 
   // 6. Get model details
-  console.log(`\n6️⃣ Getting detailed information for model ${firstModel}...`);
+  // 6️⃣ Getting detailed information for model
   await getModelDetails(firstModel);
 
-  console.log('\n✅ Ollama API demonstration completed!');
+  // ✅ Ollama API demonstration completed
 }
 
 // Usage examples:
-// 
+//
 // Import and use in your components:
 // import { demonstrateOllamaAPI, checkOllamaConnection, listAllModels } from '@/utils/ollamaApiExample';
-// 
+//
 // // Call in component
 // useEffect(() => {
 //   demonstrateOllamaAPI();
@@ -335,5 +351,5 @@ export default {
   removeModel,
   generateEmbeddings,
   copyModel,
-  demonstrateOllamaAPI
+  demonstrateOllamaAPI,
 };

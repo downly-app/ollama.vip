@@ -6,12 +6,12 @@
 export const API_CONFIG = {
   // Ollama Pro API base address
   OLLAMA_PRO_BASE_URL: 'https://api.ollama.vip/api',
-  
+
   // Specific API endpoints
   ENDPOINTS: {
     MODELS: '/models',
     MODEL_DETAIL: '/models',
-  }
+  },
 } as const;
 
 /**

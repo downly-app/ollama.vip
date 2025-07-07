@@ -1,3 +1,4 @@
+import { getModelDetailApiUrl } from '../config/apiConfig';
 
 interface ModelTag {
   name: string;
@@ -35,14 +36,12 @@ interface ModelDetailResponse {
   };
 }
 
-import { getModelDetailApiUrl } from '../config/apiConfig';
-
 export const fetchModelDetail = async (modelName: string): Promise<ModelDetailResponse> => {
   const response = await fetch(getModelDetailApiUrl(modelName));
-  
+
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
   }
-  
+
   return response.json();
 };

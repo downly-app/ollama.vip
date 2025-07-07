@@ -1,4 +1,5 @@
 import { invoke } from '@tauri-apps/api/tauri';
+
 import { SystemInfo } from '../types/system';
 
 export class SystemApi {
@@ -10,8 +11,21 @@ export class SystemApi {
       const result = await invoke<SystemInfo>('get_system_resources');
       return result;
     } catch (error) {
-      console.error('Failed to get system resources:', error);
+      // Failed to get system resources
       throw new Error(`Failed to get system resources: ${error}`);
+    }
+  }
+
+  /**
+   * Get system resource information for a specific storage path
+   */
+  static async getSystemResourcesForPath(storagePath: string): Promise<SystemInfo> {
+    try {
+      const result = await invoke<SystemInfo>('get_system_resources_for_path', { storagePath });
+      return result;
+    } catch (error) {
+      // Failed to get system resources for path
+      throw new Error(`Failed to get system resources for path: ${error}`);
     }
   }
 

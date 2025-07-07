@@ -7,6 +7,7 @@
     "general": "General",
     "chat": "Chat",
     "models": "Models",
+    "downloads": "Downloads",
     "onlineModels": "Online Models",
     "localModels": "Local Models",
     "settings": "Settings",
@@ -39,14 +40,14 @@
     "messageEdited": "Message edited",
     "messageDeleted": "Message deleted",
     "startNewConversation": "Start a new conversation",
-    "sendMessageToStart": "Send a message to start the conversation",
+    "sendMessageToStart": "Send a message to begin.",
     "selectConversation": "Select a conversation",
     "selectConversationDescription": "Select a conversation from the left to start chatting, or create a new one",
     "apiKeyRequired": "API Key Required",
     "apiKeyRequiredDescription": "Please configure your API key before starting a conversation.",
     "typing": "AI is typing...",
     "modelConfigRequired": "Model Configuration Required",
-    "modelConfigRequiredDescription": "Please configure API key or download local models",
+    "modelConfigRequiredDescription": "To use this feature, please configure your API Key or ensure you have local models available.",
     "localModelNotAvailable": "Local model not available, please download models or select another model",
     "configureApiKey": "Please configure API key or download local models",
     "noModelsConfigured": "Please download local models or configure API key",
@@ -54,7 +55,21 @@
     "noModelsAvailable": "No models available",
     "configureModels": "Configure Models",
     "modelSelectorFooter": "Local models are prioritized",
-    "noMatchingConversations": "No matching conversations found"
+    "noMatchingConversations": "No matching conversations found",
+    "thinkingProcess": "Thinking Process",
+    "tips": {
+      "selectModel": "Select a model from the dropdown above",
+      "typeMessage": "Type your message and press Enter",
+      "configure": "Configure API keys in Settings",
+      "createNew": "Click the + button to start a new conversation",
+      "selectExisting": "Or select an existing conversation from the list"
+    },
+    "suggestions": "Suggestions",
+    "suggestion": {
+      "downloadLocal": "Download local models from Models page",
+      "configureApi": "Configure API keys for remote models",
+      "checkConnection": "Check your network connection"
+    }
   },
   "models": {
     "title": "Model Management",
@@ -74,10 +89,12 @@
     "size": "Size",
     "tags": "Tags",
     "downloads": "Downloads",
-    "updated": "Updated",
+    "updatedAt": "Updated At",
+    "specs": "Specs",
     "actions": "Actions",
-    "filterByType": "Filter by Type",
+    "filterByType": "Filter by type",
     "sortBy": "Sort by",
+    "sort": "Sort",
     "popular": "Popular",
     "newest": "Newest",
     "embedding": "Embedding",
@@ -97,12 +114,12 @@
     "localModelsList": "Local Models List",
     "loading": "Loading...",
     "noModelsFound": "No matching models found",
-    "noLocalModels": "No local models",
-    "adjustSearchCriteria": "Try adjusting search criteria",
-    "useDownloadFunction": "Use the download function above to add models",
+    "noLocalModels": "No local models yet",
+    "adjustSearchCriteria": "Try adjusting your search criteria",
+    "browseOnlineModels": "Use the download function above to add a model, or go to the <0>Online Model Marketplace</0> to browse and install.",
     "size": "Size",
     "parameters": "Parameters",
-    "modifiedTime": "Modified",
+    "installedTime": "Installed Time",
     "details": "Details",
     "modelInfo": "Model Information",
     "viewDetailedInfo": "View detailed model information and configuration",
@@ -129,7 +146,38 @@
     "getInfoFailed": "Failed to get information",
     "getInfoFailedMessage": "Unable to get detailed information for model {{modelName}}",
     "enterModelName": "Please enter model name",
-    "enterModelNameMessage": "Please enter the name of the model to download"
+    "enterModelNameMessage": "Please enter the name of the model to download",
+    "installed": "Installed",
+    "allFamilies": "All Families",
+    "filteredCount": "{{count}} filtered",
+    "dialog": {
+      "tabs": {
+        "overview": "Overview",
+        "architecture": "Architecture",
+        "parameters": "Parameters",
+        "configuration": "Configuration"
+      },
+      "overview": {
+        "basicInfo": "Basic Information",
+        "format": "Format",
+        "family": "Family",
+        "parameterSize": "Parameter Size",
+        "quantizationLevel": "Quantization Level",
+        "supportedFamilies": "Supported Families",
+        "modelCapabilities": "Model Capabilities"
+      },
+      "architecture": {
+        "coreArchitectureInfo": "Core Architecture Information",
+        "detailedConfigInfo": "Detailed Configuration Information"
+      },
+      "parameters": {
+        "runtimeParameters": "Runtime Parameters"
+      },
+      "configuration": {
+        "modelfileConfig": "Modelfile Configuration",
+        "templateConfig": "Template Configuration"
+      }
+    }
   },
   "settings": {
     "title": "Settings",
@@ -202,6 +250,13 @@
     "username": "Username",
     "logout": "Logout",
     "profile": "Profile"
+  },
+  "error": {
+    "somethingWentWrong": "Something went wrong",
+    "unknownError": "An unknown error occurred",
+    "tryAgain": "Try again",
+    "reloadPage": "Reload page",
+    "technicalDetails": "Technical details"
   },
   "common": {
     "save": "Save",
@@ -429,5 +484,34 @@
     "daysAgo": "{{count}} day ago",
     "daysAgo_plural": "{{count}} days ago",
     "longTimeAgo": "Long time ago"
+  },
+  "downloads": {
+    "title": "Download Manager",
+    "downloading": "Downloading",
+    "completed": "Completed",
+    "fileName": "File Name",
+    "size": "Size",
+    "progress": "Progress",
+    "speed": "Speed",
+    "remainingTime": "Time Remaining",
+    "status": {
+      "downloading": "Downloading",
+      "paused": "Paused",
+      "completed": "Completed",
+      "error": "Error",
+      "pending": "Pending",
+      "finalizing": "Finalizing"
+    },
+    "toast": {
+      "downloadCompleteTitle": "Download Complete",
+      "downloadCompleteMessage": "{{modelName}} has been successfully downloaded."
+    },
+    "actions": "Actions",
+    "noDownloadingJobs": "No active download jobs.",
+    "noCompletedJobs": "No completed jobs.",
+    "clearCompleted": "Clear Completed",
+    "pause": "Pause",
+    "resume": "Resume",
+    "retry": "Retry"
   }
 }

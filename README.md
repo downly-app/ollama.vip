@@ -1,7 +1,5 @@
 # Ollama Pro
 
-[![Build Status](https://github.com/downly-app/ollama.vip/workflows/Build%20and%20Release/badge.svg)](https://github.com/downly-app/ollama.vip/actions)
-[![Security Scan](https://github.com/downly-app/ollama.vip/workflows/Security%20Scan/badge.svg)](https://github.com/downly-app/ollama.vip/actions)
 [![License](https://img.shields.io/badge/license-GPL%20v3%20with%20Commercial%20Exception-blue.svg)](LICENSE)
 [![Release](https://img.shields.io/github/v/release/downly-app/ollama.vip)](https://github.com/downly-app/ollama.vip/releases)
 [![Downloads](https://img.shields.io/github/downloads/downly-app/ollama.vip/total)](https://github.com/downly-app/ollama.vip/releases)

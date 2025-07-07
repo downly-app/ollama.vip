@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { Conversation, ChatMessage } from '@/types/chat';
+
+import { ChatMessage, Conversation } from '@/types/chat';
 import { convertDatesToObjects } from '@/utils/dataUtils';
 
 interface ChatState {
@@ -14,8 +15,9 @@ interface ChatActions {
   createConversation: (title?: string, provider?: string, model?: string) => string;
   deleteConversation: (id: string) => void;
   selectConversation: (id: string) => void;
-  addMessage: (chatId: string, message: Omit<ChatMessage, 'id'>) => void;
+  addMessage: (chatId: string, message: Omit<ChatMessage, 'id'>) => string;
   updateMessage: (chatId: string, messageId: string, content: string) => void;
+  appendMessageContent: (chatId: string, messageId: string, contentChunk: string) => void;
   updateMessageModel: (chatId: string, messageId: string, model: string) => void;
   deleteMessage: (chatId: string, messageId: string) => void;
   deleteMessagesFrom: (chatId: string, messageId: string) => void;
@@ -38,8 +40,8 @@ const convertConversationDates = (conversations: Conversation[]): Conversation[]
     updatedAt: new Date(conv.updatedAt),
     messages: conv.messages.map(msg => ({
       ...msg,
-      timestamp: new Date(msg.timestamp)
-    }))
+      timestamp: new Date(msg.timestamp),
+    })),
   }));
 };
 
@@ -50,8 +52,8 @@ const processStorageData = (data: any) => {
       ...data,
       state: {
         ...data.state,
-        conversations: convertConversationDates(data.state.conversations)
-      }
+        conversations: convertConversationDates(data.state.conversations),
+      },
     };
   }
   return data;
@@ -80,27 +82,27 @@ export const useChatStore = create<ChatStore>()(
           createdAt: now,
           updatedAt: now,
           provider: defaultProvider,
-          model: defaultModel
+          model: defaultModel,
         };
 
         set(state => ({
           conversations: [newConversation, ...state.conversations],
           currentChatId: id,
-          error: null
+          error: null,
         }));
 
         return id;
       },
 
-      deleteConversation: (id) => {
+      deleteConversation: id => {
         set(state => ({
           conversations: state.conversations.filter(conv => conv.id !== id),
           currentChatId: state.currentChatId === id ? null : state.currentChatId,
-          error: null
+          error: null,
         }));
       },
 
-      selectConversation: (id) => {
+      selectConversation: id => {
         const conversation = get().conversations.find(conv => conv.id === id);
         if (conversation) {
           set({ currentChatId: id, error: null });
@@ -112,21 +114,22 @@ export const useChatStore = create<ChatStore>()(
         const message: ChatMessage = {
           ...messageData,
           id: messageId,
-          timestamp: new Date()
+          timestamp: new Date(),
         };
 
         set(state => ({
           conversations: state.conversations.map(conv =>
             conv.id === chatId
               ? {
-                ...conv,
-                messages: [...conv.messages, message],
-                updatedAt: new Date()
-              }
+                  ...conv,
+                  messages: [...conv.messages, message],
+                  updatedAt: new Date(),
+                }
               : conv
           ),
-          error: null
+          error: null,
         }));
+        return messageId;
       },
 
       updateMessage: (chatId, messageId, content) => {
@@ -134,15 +137,31 @@ export const useChatStore = create<ChatStore>()(
           conversations: state.conversations.map(conv =>
             conv.id === chatId
               ? {
-                ...conv,
-                messages: conv.messages.map(msg =>
-                  msg.id === messageId ? { ...msg, content } : msg
-                ),
-                updatedAt: new Date()
-              }
+                  ...conv,
+                  messages: conv.messages.map(msg =>
+                    msg.id === messageId ? { ...msg, content } : msg
+                  ),
+                  updatedAt: new Date(),
+                }
               : conv
           ),
-          error: null
+          error: null,
+        }));
+      },
+
+      appendMessageContent: (chatId, messageId, contentChunk) => {
+        set(state => ({
+          conversations: state.conversations.map(conv =>
+            conv.id === chatId
+              ? {
+                  ...conv,
+                  messages: conv.messages.map(msg =>
+                    msg.id === messageId ? { ...msg, content: msg.content + contentChunk } : msg
+                  ),
+                  updatedAt: new Date(),
+                }
+              : conv
+          ),
         }));
       },
 
@@ -151,15 +170,15 @@ export const useChatStore = create<ChatStore>()(
           conversations: state.conversations.map(conv =>
             conv.id === chatId
               ? {
-                ...conv,
-                messages: conv.messages.map(msg =>
-                  msg.id === messageId ? { ...msg, model } : msg
-                ),
-                updatedAt: new Date()
-              }
+                  ...conv,
+                  messages: conv.messages.map(msg =>
+                    msg.id === messageId ? { ...msg, model } : msg
+                  ),
+                  updatedAt: new Date(),
+                }
               : conv
           ),
-          error: null
+          error: null,
         }));
       },
 
@@ -168,13 +187,13 @@ export const useChatStore = create<ChatStore>()(
           conversations: state.conversations.map(conv =>
             conv.id === chatId
               ? {
-                ...conv,
-                messages: conv.messages.filter(msg => msg.id !== messageId),
-                updatedAt: new Date()
-              }
+                  ...conv,
+                  messages: conv.messages.filter(msg => msg.id !== messageId),
+                  updatedAt: new Date(),
+                }
               : conv
           ),
-          error: null
+          error: null,
         }));
       },
 
@@ -187,31 +206,29 @@ export const useChatStore = create<ChatStore>()(
                 return {
                   ...conv,
                   messages: conv.messages.slice(0, messageIndex),
-                  updatedAt: new Date()
+                  updatedAt: new Date(),
                 };
               }
             }
             return conv;
           }),
-          error: null
+          error: null,
         }));
       },
 
-      setLoading: (loading) => set({ isLoading: loading }),
-      setError: (error) => set({ error }),
+      setLoading: loading => set({ isLoading: loading }),
+      setError: error => set({ error }),
       clearError: () => set({ error: null }),
 
       updateConversationTitle: (chatId, title) => {
         set(state => ({
           conversations: state.conversations.map(conv =>
-            conv.id === chatId
-              ? { ...conv, title, updatedAt: new Date() }
-              : conv
-          )
+            conv.id === chatId ? { ...conv, title, updatedAt: new Date() } : conv
+          ),
         }));
       },
 
-      getConversation: (chatId) => {
+      getConversation: chatId => {
         return get().conversations.find(conv => conv.id === chatId);
       },
 
@@ -220,28 +237,27 @@ export const useChatStore = create<ChatStore>()(
         return currentChatId ? conversations.find(conv => conv.id === currentChatId) : undefined;
       },
 
-      searchConversations: (query) => {
+      searchConversations: query => {
         const { conversations } = get();
         if (!query.trim()) return conversations;
 
         const lowercaseQuery = query.toLowerCase();
-        return conversations.filter(conv =>
-          conv.title.toLowerCase().includes(lowercaseQuery) ||
-          conv.messages.some(msg =>
-            msg.content.toLowerCase().includes(lowercaseQuery)
-          )
+        return conversations.filter(
+          conv =>
+            conv.title.toLowerCase().includes(lowercaseQuery) ||
+            conv.messages.some(msg => msg.content.toLowerCase().includes(lowercaseQuery))
         );
-      }
+      },
     }),
     {
       name: 'chat-store',
       // Use onRehydrateStorage to handle data recovery
-      onRehydrateStorage: () => (state) => {
+      onRehydrateStorage: () => state => {
         if (state?.conversations) {
           // Convert date fields
           state.conversations = convertConversationDates(state.conversations);
         }
-      }
+      },
     }
   )
-); 
+);

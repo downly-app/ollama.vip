@@ -36,7 +36,7 @@ export function formatTime(
   try {
     return date.toLocaleTimeString(undefined, options);
   } catch (error) {
-    console.warn('Time formatting failed:', error);
+    // Time formatting failed
     return date.toTimeString().slice(0, 5); // Fallback to simple format HH:MM
   }
 }
@@ -64,10 +64,10 @@ export function formatRelativeTime(timestamp: Date | string | number): string {
   try {
     return date.toLocaleDateString(undefined, {
       month: 'numeric',
-      day: 'numeric'
+      day: 'numeric',
     });
   } catch (error) {
-    console.warn('Relative time formatting failed:', error);
+    // Relative time formatting failed
     return 'Long time ago';
   }
 }
@@ -98,10 +98,10 @@ export function formatRelativeTimeI18n(
   try {
     return date.toLocaleDateString(undefined, {
       month: 'numeric',
-      day: 'numeric'
+      day: 'numeric',
     });
   } catch (error) {
-    console.warn('Relative time formatting failed:', error);
+    // Relative time formatting failed
     return t('time.longTimeAgo');
   }
 }
@@ -121,10 +121,10 @@ export function formatDateTime(timestamp: Date | string | number): string {
       day: '2-digit',
       hour: '2-digit',
       minute: '2-digit',
-      second: '2-digit'
+      second: '2-digit',
     });
   } catch (error) {
-    console.warn('Date time formatting failed:', error);
+    // Date time formatting failed
     return date.toString();
   }
 }
@@ -157,4 +157,3 @@ export function getEndOfToday(): Date {
   today.setHours(23, 59, 59, 999);
   return today;
 }
-

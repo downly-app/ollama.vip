@@ -1,19 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { 
-  Clock,
-  CheckCircle,
+import {
   AlertTriangle,
+  CheckCircle,
+  Clock,
   Info,
-  Zap,
-  Trash2,
   RefreshCw,
-  XCircle
+  Trash2,
+  XCircle,
+  Zap,
 } from 'lucide-react';
-import { useTheme } from '@/contexts/ThemeContext';
+
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useTheme } from '@/contexts/ThemeContext';
 
 interface Activity {
   id: string;
@@ -49,11 +51,11 @@ class ActivityLogger {
         this.activities = activities.map((activity: any) => ({
           ...activity,
           time: new Date(activity.time),
-          icon: this.getIconByType(activity.type)
+          icon: this.getIconByType(activity.type),
         }));
       }
     } catch (error) {
-      console.error('Failed to load activities:', error);
+      // Failed to load activity log
     }
   }
 
@@ -61,11 +63,11 @@ class ActivityLogger {
     try {
       const toSave = this.activities.map(activity => ({
         ...activity,
-        icon: undefined // Don't save icon function
+        icon: undefined, // Don't save icon function
       }));
       localStorage.setItem('ollama_activity_log', JSON.stringify(toSave));
     } catch (error) {
-      console.error('Failed to save activities:', error);
+      // Failed to save activity log
     }
   }
 
@@ -102,11 +104,11 @@ class ActivityLogger {
       message,
       timestamp: this.formatTime(new Date()),
       time: new Date(),
-      icon: this.getIconByType(type)
+      icon: this.getIconByType(type),
     };
 
     this.activities.unshift(activity);
-    
+
     // Keep the latest 50 records
     if (this.activities.length > 50) {
       this.activities = this.activities.slice(0, 50);
@@ -120,7 +122,7 @@ class ActivityLogger {
     // Update timestamps
     return this.activities.map(activity => ({
       ...activity,
-      timestamp: this.formatTime(activity.time)
+      timestamp: this.formatTime(activity.time),
     }));
   }
 
@@ -209,59 +211,67 @@ const ActivityLogAndActions = () => {
   };
 
   return (
-    <Card className="bg-white/10 backdrop-blur-sm border-white/20">
-      <CardHeader className="pb-4">
-        <CardTitle className={`text-xl font-bold bg-gradient-to-r ${currentTheme.colors.secondary} bg-clip-text text-transparent flex items-center justify-between`}>
-          <div className="flex items-center">
-            <Zap className="mr-2" size={20} />
+    <Card className='bg-white/10 backdrop-blur-sm border-white/20'>
+      <CardHeader className='pb-4'>
+        <CardTitle
+          className={`text-xl font-bold bg-gradient-to-r ${currentTheme.colors.secondary} bg-clip-text text-transparent flex items-center justify-between`}
+        >
+          <div className='flex items-center'>
+            <Zap className='mr-2' size={20} />
             {t('dashboard.activityLog.title')}
           </div>
-          <div className="flex items-center space-x-1">
+          <div className='flex items-center space-x-1'>
             <Button
-              size="sm"
-              variant="ghost"
+              size='sm'
+              variant='ghost'
               onClick={handleRefreshActivities}
-              className="text-white/70 hover:text-white hover:bg-white/10"
+              className='text-white/70 hover:text-white hover:bg-white/10'
             >
               <RefreshCw size={14} />
             </Button>
             <Button
-              size="sm"
-              variant="ghost"
+              size='sm'
+              variant='ghost'
               onClick={handleClearActivities}
-              className="text-white/70 hover:text-white hover:bg-white/10"
+              className='text-white/70 hover:text-white hover:bg-white/10'
             >
               <Trash2 size={14} />
             </Button>
           </div>
         </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className='space-y-4'>
         {/* Recent Activities */}
-        <div className="space-y-2">
-          <h4 className="text-white font-medium flex items-center">
-            <Clock size={16} className="mr-2" />
+        <div className='space-y-2'>
+          <h4 className='text-white font-medium flex items-center'>
+            <Clock size={16} className='mr-2' />
             {t('dashboard.activityLog.recentActivity')} ({activities.length})
           </h4>
-          <div className="space-y-2">
+          <div className='space-y-2'>
             {activities.length > 0 ? (
-              activities.slice(0, 10).map((activity) => (
-                <div key={activity.id} className="flex items-start space-x-2 p-2 bg-black/20 rounded-lg hover:bg-black/30 transition-colors">
-                  <activity.icon 
-                    size={14} 
-                    className={`mt-0.5 flex-shrink-0 ${getActivityColor(activity.type)}`} 
+              activities.slice(0, 10).map(activity => (
+                <div
+                  key={activity.id}
+                  className='flex items-start space-x-2 p-2 bg-black/20 rounded-lg hover:bg-black/30 transition-colors'
+                >
+                  <activity.icon
+                    size={14}
+                    className={`mt-0.5 flex-shrink-0 ${getActivityColor(activity.type)}`}
                   />
-                  <div className="flex-1 min-w-0">
-                    <p className="text-white/90 text-xs break-words">{activity.message}</p>
-                    <div className="flex items-center justify-between mt-1">
-                      <span className="text-white/50 text-xs">{activity.timestamp}</span>
-                      <Badge 
+                  <div className='flex-1 min-w-0'>
+                    <p className='text-white/90 text-xs break-words'>{activity.message}</p>
+                    <div className='flex items-center justify-between mt-1'>
+                      <span className='text-white/50 text-xs'>{activity.timestamp}</span>
+                      <Badge
                         variant={getActivityBadgeVariant(activity.type)}
                         className={`text-xs ${
-                          activity.type === 'success' ? 'bg-green-600 text-white' :
-                          activity.type === 'warning' ? 'bg-yellow-600 text-white' :
-                          activity.type === 'error' ? 'bg-red-600 text-white' :
-                          'bg-blue-600 text-white'
+                          activity.type === 'success'
+                            ? 'bg-green-600 text-white'
+                            : activity.type === 'warning'
+                              ? 'bg-yellow-600 text-white'
+                              : activity.type === 'error'
+                                ? 'bg-red-600 text-white'
+                                : 'bg-blue-600 text-white'
                         }`}
                       >
                         {t(`dashboard.activityLog.status.${activity.type}`)}
@@ -271,7 +281,7 @@ const ActivityLogAndActions = () => {
                 </div>
               ))
             ) : (
-              <p className="text-white/50 text-sm text-center py-4">
+              <p className='text-white/50 text-sm text-center py-4'>
                 {t('dashboard.activityLog.noActivities')}
               </p>
             )}
@@ -280,13 +290,16 @@ const ActivityLogAndActions = () => {
 
         {/* View More */}
         {activities.length > 10 && (
-          <Button 
-            variant="ghost" 
-            size="sm"
-            className="w-full text-white/70 border border-white/20 hover:bg-white/10 hover:text-white bg-transparent"
-            onClick={() => console.log('Show all activities')}
+          <Button
+            variant='ghost'
+            size='sm'
+            className='w-full text-white/70 border border-white/20 hover:bg-white/10 hover:text-white bg-transparent'
+            onClick={() => {
+              /* Show all activities */
+            }}
           >
-            {t('dashboard.activityLog.viewAllActivities')} ({activities.length - 10} {t('dashboard.activityLog.more')})
+            {t('dashboard.activityLog.viewAllActivities')} ({activities.length - 10}{' '}
+            {t('dashboard.activityLog.more')})
           </Button>
         )}
       </CardContent>

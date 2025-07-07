@@ -7,6 +7,7 @@
     "general": "概览",
     "chat": "聊天",
     "models": "模型",
+    "downloads": "下载管理",
     "onlineModels": "在线模型",
     "localModels": "本地模型",
     "settings": "设置",
@@ -43,7 +44,7 @@
     "apiKeyRequiredDescription": "请先配置API密钥才能开始对话。",
     "typing": "正在输入...",
     "modelConfigRequired": "模型配置必需",
-    "modelConfigRequiredDescription": "请配置API密钥或下载本地模型",
+    "modelConfigRequiredDescription": "要使用此功能，请配置您的 API 密钥或确保您有可用的本地模型。",
     "localModelNotAvailable": "本地模型不可用，请下载模型或选择其他模型",
     "configureApiKey": "请配置API密钥或下载本地模型",
     "noModelsConfigured": "请下载本地模型或配置API密钥",
@@ -54,7 +55,24 @@
     "noMatchingConversations": "未找到匹配的对话",
     "inputTip": "按 Enter 发送，Shift+Enter 换行",
     "characters": "字符",
-    "recording": "正在录音..."
+    "recording": "正在录音...",
+    "downloadProgress": "下载进度",
+    "downloadComplete": "下载完成",
+    "downloadFailed": "下载失败",
+    "thinkingProcess": "思考过程",
+    "tips": {
+      "selectModel": "从上方下拉菜单选择一个模型",
+      "typeMessage": "输入您的消息并按回车键",
+      "configure": "在设置中配置API密钥",
+      "createNew": "点击 + 按钮开始新对话",
+      "selectExisting": "或从列表中选择现有对话"
+    },
+    "suggestions": "建议",
+    "suggestion": {
+      "downloadLocal": "从模型页面下载本地模型",
+      "configureApi": "为远程模型配置API密钥",
+      "checkConnection": "检查您的网络连接"
+    }
   },
   "models": {
     "title": "模型管理",
@@ -74,10 +92,12 @@
     "size": "大小",
     "tags": "标签",
     "downloads": "下载量",
-    "updated": "更新时间",
+    "updatedAt": "更新时间",
+    "specs": "规格",
     "actions": "操作",
     "filterByType": "按类型筛选",
     "sortBy": "排序方式",
+    "sort": "排序",
     "popular": "热门",
     "newest": "最新",
     "embedding": "嵌入",
@@ -99,10 +119,10 @@
     "noModelsFound": "未找到匹配的模型",
     "noLocalModels": "暂无本地模型",
     "adjustSearchCriteria": "尝试调整搜索条件",
-    "useDownloadFunction": "使用上方的下载功能添加模型",
+    "browseOnlineModels": "使用上方的下载功能添加模型，或前往 <0>在线模型市场</0> 浏览并安装。",
     "size": "大小",
     "parameters": "参数",
-    "modifiedTime": "修改时间",
+    "installedTime": "安装时间",
     "details": "详情",
     "modelInfo": "模型信息",
     "viewDetailedInfo": "查看模型的详细信息和配置",
@@ -129,7 +149,38 @@
     "getInfoFailed": "获取信息失败",
     "getInfoFailedMessage": "无法获取模型 {{modelName}} 的详细信息",
     "enterModelName": "请输入模型名称",
-    "enterModelNameMessage": "请输入要下载的模型名称"
+    "enterModelNameMessage": "请输入要下载的模型名称",
+    "installed": "已安装",
+    "allFamilies": "所有家族",
+    "filteredCount": "筛选后 {{count}} 个",
+    "dialog": {
+      "tabs": {
+        "overview": "概览",
+        "architecture": "架构",
+        "parameters": "参数",
+        "configuration": "配置"
+      },
+      "overview": {
+        "basicInfo": "基本信息",
+        "format": "格式",
+        "family": "模型族",
+        "parameterSize": "参数规模",
+        "quantizationLevel": "量化级别",
+        "supportedFamilies": "支持的模型族",
+        "modelCapabilities": "模型能力"
+      },
+      "architecture": {
+        "coreArchitectureInfo": "核心架构信息",
+        "detailedConfigInfo": "详细配置信息"
+      },
+      "parameters": {
+        "runtimeParameters": "运行时参数"
+      },
+      "configuration": {
+        "modelfileConfig": "Modelfile 配置",
+        "templateConfig": "模板配置"
+      }
+    }
   },
   "settings": {
     "title": "设置",
@@ -371,6 +422,13 @@
     "privacy": "隐私",
     "notifications": "通知"
   },
+  "error": {
+    "somethingWentWrong": "出现了问题",
+    "unknownError": "发生了未知错误",
+    "tryAgain": "重试",
+    "reloadPage": "重新加载页面",
+    "technicalDetails": "技术详情"
+  },
   "errors": {
     "networkError": "网络错误",
     "apiError": "API错误",
@@ -410,5 +468,34 @@
     "daysAgo": "{{count}}天前",
     "daysAgo_plural": "{{count}}天前",
     "longTimeAgo": "很久以前"
+  },
+  "downloads": {
+    "title": "下载管理器",
+    "downloading": "下载中",
+    "completed": "已完成",
+    "fileName": "文件名",
+    "size": "大小",
+    "progress": "进度",
+    "speed": "速度",
+    "remainingTime": "剩余时间",
+    "status": {
+      "downloading": "下载中",
+      "paused": "已暂停",
+      "completed": "已完成",
+      "error": "错误",
+      "pending": "等待中",
+      "finalizing": "正在完成"
+    },
+    "toast": {
+      "downloadCompleteTitle": "下载完成",
+      "downloadCompleteMessage": "{{modelName}} 已成功下载。"
+    },
+    "actions": "操作",
+    "noDownloadingJobs": "没有正在下载的任务。",
+    "noCompletedJobs": "没有已完成的任务。",
+    "clearCompleted": "清除已完成",
+    "pause": "暂停",
+    "resume": "继续",
+    "retry": "重试"
   }
 }

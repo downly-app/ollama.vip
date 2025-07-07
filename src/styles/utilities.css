@@ -1,0 +1,769 @@
+/* Utility Styles System v2.0
+ * Common utility classes and layout helpers
+ * Supplement Tailwind CSS
+ * Provide more style utilities
+ */
+
+/* ==========================================================================
+   Layout Utilities
+   ========================================================================== */
+
+/* Flexbox utilities */
+.flex-center {
+  @apply flex items-center justify-center;
+}
+
+.flex-between {
+  @apply flex items-center justify-between;
+}
+
+.flex-start {
+  @apply flex items-center justify-start;
+}
+
+.flex-end {
+  @apply flex items-center justify-end;
+}
+
+.flex-around {
+  @apply flex items-center justify-around;
+}
+
+.flex-evenly {
+  @apply flex items-center justify-evenly;
+}
+
+.flex-col-center {
+  @apply flex flex-col items-center justify-center;
+}
+
+.flex-col-between {
+  @apply flex flex-col items-center justify-between;
+}
+
+.flex-col-start {
+  @apply flex flex-col items-center justify-start;
+}
+
+.flex-col-end {
+  @apply flex flex-col items-center justify-end;
+}
+
+/* Grid utilities */
+.grid-center {
+  @apply grid place-items-center;
+}
+
+.grid-cols-auto-fit {
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+.grid-cols-auto-fill {
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+}
+
+/* Positioning utilities */
+.absolute-center {
+  @apply absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2;
+}
+
+.absolute-top-center {
+  @apply absolute top-0 left-1/2 transform -translate-x-1/2;
+}
+
+.absolute-bottom-center {
+  @apply absolute bottom-0 left-1/2 transform -translate-x-1/2;
+}
+
+.absolute-left-center {
+  @apply absolute left-0 top-1/2 transform -translate-y-1/2;
+}
+
+.absolute-right-center {
+  @apply absolute right-0 top-1/2 transform -translate-y-1/2;
+}
+
+.fixed-center {
+  @apply fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2;
+}
+
+/* Size utilities */
+.full-size {
+  @apply w-full h-full;
+}
+
+.square {
+  @apply aspect-square;
+}
+
+.circle {
+  @apply rounded-full aspect-square;
+}
+
+.min-h-screen-safe {
+  min-height: 100vh;
+  min-height: 100dvh; /* Dynamic viewport height */
+}
+
+.h-screen-safe {
+  height: 100vh;
+  height: 100dvh; /* Dynamic viewport height */
+}
+
+/* ==========================================================================
+   Visual Effects Utilities
+   ========================================================================== */
+
+/* Glass effect */
+.glass {
+  @apply bg-white/10 backdrop-blur-md border border-white/20;
+}
+
+.glass-strong {
+  @apply bg-white/15 backdrop-blur-xl border border-white/30;
+}
+
+.glass-subtle {
+  @apply bg-white/5 backdrop-blur-sm border border-white/10;
+}
+
+/* Gradient effects */
+.gradient-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.gradient-secondary {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.gradient-success {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+
+.gradient-warning {
+  background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+}
+
+.gradient-danger {
+  background: linear-gradient(135deg, #ff8a80 0%, #ff5722 100%);
+}
+
+.gradient-dark {
+  background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+}
+
+.gradient-light {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+.gradient-rainbow {
+  background: linear-gradient(135deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #feca57, #ff9ff3);
+}
+
+/* Text gradients */
+.text-gradient-primary {
+  @apply bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent;
+}
+
+.text-gradient-secondary {
+  @apply bg-gradient-to-r from-pink-500 to-orange-500 bg-clip-text text-transparent;
+}
+
+.text-gradient-success {
+  @apply bg-gradient-to-r from-green-500 to-teal-500 bg-clip-text text-transparent;
+}
+
+.text-gradient-rainbow {
+  @apply bg-gradient-to-r from-red-500 via-yellow-500 to-blue-500 bg-clip-text text-transparent;
+}
+
+/* Shadow effects */
+.shadow-glow {
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+}
+
+.shadow-glow-green {
+  box-shadow: 0 0 20px rgba(34, 197, 94, 0.3);
+}
+
+.shadow-glow-red {
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
+}
+
+.shadow-glow-yellow {
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
+}
+
+.shadow-glow-purple {
+  box-shadow: 0 0 20px rgba(147, 51, 234, 0.3);
+}
+
+.shadow-inner-glow {
+  box-shadow: inset 0 0 20px rgba(59, 130, 246, 0.2);
+}
+
+.shadow-soft {
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+}
+
+.shadow-hard {
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.3);
+}
+
+/* Border effects */
+.border-gradient {
+  border: 1px solid transparent;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) border-box;
+  background-clip: padding-box, border-box;
+}
+
+.border-gradient-rounded {
+  border: 1px solid transparent;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) border-box;
+  background-clip: padding-box, border-box;
+  border-radius: 0.5rem; /* rounded-lg equivalent */
+}
+
+.border-dashed-animated {
+  border: 2px dashed rgba(255, 255, 255, 0.3);
+  animation: dash 20s linear infinite;
+}
+
+@keyframes dash {
+  to {
+    stroke-dashoffset: -1000;
+  }
+}
+
+/* ==========================================================================
+   Text Utilities
+   ========================================================================== */
+
+/* Text truncation */
+.text-truncate {
+  @apply truncate;
+}
+
+.text-truncate-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.text-truncate-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.text-truncate-4 {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Text styles */
+.text-balance {
+  text-wrap: balance;
+}
+
+.text-pretty {
+  text-wrap: pretty;
+}
+
+.text-stroke {
+  -webkit-text-stroke: 1px currentColor;
+}
+
+.text-stroke-2 {
+  -webkit-text-stroke: 2px currentColor;
+}
+
+.text-shadow {
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.text-shadow-lg {
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+.text-shadow-glow {
+  text-shadow: 0 0 10px currentColor;
+}
+
+.text-outline {
+  color: transparent;
+  -webkit-text-stroke: 2px currentColor;
+}
+
+/* Text selection styles */
+.select-all {
+  user-select: all;
+}
+
+.select-none {
+  user-select: none;
+}
+
+.select-text {
+  user-select: text;
+}
+
+/* ==========================================================================
+   Interaction Utilities
+   ========================================================================== */
+
+/* Cursor styles */
+.cursor-grab {
+  cursor: grab;
+}
+
+.cursor-grabbing {
+  cursor: grabbing;
+}
+
+.cursor-zoom-in {
+  cursor: zoom-in;
+}
+
+.cursor-zoom-out {
+  cursor: zoom-out;
+}
+
+.cursor-alias {
+  cursor: alias;
+}
+
+.cursor-copy {
+  cursor: copy;
+}
+
+.cursor-crosshair {
+  cursor: crosshair;
+}
+
+/* User selection */
+.user-select-none {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.user-select-text {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+
+.user-select-all {
+  -webkit-user-select: all;
+  -moz-user-select: all;
+  -ms-user-select: all;
+  user-select: all;
+}
+
+/* Drag and drop */
+.drag-none {
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-drag: none;
+}
+
+.drag-auto {
+  -webkit-user-drag: auto;
+  -khtml-user-drag: auto;
+  -moz-user-drag: auto;
+  -o-user-drag: auto;
+  user-drag: auto;
+}
+
+/* Touch actions */
+.touch-none {
+  touch-action: none;
+}
+
+.touch-pan-x {
+  touch-action: pan-x;
+}
+
+.touch-pan-y {
+  touch-action: pan-y;
+}
+
+.touch-pinch-zoom {
+  touch-action: pinch-zoom;
+}
+
+.touch-manipulation {
+  touch-action: manipulation;
+}
+
+/* ==========================================================================
+   State Utilities
+   ========================================================================== */
+
+/* Loading state */
+.is-loading {
+  @apply relative overflow-hidden;
+}
+
+.is-loading::before {
+  @apply absolute inset-0 bg-white/5 backdrop-blur-sm;
+  @apply flex items-center justify-center;
+  content: '';
+}
+
+.is-loading::after {
+  @apply absolute inset-0 flex items-center justify-center;
+  content: '';
+  width: 2rem;
+  height: 2rem;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Error state */
+.is-error {
+  @apply border-red-500 bg-red-500/10;
+}
+
+.is-success {
+  @apply border-green-500 bg-green-500/10;
+}
+
+.is-warning {
+  @apply border-yellow-500 bg-yellow-500/10;
+}
+
+.is-info {
+  @apply border-blue-500 bg-blue-500/10;
+}
+
+/* Disabled state */
+.is-disabled {
+  @apply opacity-50 cursor-not-allowed pointer-events-none;
+}
+
+/* Active state */
+.is-active {
+  @apply bg-blue-500/20 border-blue-500/50;
+}
+
+/* ==========================================================================
+   Media Utilities
+   ========================================================================== */
+
+/* Image utilities */
+.img-cover {
+  @apply object-cover;
+}
+
+.img-contain {
+  @apply object-contain;
+}
+
+.img-fill {
+  @apply object-fill;
+}
+
+.img-center {
+  @apply object-center;
+}
+
+.img-top {
+  @apply object-top;
+}
+
+.img-bottom {
+  @apply object-bottom;
+}
+
+.img-left {
+  @apply object-left;
+}
+
+.img-right {
+  @apply object-right;
+}
+
+/* Video utilities */
+.video-responsive {
+  @apply aspect-video;
+}
+
+.video-responsive iframe,
+.video-responsive object,
+.video-responsive embed {
+  @apply absolute top-0 left-0 w-full h-full;
+}
+
+/* ==========================================================================
+   Spacing and Whitespace Utilities
+   ========================================================================== */
+
+/* Spacing utilities */
+.space-y-px > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-y-reverse: 0;
+  margin-top: calc(1px * calc(1 - var(--tw-space-y-reverse)));
+  margin-bottom: calc(1px * var(--tw-space-y-reverse));
+}
+
+.space-x-px > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-x-reverse: 0;
+  margin-right: calc(1px * var(--tw-space-x-reverse));
+  margin-left: calc(1px * calc(1 - var(--tw-space-x-reverse)));
+}
+
+/* Dividers */
+.divider {
+  @apply border-b border-white/10;
+}
+
+.divider-vertical {
+  @apply border-r border-white/10;
+}
+
+.divider-dashed {
+  @apply border-b border-dashed border-white/10;
+}
+
+.divider-dotted {
+  @apply border-b border-dotted border-white/10;
+}
+
+/* ==========================================================================
+   Responsive Utilities
+   ========================================================================== */
+
+/* Show/Hide */
+.show-mobile {
+  @apply block md:hidden;
+}
+
+.show-desktop {
+  @apply hidden md:block;
+}
+
+.show-tablet {
+  @apply hidden md:block lg:hidden;
+}
+
+.show-laptop {
+  @apply hidden lg:block xl:hidden;
+}
+
+.show-desktop-large {
+  @apply hidden xl:block;
+}
+
+/* Container queries */
+.container-xs {
+  container-type: inline-size;
+}
+
+.container-sm {
+  container-type: inline-size;
+}
+
+.container-md {
+  container-type: inline-size;
+}
+
+.container-lg {
+  container-type: inline-size;
+}
+
+.container-xl {
+  container-type: inline-size;
+}
+
+/* ==========================================================================
+   Accessibility Utilities
+   ========================================================================== */
+
+/* Screen reader - Use native CSS to avoid circular dependencies */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.not-sr-only {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: 0;
+  margin: 0;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
+/* Focus indicators */
+.focus-visible {
+  @apply focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
+}
+
+.focus-visible-inset {
+  @apply focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset;
+}
+
+/* Skip links */
+.skip-link {
+  @apply absolute -top-full left-0 p-4 bg-black text-white z-50;
+  @apply focus:top-0 transition-all duration-200;
+}
+
+/* ==========================================================================
+   Performance Optimization Utilities
+   ========================================================================== */
+
+/* Hardware acceleration */
+.gpu-accelerated {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+.gpu-accelerated-opacity {
+  transform: translateZ(0);
+  will-change: opacity;
+}
+
+.gpu-accelerated-scroll {
+  transform: translateZ(0);
+  will-change: scroll-position;
+}
+
+/* Content visibility */
+.content-visibility-auto {
+  content-visibility: auto;
+}
+
+.content-visibility-hidden {
+  content-visibility: hidden;
+}
+
+.content-visibility-visible {
+  content-visibility: visible;
+}
+
+/* Containment */
+.contain-layout {
+  contain: layout;
+}
+
+.contain-paint {
+  contain: paint;
+}
+
+.contain-size {
+  contain: size;
+}
+
+.contain-style {
+  contain: style;
+}
+
+.contain-strict {
+  contain: strict;
+}
+
+.contain-content {
+  contain: content;
+}
+
+/* ==========================================================================
+   Debug Utilities
+   ========================================================================== */
+
+/* Debug borders */
+.debug-outline {
+  outline: 2px dashed red;
+  outline-offset: 2px;
+}
+
+.debug-outline-green {
+  outline: 2px dashed green;
+  outline-offset: 2px;
+}
+
+.debug-outline-blue {
+  outline: 2px dashed blue;
+  outline-offset: 2px;
+}
+
+.debug-outline-yellow {
+  outline: 2px dashed yellow;
+  outline-offset: 2px;
+}
+
+/* Debug backgrounds */
+.debug-bg {
+  background: rgba(255, 0, 0, 0.1);
+}
+
+.debug-bg-green {
+  background: rgba(0, 255, 0, 0.1);
+}
+
+.debug-bg-blue {
+  background: rgba(0, 0, 255, 0.1);
+}
+
+.debug-bg-yellow {
+  background: rgba(255, 255, 0, 0.1);
+}
+
+/* Debug grid */
+.debug-grid {
+  background-image:
+    linear-gradient(rgba(255, 0, 0, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 0, 0, 0.1) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* ==========================================================================
+   打印工具类
+   ========================================================================== */
+
+@media print {
+  .print-hidden {
+    display: none !important;
+  }
+
+  .print-visible {
+    display: block !important;
+  }
+
+  .print-page-break {
+    page-break-after: always;
+  }
+
+  .print-no-break {
+    page-break-inside: avoid;
+  }
+
+  .print-black {
+    color: black !important;
+  }
+
+  .print-white {
+    color: white !important;
+  }
+}
+ 

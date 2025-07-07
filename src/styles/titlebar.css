@@ -83,7 +83,8 @@
 }
 
 /* Ensure transparent background */
-html, body {
+html,
+body {
   background: transparent !important;
   margin: 0;
   padding: 0;

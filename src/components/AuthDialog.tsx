@@ -1,16 +1,18 @@
+import { LogIn, UserPlus } from 'lucide-react';
 
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { LogIn, UserPlus } from 'lucide-react';
-import { useTranslation } from 'react-i18next';
 
 interface AuthDialogProps {
   open: boolean;
@@ -26,7 +28,7 @@ const AuthDialog = ({ open, onClose, onLogin, onRegister }: AuthDialogProps) => 
     email: '',
     password: '',
     username: '',
-    confirmPassword: ''
+    confirmPassword: '',
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -50,89 +52,105 @@ const AuthDialog = ({ open, onClose, onLogin, onRegister }: AuthDialogProps) => 
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[450px] bg-white/10 backdrop-blur-xl border border-white/20 text-white shadow-2xl rounded-2xl">
+      <DialogContent className='sm:max-w-[450px] bg-white/10 backdrop-blur-xl border border-white/20 text-white shadow-2xl rounded-2xl'>
         <DialogHeader>
-          <DialogTitle className="text-white flex items-center text-xl font-semibold">
+          <DialogTitle className='text-center text-2xl font-bold text-white flex items-center justify-center gap-2'>
             {isLogin ? (
-              <LogIn className="mr-3 text-orange-400" size={24} />
+              <>
+                <LogIn className='w-6 h-6' />
+                {t('auth.login', 'Login')}
+              </>
             ) : (
-              <UserPlus className="mr-3 text-purple-400" size={24} />
+              <>
+                <UserPlus className='w-6 h-6' />
+                {t('auth.register', 'Register')}
+              </>
             )}
-            <span className="bg-gradient-to-r from-orange-400 to-purple-400 bg-clip-text text-transparent">
-              {isLogin ? t('auth.login') : t('auth.register')}
-            </span>
           </DialogTitle>
+          <DialogDescription className='text-center text-white/70'>
+            {isLogin
+              ? t('auth.loginDescription', 'Sign in to your account')
+              : t('auth.registerDescription', 'Create a new account')}
+          </DialogDescription>
         </DialogHeader>
-        
-        <form onSubmit={handleSubmit} className="space-y-6 pt-2">
+
+        <form onSubmit={handleSubmit} className='space-y-6 pt-2'>
           {!isLogin && (
-            <div className="space-y-2">
-              <Label htmlFor="username" className="text-white/90 font-medium">{t('auth.username')}</Label>
+            <div className='space-y-2'>
+              <Label htmlFor='username' className='text-white/90 font-medium'>
+                {t('auth.username')}
+              </Label>
               <Input
-                id="username"
-                type="text"
+                id='username'
+                type='text'
                 value={formData.username}
-                onChange={(e) => setFormData({...formData, username: e.target.value})}
-                className="px-4 py-3 bg-white/10 backdrop-blur-sm border-white/20 text-white placeholder-white/50 focus:ring-2 focus:ring-purple-400/50 focus:border-purple-400/50 hover:bg-white/15 transition-all duration-300 rounded-xl"
+                onChange={e => setFormData({ ...formData, username: e.target.value })}
+                className='px-4 py-3 bg-white/10 backdrop-blur-sm border-white/20 text-white placeholder-white/50 focus:ring-2 focus:ring-purple-400/50 focus:border-purple-400/50 hover:bg-white/15 transition-all duration-300 rounded-xl'
                 placeholder={t('auth.enterUsername')}
                 required
               />
             </div>
           )}
 
-          <div className="space-y-2">
-            <Label htmlFor="email" className="text-white/90 font-medium">{t('auth.email')}</Label>
+          <div className='space-y-2'>
+            <Label htmlFor='email' className='text-white/90 font-medium'>
+              {t('auth.email')}
+            </Label>
             <Input
-              id="email"
-              type="email"
+              id='email'
+              type='email'
               value={formData.email}
-              onChange={(e) => setFormData({...formData, email: e.target.value})}
-              className="px-4 py-3 bg-white/10 backdrop-blur-sm border-white/20 text-white placeholder-white/50 focus:ring-2 focus:ring-orange-400/50 focus:border-orange-400/50 hover:bg-white/15 transition-all duration-300 rounded-xl"
+              onChange={e => setFormData({ ...formData, email: e.target.value })}
+              className='px-4 py-3 bg-white/10 backdrop-blur-sm border-white/20 text-white placeholder-white/50 focus:ring-2 focus:ring-orange-400/50 focus:border-orange-400/50 hover:bg-white/15 transition-all duration-300 rounded-xl'
               placeholder={t('auth.enterEmail')}
               required
             />
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="password" className="text-white/90 font-medium">{t('auth.password')}</Label>
+          <div className='space-y-2'>
+            <Label htmlFor='password' className='text-white/90 font-medium'>
+              {t('auth.password')}
+            </Label>
             <Input
-              id="password"
-              type="password"
+              id='password'
+              type='password'
               value={formData.password}
-              onChange={(e) => setFormData({...formData, password: e.target.value})}
-              className="px-4 py-3 bg-white/10 backdrop-blur-sm border-white/20 text-white placeholder-white/50 focus:ring-2 focus:ring-orange-400/50 focus:border-orange-400/50 hover:bg-white/15 transition-all duration-300 rounded-xl"
+              onChange={e => setFormData({ ...formData, password: e.target.value })}
+              className='px-4 py-3 bg-white/10 backdrop-blur-sm border-white/20 text-white placeholder-white/50 focus:ring-2 focus:ring-orange-400/50 focus:border-orange-400/50 hover:bg-white/15 transition-all duration-300 rounded-xl'
               placeholder={t('auth.enterPassword')}
               required
             />
           </div>
 
           {!isLogin && (
-            <div className="space-y-2">
-              <Label htmlFor="confirmPassword" className="text-white/90 font-medium">{t('auth.confirmPassword')}</Label>
+            <div className='space-y-2'>
+              <Label htmlFor='confirmPassword' className='text-white/90 font-medium'>
+                {t('auth.confirmPassword')}
+              </Label>
               <Input
-                id="confirmPassword"
-                type="password"
+                id='confirmPassword'
+                type='password'
                 value={formData.confirmPassword}
-                onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
-                className="px-4 py-3 bg-white/10 backdrop-blur-sm border-white/20 text-white placeholder-white/50 focus:ring-2 focus:ring-purple-400/50 focus:border-purple-400/50 hover:bg-white/15 transition-all duration-300 rounded-xl"
+                onChange={e => setFormData({ ...formData, confirmPassword: e.target.value })}
+                className='px-4 py-3 bg-white/10 backdrop-blur-sm border-white/20 text-white placeholder-white/50 focus:ring-2 focus:ring-purple-400/50 focus:border-purple-400/50 hover:bg-white/15 transition-all duration-300 rounded-xl'
                 placeholder={t('auth.reenterPassword')}
                 required
               />
             </div>
           )}
 
-          <Button 
-            type="submit" 
-            className="w-full px-6 py-4 bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700 text-white border-0 shadow-lg transition-all duration-300 font-medium rounded-xl text-base"
+          <Button
+            type='submit'
+            className='w-full px-6 py-4 bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700 text-white border-0 shadow-lg transition-all duration-300 font-medium rounded-xl text-base'
           >
             {isLogin ? t('auth.loginButton') : t('auth.registerButton')}
           </Button>
 
-          <div className="text-center pt-2">
+          <div className='text-center pt-2'>
             <button
-              type="button"
+              type='button'
               onClick={toggleMode}
-              className="bg-gradient-to-r from-orange-400 to-purple-400 bg-clip-text text-transparent text-sm underline transition-colors duration-300 font-medium hover:from-orange-300 hover:to-purple-300"
+              className='bg-gradient-to-r from-orange-400 to-purple-400 bg-clip-text text-transparent text-sm underline transition-colors duration-300 font-medium hover:from-orange-300 hover:to-purple-300'
             >
               {isLogin ? t('auth.noAccount') : t('auth.hasAccount')}
             </button>

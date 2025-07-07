@@ -1,4 +1,10 @@
-@import './styles/scrollbar.css';
+/* 导入统一样式系统 - 必须在最前面 */
+@import './styles/theme.css';
+@import './styles/scrollbar-unified.css';
+@import './styles/animations.css';
+@import './styles/components.css';
+@import './styles/utilities.css';
+@import './styles/markdown.css';
 @import './styles/titlebar.css';
 
 @tailwind base;
@@ -95,16 +101,18 @@
 
 @layer base {
   * {
-    @apply border-border;
+    border-color: hsl(var(--border));
   }
 
   body {
-    @apply bg-background text-foreground;
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
   }
 }
 
 @keyframes gradientFlow {
-  0%, 100% {
+  0%,
+  100% {
     background-position: 0% 50%;
   }
   50% {
@@ -113,8 +121,9 @@
 }
 
 @keyframes gradientMovement {
-  0%, 100% {
-    background-size: 
+  0%,
+  100% {
+    background-size:
       130vmax 130vmax,
       80vmax 80vmax,
       90vmax 90vmax,
@@ -128,7 +137,7 @@
       50vmax 50vmax;
   }
   25% {
-    background-size: 
+    background-size:
       100vmax 100vmax,
       90vmax 90vmax,
       100vmax 100vmax,
@@ -142,7 +151,7 @@
       40vmax 60vmax;
   }
   50% {
-    background-size: 
+    background-size:
       80vmax 80vmax,
       110vmax 110vmax,
       80vmax 80vmax,
@@ -156,7 +165,7 @@
       30vmax 70vmax;
   }
   75% {
-    background-size: 
+    background-size:
       90vmax 90vmax,
       90vmax 90vmax,
       100vmax 100vmax,

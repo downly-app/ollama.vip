@@ -24,8 +24,15 @@ export function convertDatesToObjects<T>(obj: unknown, dateFields: string[] = []
 
   // Auto-detect common date fields
   const commonDateFields = [
-    'timestamp', 'createdAt', 'updatedAt', 'date', 'time',
-    'startTime', 'endTime', 'lastModified', 'publishedAt'
+    'timestamp',
+    'createdAt',
+    'updatedAt',
+    'date',
+    'time',
+    'startTime',
+    'endTime',
+    'lastModified',
+    'publishedAt',
   ];
 
   const fieldsToConvert = [...new Set([...dateFields, ...commonDateFields])];
@@ -57,7 +64,7 @@ export function safeGetFromStorage<T>(key: string, defaultValue: T): T {
     }
     return JSON.parse(item) as T;
   } catch (error) {
-    console.warn(`Failed to get item from localStorage with key "${key}":`, error);
+    // Failed to get item from localStorage
     return defaultValue;
   }
 }
@@ -71,7 +78,7 @@ export function safeSetToStorage<T>(key: string, value: T): void {
   try {
     localStorage.setItem(key, JSON.stringify(value));
   } catch (error) {
-    console.warn(`Failed to set item to localStorage with key "${key}":`, error);
+    // Failed to set item to localStorage
   }
 }
 
@@ -95,7 +102,11 @@ export function cleanObject<T>(obj: T): T {
     if (value != null) {
       if (typeof value === 'object') {
         const cleanedValue = cleanObject(value);
-        if (Array.isArray(cleanedValue) ? cleanedValue.length > 0 : Object.keys(cleanedValue).length > 0) {
+        if (
+          Array.isArray(cleanedValue)
+            ? cleanedValue.length > 0
+            : Object.keys(cleanedValue).length > 0
+        ) {
           (cleaned as Record<string, unknown>)[key] = cleanedValue;
         }
       } else {

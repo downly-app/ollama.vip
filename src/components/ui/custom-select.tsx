@@ -1,4 +1,5 @@
 import React from 'react';
+
 import {
   Select,
   SelectContent,
@@ -22,12 +23,12 @@ interface CustomSelectProps {
 const CustomSelect = ({
   value,
   onValueChange,
-  placeholder = "Please Select",
+  placeholder = 'Please Select',
   options,
-  className = "",
+  className = '',
   size = 'md',
   variant = 'default',
-  disabled = false
+  disabled = false,
 }: CustomSelectProps) => {
   const { currentTheme } = useTheme();
 
@@ -73,23 +74,23 @@ const CustomSelect = ({
             ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
           `}
         >
-          <SelectValue placeholder={placeholder} className="text-white" />
+          <SelectValue placeholder={placeholder} className='text-white' />
         </SelectTrigger>
         <SelectContent
-          className="bg-white/10 backdrop-blur-xl border border-white/20 text-white shadow-2xl rounded-xl min-w-[280px] z-[9999]"
-          position="popper"
+          className='bg-white/10 backdrop-blur-xl border border-white/20 text-white shadow-2xl rounded-xl z-[9999]'
+          position='popper'
           sideOffset={4}
         >
-          {options.map((option) => (
+          {options.map(option => (
             <SelectItem
               key={option.value}
               value={option.value}
-              className="text-white hover:bg-white/20 focus:bg-white/20 focus:text-white cursor-pointer rounded-lg data-[highlighted]:bg-white/20 data-[highlighted]:text-white"
+              className='text-white hover:bg-white/20 focus:bg-white/20 focus:text-white cursor-pointer rounded-lg data-[highlighted]:bg-white/20 data-[highlighted]:text-white'
             >
-              <div className="flex items-center justify-between w-full">
-                <span className="text-sm truncate pr-2">{option.label}</span>
+              <div className='flex items-center justify-between w-full'>
+                <span className='text-sm truncate pr-2'>{option.label}</span>
                 {value === option.value && (
-                  <div className="w-2 h-2 rounded-full flex-shrink-0 bg-blue-400"></div>
+                  <div className='w-2 h-2 rounded-full flex-shrink-0 bg-blue-400'></div>
                 )}
               </div>
             </SelectItem>
@@ -100,4 +101,4 @@ const CustomSelect = ({
   );
 };
 
-export default CustomSelect; 
+export default CustomSelect;

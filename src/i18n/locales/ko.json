@@ -1,420 +1,484 @@
 {
-    "app": {
-        "title": "Ollama 웹 클라이언트",
-        "description": "전문적인 Ollama 웹 인터페이스"
+  "app": {
+    "title": "Ollama 웹 클라이언트",
+    "description": "전문적인 Ollama 웹 인터페이스"
+  },
+  "auth": {
+    "login": "로그인",
+    "register": "회원가입",
+    "email": "이메일",
+    "password": "비밀번호",
+    "username": "사용자명",
+    "logout": "로그아웃",
+    "profile": "프로필"
+  },
+  "common": {
+    "save": "저장",
+    "cancel": "취소",
+    "delete": "삭제",
+    "edit": "편집",
+    "copy": "복사",
+    "search": "검색",
+    "loading": "로딩 중...",
+    "error": "오류",
+    "success": "성공",
+    "confirm": "확인",
+    "close": "닫기",
+    "settings": "설정",
+    "language": "언어",
+    "refresh": "새로고침"
+  },
+  "navigation": {
+    "general": "일반",
+    "chat": "채팅",
+    "models": "모델",
+    "downloads": "다운로드 관리",
+    "onlineModels": "온라인 모델",
+    "localModels": "로컬 모델",
+    "settings": "설정",
+    "profile": "프로필"
+  },
+  "chat": {
+    "title": "채팅",
+    "newConversation": "새 대화",
+    "searchConversations": "대화 검색...",
+    "noConversations": "대화가 없습니다",
+    "createFirstConversation": "첫 번째 대화 만들기",
+    "typeMessage": "메시지 입력...",
+    "inputTip": "여기에 메시지를 입력하세요...",
+    "characters": "글자",
+    "recording": "녹음 중...",
+    "send": "전송",
+    "resend": "다시 전송",
+    "editMessage": "메시지 편집",
+    "deleteMessage": "메시지 삭제",
+    "copyMessage": "메시지 복사",
+    "messageCount": "{{count}}개 메시지",
+    "messageCount_plural": "{{count}}개 메시지",
+    "selectModel": "모델 선택",
+    "apiSettings": "API 설정",
+    "needApiKey": "API 키 필요",
+    "needApiKeyDescription": "채팅 기능을 사용하려면 설정에서 API 키를 구성하세요.",
+    "goToSettings": "설정으로 이동",
+    "conversationDeleted": "대화가 삭제되었습니다",
+    "messageCopied": "메시지가 클립보드에 복사되었습니다",
+    "messageEdited": "메시지가 편집되었습니다",
+    "messageDeleted": "메시지가 삭제되었습니다",
+    "selectConversation": "대화 선택",
+    "selectConversationDescription": "왼쪽에서 대화를 선택하여 채팅을 시작하거나 새 대화를 만드세요",
+    "startNewConversation": "새 대화 시작",
+    "sendMessageToStart": "메시지를 보내 대화를 시작하세요",
+    "apiKeyRequired": "API 키 필요",
+    "apiKeyRequiredDescription": "대화를 시작하기 전에 API 키를 설정해주세요.",
+    "typing": "AI가 입력 중...",
+    "modelConfigRequired": "모델 구성 필요",
+    "modelConfigRequiredDescription": "이 기능을 사용하려면 API 키를 구성하거나 로컬 모델을 사용할 수 있는지 확인하십시오.",
+    "localModelNotAvailable": "로컬 모델을 사용할 수 없습니다. 모델을 다운로드하거나 다른 모델을 선택해주세요",
+    "configureApiKey": "API 키를 설정하거나 로컬 모델을 다운로드해주세요",
+    "noModelsConfigured": "로컬 모델을 다운로드하거나 API 키를 설정해주세요",
+    "noAvailableModels": "사용 가능한 모델이 없습니다",
+    "noModelsAvailable": "사용 가능한 모델이 없습니다",
+    "configureModels": "모델 설정",
+    "modelSelectorFooter": "로컬 모델이 우선 표시됩니다",
+    "noMatchingConversations": "일치하는 대화를 찾을 수 없습니다",
+    "thinkingProcess": "사고 과정"
+  },
+  "models": {
+    "title": "모델 관리",
+    "searchModels": "모델 검색...",
+    "noModels": "모델을 찾을 수 없습니다",
+    "download": "다운로드",
+    "install": "설치",
+    "installNow": "지금 설치",
+    "delete": "삭제",
+    "select": "선택",
+    "selected": "선택됨",
+    "downloading": "다운로드 중...",
+    "installing": "설치 중...",
+    "modelName": "모델 이름",
+    "description": "설명",
+    "type": "유형",
+    "size": "크기",
+    "tags": "태그",
+    "downloads": "다운로드",
+    "updatedAt": "업데이트 날짜",
+    "specs": "사양",
+    "actions": "작업",
+    "filterByType": "유형별 필터",
+    "sortBy": "정렬 기준",
+    "sort": "정렬",
+    "popular": "인기순",
+    "newest": "최신순",
+    "embedding": "임베딩",
+    "vision": "비전",
+    "tools": "도구",
+    "thinking": "사고",
+    "downloadProgress": "다운로드 진행률",
+    "downloadComplete": "다운로드 완료",
+    "downloadFailed": "다운로드 실패"
+  },
+  "settings": {
+    "title": "설정",
+    "aiModelSettings": "AI 모델 설정",
+    "currentModel": "현재 모델",
+    "theme": "테마",
+    "provider": "제공업체",
+    "model": "모델",
+    "apiKey": "API 키",
+    "temperature": "온도",
+    "enterApiKey": "API 키 입력",
+    "enterTemperature": "온도 입력 (0.0 - 2.0)",
+    "saveSettings": "설정 저장",
+    "settingsSaved": "설정이 성공적으로 저장되었습니다",
+    "temperatureError": "온도는 0과 2 사이여야 합니다",
+    "temperatureInvalid": "유효한 숫자를 입력해주세요",
+    "temperatureRange": "온도는 0과 2 사이여야 합니다",
+    "themes": {
+      "midnight": "미드나이트 블루",
+      "rose": "로즈 퍼플",
+      "starlight": "스타라이트 퍼플",
+      "sunset": "선셋 오렌지",
+      "ocean": "오션 블루",
+      "forest": "포레스트 그린"
     },
-    "auth": {
-        "login": "로그인",
-        "register": "회원가입",
-        "email": "이메일",
-        "password": "비밀번호",
-        "username": "사용자명",
-        "logout": "로그아웃",
-        "profile": "프로필"
+    "languageSettings": "언어 설정",
+    "selectLanguage": "언어 선택",
+    "languages": {
+      "en": "English",
+      "zh": "中文",
+      "ja": "日本語",
+      "ko": "한국어",
+      "fr": "Français"
     },
-    "common": {
+    "selectProvider": "프로바이더",
+    "selectProviderPlaceholder": "AI 프로바이더를 선택해주세요",
+    "configured": "설정됨",
+    "notConfigured": "설정되지 않음",
+    "visitWebsite": "웹사이트 방문",
+    "defaultUrl": "기본 URL",
+    "providers": {
+      "openai": {
+        "description": "OpenAI는 GPT 및 o-시리즈를 포함한 고급 대형 언어 모델을 개발하는 선도적인 AI 연구 회사로, 자연어 처리 및 추론 능력에 뛰어납니다."
+      },
+      "anthropic": {
+        "description": "Anthropic은 AI 안전 연구에 중점을 두고 대화 이해, 추론 및 안전성에 뛰어난 Claude 시리즈 모델을 개발하며, 긴 컨텍스트 처리를 지원합니다."
+      },
+      "deepseek": {
+        "description": "DeepSeek은 추론, 프로그래밍 및 다국어 처리에 강력한 능력을 가진 고성능 대형 언어 모델을 전문으로 하는 중국의 선도적인 AI 회사입니다."
+      },
+      "google": {
+        "description": "Google의 Gemini 시리즈 모델은 고급 멀티모달 기능을 통합하여 다양한 응용 시나리오에서 텍스트, 이미지 및 코드 이해에 뛰어납니다."
+      },
+      "meta": {
+        "description": "Meta의 Llama 시리즈는 자연어 이해, 코드 생성 및 다국어 지원에 뛰어난 선도적인 오픈소스 대형 언어 모델을 나타냅니다."
+      },
+      "xai": {
+        "description": "Elon Musk가 설립한 xAI는 독특한 개성과 실시간 정보 처리 능력을 가진 Grok 모델을 개발합니다."
+      },
+      "alibaba": {
+        "description": "Alibaba의 Qwen 시리즈 모델은 중국어 이해, 멀티모달 처리 및 기업 응용 분야에서 상당한 장점을 보여줍니다."
+      }
+    }
+  },
+  "general": {
+    "title": "대시보드",
+    "welcome": "Ollama Pro에 오신 것을 환영합니다",
+    "ollamaStatus": "Ollama 서비스 상태",
+    "modelOverview": "모델 개요",
+    "systemResources": "시스템 리소스",
+    "activityLog": "활동 로그",
+    "totalModels": "총 모델 수",
+    "activeModel": "활성 모델",
+    "storageUsed": "사용된 저장소",
+    "memoryUsage": "메모리 사용량",
+    "cpuUsage": "CPU 사용량",
+    "diskUsage": "디스크 사용량"
+  },
+  "profile": {
+    "title": "프로필",
+    "username": "사용자명",
+    "email": "이메일",
+    "avatar": "아바타",
+    "preferences": "환경설정",
+    "account": "계정",
+    "privacy": "개인정보",
+    "notifications": "알림"
+  },
+  "errors": {
+    "networkError": "네트워크 오류가 발생했습니다",
+    "apiError": "API 오류가 발생했습니다",
+    "invalidApiKey": "유효하지 않은 API 키",
+    "modelNotFound": "모델을 찾을 수 없습니다",
+    "downloadFailed": "다운로드에 실패했습니다",
+    "uploadFailed": "업로드에 실패했습니다",
+    "fileNotSupported": "지원되지 않는 파일 형식",
+    "fileTooLarge": "파일이 너무 큽니다",
+    "unknownError": "알 수 없는 오류가 발생했습니다"
+  },
+  "tooltips": {
+    "refresh": "새로고침",
+    "minimize": "최소화",
+    "maximize": "최대화",
+    "close": "닫기",
+    "openFolder": "폴더 열기",
+    "copyPath": "경로 복사",
+    "viewDetails": "세부 정보 보기"
+  },
+  "pages": {
+    "general": "일반",
+    "models": "모델 관리",
+    "localModels": "로컬 모델",
+    "notFound": {
+      "title": "404",
+      "message": "죄송합니다! 페이지를 찾을 수 없습니다",
+      "returnHome": "홈으로 돌아가기"
+    }
+  },
+  "time": {
+    "justNow": "방금 전",
+    "minutesAgo": "{{count}}분 전",
+    "minutesAgo_plural": "{{count}}분 전",
+    "hoursAgo": "{{count}}시간 전",
+    "hoursAgo_plural": "{{count}}시간 전",
+    "daysAgo": "{{count}}일 전",
+    "daysAgo_plural": "{{count}}일 전",
+    "longTimeAgo": "오래 전"
+  },
+  "dashboard": {
+    "systemResources": {
+      "title": "시스템 리소스 모니터링",
+      "overview": "시스템 개요",
+      "resources": {
+        "cpu": "CPU",
+        "gpu": "GPU",
+        "memory": "메모리",
+        "disk": "디스크"
+      },
+      "usageUnavailable": "사용률 불가",
+      "refreshSuccess": "시스템 리소스 모니터링 새로고침 성공 - CPU: {{cpu}}%, 메모리: {{memory}}%",
+      "errors": {
+        "fetchFailed": "시스템 리소스 가져오기 실패",
+        "unavailable": "데이터를 사용할 수 없음"
+      },
+      "activities": {
+        "resourcesUpdated": "시스템 리소스 데이터가 업데이트됨"
+      },
+      "metrics": {
+        "cpu": "CPU 사용량",
+        "gpu": "GPU 사용량",
+        "memory": "메모리 사용량",
+        "disk": "디스크 사용량"
+      },
+      "recentLogs": {
+        "title": "최근 로그",
+        "viewAll": "모든 로그 보기"
+      },
+      "logLevels": {
+        "info": "정보",
+        "warning": "경고",
+        "error": "오류"
+      }
+    },
+    "ollamaService": {
+      "title": "Ollama 서비스 상태",
+      "version": "Ollama 버전",
+      "checkUpdate": "업데이트 확인",
+      "serviceStatus": "서비스 상태",
+      "listeningAddress": "수신 주소",
+      "autoStart": "자동 시작",
+      "quickActions": "빠른 작업",
+      "systemLoadOverview": "시스템 부하 개요",
+      "runningModels": "실행 중인 모델",
+      "totalModels": "총 모델 수",
+      "status": {
+        "checking": "확인 중...",
+        "running": "실행 중",
+        "stopped": "중지됨"
+      },
+      "unknown": "알 수 없음",
+      "errors": {
+        "connectionFailed": "연결 실패",
+        "serviceUnavailable": "서비스를 사용할 수 없음",
+        "dataFetchFailed": "데이터 가져오기 실패"
+      },
+      "actions": {
+        "start": "시작",
+        "stop": "중지",
+        "restart": "재시작",
         "save": "저장",
-        "cancel": "취소",
-        "delete": "삭제",
-        "edit": "편집",
-        "copy": "복사",
-        "search": "검색",
-        "loading": "로딩 중...",
-        "error": "오류",
-        "success": "성공",
-        "confirm": "확인",
-        "close": "닫기",
-        "settings": "설정",
-        "language": "언어",
-        "refresh": "새로고침"
+        "copied": "복사됨",
+        "addressCopied": "서비스 주소가 클립보드에 복사됨",
+        "addressSaved": "수신 주소가 저장됨",
+        "serviceStopped": "서비스 중지됨",
+        "serviceStoppedDesc": "Ollama 서비스가 성공적으로 중지됨",
+        "serviceStarted": "서비스 시작됨",
+        "serviceStartedDesc": "Ollama 서비스가 성공적으로 시작됨",
+        "serviceRestarted": "서비스 재시작됨",
+        "restartFailed": "재시작 실패",
+        "startFailed": "시작 실패"
+      },
+      "quickActionLabels": {
+        "aiChat": "AI 채팅",
+        "modelLibrary": "모델 라이브러리",
+        "importGguf": "GGUF 모델 가져오기"
+      }
     },
-    "navigation": {
-        "general": "일반",
-        "chat": "채팅",
-        "models": "모델",
-        "onlineModels": "온라인 모델",
-        "localModels": "로컬 모델",
-        "settings": "설정",
-        "profile": "프로필"
+    "modelOverview": {
+      "title": "모델 개요",
+      "localModels": "로컬 모델",
+      "viewAllModels": "모든 모델 보기",
+      "runningModels": "실행 중인 모델",
+      "noRunningModels": "실행 중인 모델이 없음",
+      "storageInfo": "저장소 정보",
+      "storagePath": "저장소 경로",
+      "usedSpace": "사용된 공간",
+      "totalModels": "총 모델 수",
+      "recentDownloads": "최근 다운로드",
+      "noRecentDownloads": "최근 다운로드가 없음",
+      "status": {
+        "active": "활성",
+        "idle": "유휴"
+      },
+      "errors": {
+        "fetchFailed": "모델 데이터 가져오기 실패",
+        "serviceUnavailable": "Ollama 서비스를 사용할 수 없음"
+      }
     },
-    "chat": {
-        "title": "채팅",
-        "newConversation": "새 대화",
-        "searchConversations": "대화 검색...",
-        "noConversations": "대화가 없습니다",
-        "createFirstConversation": "첫 번째 대화 만들기",
-        "typeMessage": "메시지 입력...",
-        "inputTip": "여기에 메시지를 입력하세요...",
-        "characters": "글자",
-        "recording": "녹음 중...",
-        "send": "전송",
-        "resend": "다시 전송",
-        "editMessage": "메시지 편집",
-        "deleteMessage": "메시지 삭제",
-        "copyMessage": "메시지 복사",
-        "messageCount": "{{count}}개 메시지",
-        "messageCount_plural": "{{count}}개 메시지",
-        "selectModel": "모델 선택",
-        "apiSettings": "API 설정",
-        "needApiKey": "API 키 필요",
-        "needApiKeyDescription": "채팅 기능을 사용하려면 설정에서 API 키를 구성하세요.",
-        "goToSettings": "설정으로 이동",
-        "conversationDeleted": "대화가 삭제되었습니다",
-        "messageCopied": "메시지가 클립보드에 복사되었습니다",
-        "messageEdited": "메시지가 편집되었습니다",
-        "messageDeleted": "메시지가 삭제되었습니다",
-        "selectConversation": "대화 선택",
-        "selectConversationDescription": "왼쪽에서 대화를 선택하여 채팅을 시작하거나 새 대화를 만드세요",
-        "startNewConversation": "새 대화 시작",
-        "sendMessageToStart": "메시지를 보내 대화를 시작하세요",
-        "apiKeyRequired": "API 키 필요",
-        "apiKeyRequiredDescription": "대화를 시작하기 전에 API 키를 설정해주세요.",
-        "typing": "AI가 입력 중...",
-        "modelConfigRequired": "모델 구성 필요",
-        "modelConfigRequiredDescription": "API 키를 구성하거나 로컬 모델을 다운로드하세요",
-        "localModelNotAvailable": "로컬 모델을 사용할 수 없습니다. 모델을 다운로드하거나 다른 모델을 선택해주세요",
-        "configureApiKey": "API 키를 설정하거나 로컬 모델을 다운로드해주세요",
-        "noModelsConfigured": "로컬 모델을 다운로드하거나 API 키를 설정해주세요",
-        "noAvailableModels": "사용 가능한 모델이 없습니다",
-        "noModelsAvailable": "사용 가능한 모델이 없습니다",
-        "configureModels": "모델 설정",
-        "modelSelectorFooter": "로컬 모델이 우선 표시됩니다",
-        "noMatchingConversations": "일치하는 대화를 찾을 수 없습니다"
-    },
-    "models": {
-        "title": "모델 관리",
-        "searchModels": "모델 검색...",
-        "noModels": "모델을 찾을 수 없습니다",
-        "download": "다운로드",
-        "install": "설치",
-        "installNow": "지금 설치",
-        "delete": "삭제",
-        "select": "선택",
-        "selected": "선택됨",
-        "downloading": "다운로드 중...",
-        "installing": "설치 중...",
-        "modelName": "모델 이름",
-        "description": "설명",
-        "type": "유형",
-        "size": "크기",
-        "tags": "태그",
-        "downloads": "다운로드 수",
-        "updated": "업데이트됨",
-        "actions": "작업",
-        "filterByType": "유형별 필터",
-        "sortBy": "정렬 기준",
-        "popular": "인기",
-        "newest": "최신",
-        "embedding": "임베딩",
-        "vision": "비전",
-        "tools": "도구",
-        "thinking": "사고",
-        "downloadProgress": "다운로드 진행률",
-        "downloadComplete": "다운로드 완료",
-        "downloadFailed": "다운로드 실패"
-    },
-    "settings": {
-        "title": "설정",
-        "aiModelSettings": "AI 모델 설정",
-        "currentModel": "현재 모델",
-        "theme": "테마",
-        "provider": "제공업체",
-        "model": "모델",
-        "apiKey": "API 키",
-        "temperature": "온도",
-        "enterApiKey": "API 키 입력",
-        "enterTemperature": "온도 입력 (0.0 - 2.0)",
-        "saveSettings": "설정 저장",
-        "settingsSaved": "설정이 성공적으로 저장되었습니다",
-        "temperatureError": "온도는 0과 2 사이여야 합니다",
-        "temperatureInvalid": "유효한 숫자를 입력해주세요",
-        "temperatureRange": "온도는 0과 2 사이여야 합니다",
-        "themes": {
-            "midnight": "미드나이트 블루",
-            "rose": "로즈 퍼플",
-            "starlight": "스타라이트 퍼플",
-            "sunset": "선셋 오렌지",
-            "ocean": "오션 블루",
-            "forest": "포레스트 그린"
-        },
-        "languageSettings": "언어 설정",
-        "selectLanguage": "언어 선택",
-        "languages": {
-            "en": "English",
-            "zh": "中文",
-            "ja": "日本語",
-            "ko": "한국어",
-            "fr": "Français"
-        },
-        "selectProvider": "프로바이더",
-        "selectProviderPlaceholder": "AI 프로바이더를 선택해주세요",
-        "configured": "설정됨",
-        "notConfigured": "설정되지 않음",
-        "visitWebsite": "웹사이트 방문",
-        "defaultUrl": "기본 URL",
-        "providers": {
-            "openai": {
-                "description": "OpenAI는 GPT 및 o-시리즈를 포함한 고급 대형 언어 모델을 개발하는 선도적인 AI 연구 회사로, 자연어 처리 및 추론 능력에 뛰어납니다."
-            },
-            "anthropic": {
-                "description": "Anthropic은 AI 안전 연구에 중점을 두고 대화 이해, 추론 및 안전성에 뛰어난 Claude 시리즈 모델을 개발하며, 긴 컨텍스트 처리를 지원합니다."
-            },
-            "deepseek": {
-                "description": "DeepSeek은 추론, 프로그래밍 및 다국어 처리에 강력한 능력을 가진 고성능 대형 언어 모델을 전문으로 하는 중국의 선도적인 AI 회사입니다."
-            },
-            "google": {
-                "description": "Google의 Gemini 시리즈 모델은 고급 멀티모달 기능을 통합하여 다양한 응용 시나리오에서 텍스트, 이미지 및 코드 이해에 뛰어납니다."
-            },
-            "meta": {
-                "description": "Meta의 Llama 시리즈는 자연어 이해, 코드 생성 및 다국어 지원에 뛰어난 선도적인 오픈소스 대형 언어 모델을 나타냅니다."
-            },
-            "xai": {
-                "description": "Elon Musk가 설립한 xAI는 독특한 개성과 실시간 정보 처리 능력을 가진 Grok 모델을 개발합니다."
-            },
-            "alibaba": {
-                "description": "Alibaba의 Qwen 시리즈 모델은 중국어 이해, 멀티모달 처리 및 기업 응용 분야에서 상당한 장점을 보여줍니다."
-            }
-        }
-    },
-    "general": {
-        "title": "대시보드",
-        "welcome": "Ollama Pro에 오신 것을 환영합니다",
-        "ollamaStatus": "Ollama 서비스 상태",
-        "modelOverview": "모델 개요",
-        "systemResources": "시스템 리소스",
-        "activityLog": "활동 로그",
-        "totalModels": "총 모델 수",
-        "activeModel": "활성 모델",
-        "storageUsed": "사용된 저장소",
-        "memoryUsage": "메모리 사용량",
-        "cpuUsage": "CPU 사용량",
-        "diskUsage": "디스크 사용량"
-    },
-    "profile": {
-        "title": "프로필",
-        "username": "사용자명",
-        "email": "이메일",
-        "avatar": "아바타",
-        "preferences": "환경설정",
-        "account": "계정",
-        "privacy": "개인정보",
-        "notifications": "알림"
-    },
-    "errors": {
-        "networkError": "네트워크 오류가 발생했습니다",
-        "apiError": "API 오류가 발생했습니다",
-        "invalidApiKey": "유효하지 않은 API 키",
-        "modelNotFound": "모델을 찾을 수 없습니다",
-        "downloadFailed": "다운로드에 실패했습니다",
-        "uploadFailed": "업로드에 실패했습니다",
-        "fileNotSupported": "지원되지 않는 파일 형식",
-        "fileTooLarge": "파일이 너무 큽니다",
-        "unknownError": "알 수 없는 오류가 발생했습니다"
-    },
-    "tooltips": {
-        "refresh": "새로고침",
-        "minimize": "최소화",
-        "maximize": "최대화",
-        "close": "닫기",
-        "openFolder": "폴더 열기",
-        "copyPath": "경로 복사",
-        "viewDetails": "세부 정보 보기"
-    },
-    "pages": {
-        "general": "일반",
-        "models": "모델 관리",
-        "localModels": "로컬 모델",
-        "notFound": {
-            "title": "404",
-            "message": "죄송합니다! 페이지를 찾을 수 없습니다",
-            "returnHome": "홈으로 돌아가기"
-        }
-    },
-    "time": {
-        "justNow": "방금 전",
+    "activityLog": {
+      "title": "활동 로그",
+      "recentActivity": "최근 활동",
+      "viewAllActivities": "모든 활동 보기",
+      "more": "개 더",
+      "noActivities": "기록된 활동이 없음",
+      "confirmClear": "모든 활동 기록을 삭제하시겠습니까?",
+      "timeAgo": {
         "minutesAgo": "{{count}}분 전",
         "minutesAgo_plural": "{{count}}분 전",
         "hoursAgo": "{{count}}시간 전",
-        "hoursAgo_plural": "{{count}}시간 전",
-        "daysAgo": "{{count}}일 전",
-        "daysAgo_plural": "{{count}}일 전",
-        "longTimeAgo": "오래 전"
-    },
-    "dashboard": {
-        "systemResources": {
-            "title": "시스템 리소스 모니터링",
-            "overview": "시스템 개요",
-            "resources": {
-                "cpu": "CPU",
-                "gpu": "GPU",
-                "memory": "메모리",
-                "disk": "디스크"
-            },
-            "usageUnavailable": "사용률 불가",
-            "refreshSuccess": "시스템 리소스 모니터링 새로고침 성공 - CPU: {{cpu}}%, 메모리: {{memory}}%",
-            "errors": {
-                "fetchFailed": "시스템 리소스 가져오기 실패",
-                "unavailable": "데이터를 사용할 수 없음"
-            },
-            "activities": {
-                "resourcesUpdated": "시스템 리소스 데이터가 업데이트됨"
-            },
-            "metrics": {
-                "cpu": "CPU 사용량",
-                "gpu": "GPU 사용량",
-                "memory": "메모리 사용량",
-                "disk": "디스크 사용량"
-            },
-            "recentLogs": {
-                "title": "최근 로그",
-                "viewAll": "모든 로그 보기"
-            },
-            "logLevels": {
-                "info": "정보",
-                "warning": "경고",
-                "error": "오류"
-            }
-        },
-        "ollamaService": {
-            "title": "Ollama 서비스 상태",
-            "version": "Ollama 버전",
-            "checkUpdate": "업데이트 확인",
-            "serviceStatus": "서비스 상태",
-            "listeningAddress": "수신 주소",
-            "autoStart": "자동 시작",
-            "quickActions": "빠른 작업",
-            "systemLoadOverview": "시스템 부하 개요",
-            "runningModels": "실행 중인 모델",
-            "totalModels": "총 모델 수",
-            "status": {
-                "checking": "확인 중...",
-                "running": "실행 중",
-                "stopped": "중지됨"
-            },
-            "unknown": "알 수 없음",
-            "errors": {
-                "connectionFailed": "연결 실패",
-                "serviceUnavailable": "서비스를 사용할 수 없음",
-                "dataFetchFailed": "데이터 가져오기 실패"
-            },
-            "actions": {
-                "start": "시작",
-                "stop": "중지",
-                "restart": "재시작",
-                "save": "저장",
-                "copied": "복사됨",
-                "addressCopied": "서비스 주소가 클립보드에 복사됨",
-                "addressSaved": "수신 주소가 저장됨",
-                "serviceStopped": "서비스 중지됨",
-                "serviceStoppedDesc": "Ollama 서비스가 성공적으로 중지됨",
-                "serviceStarted": "서비스 시작됨",
-                "serviceStartedDesc": "Ollama 서비스가 성공적으로 시작됨",
-                "serviceRestarted": "서비스 재시작됨",
-                "restartFailed": "재시작 실패",
-                "startFailed": "시작 실패"
-            },
-            "quickActionLabels": {
-                "aiChat": "AI 채팅",
-                "modelLibrary": "모델 라이브러리",
-                "importGguf": "GGUF 모델 가져오기"
-            }
-        },
-        "modelOverview": {
-            "title": "모델 개요",
-            "localModels": "로컬 모델",
-            "viewAllModels": "모든 모델 보기",
-            "runningModels": "실행 중인 모델",
-            "noRunningModels": "실행 중인 모델이 없음",
-            "storageInfo": "저장소 정보",
-            "storagePath": "저장소 경로",
-            "usedSpace": "사용된 공간",
-            "totalModels": "총 모델 수",
-            "recentDownloads": "최근 다운로드",
-            "noRecentDownloads": "최근 다운로드가 없음",
-            "status": {
-                "active": "활성",
-                "idle": "유휴"
-            },
-            "errors": {
-                "fetchFailed": "모델 데이터 가져오기 실패",
-                "serviceUnavailable": "Ollama 서비스를 사용할 수 없음"
-            }
-        },
-        "activityLog": {
-            "title": "활동 로그",
-            "recentActivity": "최근 활동",
-            "viewAllActivities": "모든 활동 보기",
-            "more": "개 더",
-            "noActivities": "기록된 활동이 없음",
-            "confirmClear": "모든 활동 기록을 삭제하시겠습니까?",
-            "timeAgo": {
-                "minutesAgo": "{{count}}분 전",
-                "minutesAgo_plural": "{{count}}분 전",
-                "hoursAgo": "{{count}}시간 전",
-                "hoursAgo_plural": "{{count}}시간 전"
-            },
-            "status": {
-                "success": "성공",
-                "info": "정보",
-                "warning": "경고",
-                "error": "오류"
-            },
-            "messages": {
-                "modelLoaded": "모델 {{name}}이 성공적으로 로드됨",
-                "downloadStarted": "모델 {{name}} 다운로드 시작",
-                "serviceStarted": "Ollama 서비스가 시작됨",
-                "newVersionAvailable": "새 버전 Ollama {{version}}을 사용할 수 있음",
-                "memoryUsageHigh": "메모리 사용량이 {{percent}}%에 도달함"
-            }
-        }
-    },
-    "localModels": {
-        "title": "로컬 모델 관리",
-        "modelsCount": "{{count}}개 모델",
-        "searchPlaceholder": "모델 검색...",
-        "downloadNewModel": "새 모델 다운로드",
-        "modelNamePlaceholder": "모델 이름 입력 (예: llama3.2:3b)",
-        "localModelsList": "로컬 모델 목록",
-        "loading": "로딩 중...",
-        "noModelsFound": "일치하는 모델을 찾을 수 없음",
-        "noLocalModels": "로컬 모델 없음",
-        "adjustSearchCriteria": "검색 조건을 조정해 보세요",
-        "useDownloadFunction": "위의 다운로드 기능을 사용하여 모델 추가",
-        "size": "크기",
+        "hoursAgo_plural": "{{count}}시간 전"
+      },
+      "status": {
+        "success": "성공",
+        "info": "정보",
+        "warning": "경고",
+        "error": "오류"
+      },
+      "messages": {
+        "modelLoaded": "모델 {{name}}이 성공적으로 로드됨",
+        "downloadStarted": "모델 {{name}} 다운로드 시작",
+        "serviceStarted": "Ollama 서비스가 시작됨",
+        "newVersionAvailable": "새 버전 Ollama {{version}}을 사용할 수 있음",
+        "memoryUsageHigh": "메모리 사용량이 {{percent}}%에 도달함"
+      }
+    }
+  },
+  "localModels": {
+    "title": "로컬 모델 관리",
+    "modelsCount": "{{count}}개 모델",
+    "searchPlaceholder": "모델 검색...",
+    "downloadNewModel": "새 모델 다운로드",
+    "modelNamePlaceholder": "모델 이름 입력 (예: llama3.2:3b)",
+    "localModelsList": "로컬 모델 목록",
+    "loading": "로딩 중...",
+    "noModelsFound": "일치하는 모델을 찾을 수 없습니다",
+    "noLocalModels": "아직 로컬 모델이 없습니다",
+    "adjustSearchCriteria": "검색 기준을 조정해 보세요",
+    "browseOnlineModels": "위의 다운로드 기능을 사용하여 모델을 추가하거나, <0>온라인 모델 마켓플레이스</0>로 이동하여 찾아보고 설치하세요.",
+    "size": "크기",
+    "parameters": "매개변수",
+    "installedTime": "설치 시간",
+    "details": "세부정보",
+    "modelInfo": "모델 정보",
+    "viewDetailedInfo": "모델의 상세 정보 및 구성 보기",
+    "basicInfo": "기본 정보",
+    "family": "패밀리",
+    "allFamilies": "모든 패밀리",
+    "format": "형식",
+    "quantization": "양자화",
+    "capabilities": "기능",
+    "architectureInfo": "아키텍처 정보",
+    "parameterConfig": "매개변수 구성",
+    "promptTemplate": "프롬프트 템플릿",
+    "modelfile": "Modelfile",
+    "failedToGetModelInfo": "모델 정보를 가져올 수 없음",
+    "confirmDeleteModel": "모델 삭제 확인",
+    "deleteConfirmation": "모델 {{modelName}}을(를) 삭제하시겠습니까? 이 작업은 되돌릴 수 없으며 {{size}}의 저장 공간이 해제됩니다.",
+    "cancel": "취소",
+    "delete": "삭제",
+    "deleteSuccess": "삭제 성공",
+    "deleteSuccessMessage": "모델 {{modelName}}이(가) 성공적으로 삭제되었습니다",
+    "deleteFailed": "삭제 실패",
+    "deleteFailedMessage": "모델 {{modelName}}을(를) 삭제할 수 없습니다",
+    "fetchFailed": "모델 가져오기 실패",
+    "fetchFailedMessage": "로컬 모델 목록을 가져올 수 없습니다. Ollama 서비스가 실행 중인지 확인하세요",
+    "getInfoFailed": "정보 가져오기 실패",
+    "getInfoFailedMessage": "모델 {{modelName}}의 상세 정보를 가져올 수 없습니다",
+    "enterModelName": "모델 이름을 입력하세요",
+    "enterModelNameMessage": "다운로드할 모델 이름을 입력하세요",
+    "installed": "설치됨",
+    "downloadProgress": "다운로드 진행률",
+    "downloadComplete": "다운로드 완료",
+    "downloadFailed": "다운로드 실패",
+    "dialog": {
+      "tabs": {
+        "overview": "개요",
+        "architecture": "아키텍처",
         "parameters": "매개변수",
-        "modifiedTime": "수정 시간",
-        "details": "세부정보",
-        "modelInfo": "모델 정보",
-        "viewDetailedInfo": "모델의 상세 정보 및 구성 보기",
+        "configuration": "구성"
+      },
+      "content": {
         "basicInfo": "기본 정보",
-        "family": "패밀리",
         "format": "형식",
-        "quantization": "양자화",
-        "capabilities": "기능",
-        "architectureInfo": "아키텍처 정보",
-        "parameterConfig": "매개변수 구성",
-        "promptTemplate": "프롬프트 템플릿",
-        "modelfile": "Modelfile",
-        "failedToGetModelInfo": "모델 정보를 가져올 수 없음",
-        "confirmDeleteModel": "모델 삭제 확인",
-        "deleteConfirmation": "모델 {{modelName}}을(를) 삭제하시겠습니까? 이 작업은 되돌릴 수 없으며 {{size}}의 저장 공간이 해제됩니다.",
-        "cancel": "취소",
-        "delete": "삭제",
-        "deleteSuccess": "삭제 성공",
-        "deleteSuccessMessage": "모델 {{modelName}}이(가) 성공적으로 삭제되었습니다",
-        "deleteFailed": "삭제 실패",
-        "deleteFailedMessage": "모델 {{modelName}}을(를) 삭제할 수 없습니다",
-        "fetchFailed": "모델 가져오기 실패",
-        "fetchFailedMessage": "로컬 모델 목록을 가져올 수 없습니다. Ollama 서비스가 실행 중인지 확인하세요",
-        "getInfoFailed": "정보 가져오기 실패",
-        "getInfoFailedMessage": "모델 {{modelName}}의 상세 정보를 가져올 수 없습니다",
-        "enterModelName": "모델 이름을 입력하세요",
-        "enterModelNameMessage": "다운로드할 모델 이름을 입력하세요",
-        "downloadProgress": "다운로드 진행률",
-        "downloadComplete": "다운로드 완료",
-        "downloadFailed": "다운로드 실패"
+        "family": "패밀리",
+        "parameterSize": "매개변수 규모",
+        "quantizationLevel": "양자화 수준",
+        "supportedFamilies": "지원되는 모델 패밀리",
+        "runtimeParameters": "런타임 매개변수",
+        "modelfileConfig": "Modelfile 구성",
+        "templateConfig": "템플릿 구성",
+        "coreArchitectureInfo": "핵심 아키텍처 정보",
+        "detailedConfigInfo": "상세 구성 정보",
+        "modelCapabilities": "모델 기능"
+      }
+    }
+  },
+  "apiKeyRequired": "API 키가 필요합니다",
+  "apiKeyRequiredDescription": "대화를 시작하기 전에 API 키를 설정해주세요.",
+  "typing": "AI가 입력 중...",
+  "downloads": {
+    "title": "다운로드 관리자",
+    "downloading": "다운로드 중",
+    "completed": "완료됨",
+    "pause": "일시 중지",
+    "resume": "재개",
+    "retry": "재시도",
+    "cancel": "취소",
+    "delete": "삭제",
+    "fileName": "파일 이름",
+    "size": "크기",
+    "progress": "진행률",
+    "speed": "속도",
+    "remainingTime": "남은 시간",
+    "status": {
+      "downloading": "다운로드 중",
+      "paused": "일시 중지",
+      "completed": "완료",
+      "error": "오류",
+      "pending": "대기 중",
+      "finalizing": "마무리 중"
     },
-    "apiKeyRequired": "API 키가 필요합니다",
-    "apiKeyRequiredDescription": "대화를 시작하기 전에 API 키를 설정해주세요.",
-    "typing": "AI가 입력 중..."
+    "toast": {
+      "downloadCompleteTitle": "다운로드 완료",
+      "downloadCompleteMessage": "{{modelName}}이(가) 성공적으로 다운로드되었습니다."
+    },
+    "actions": "작업",
+    "noDownloadingJobs": "활성 다운로드 작업이 없습니다.",
+    "noCompletedJobs": "완료된 다운로드 없음",
+    "status.pending": "대기 중...",
+    "status.downloading": "다운로드 중",
+    "status.paused": "일시 중지됨",
+    "status.completed": "완료됨",
+    "status.error": "오류",
+    "clearCompleted": "완료된 항목 지우기"
+  }
 }

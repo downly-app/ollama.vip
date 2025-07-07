@@ -8,10 +8,10 @@ use std::path::PathBuf;
 use serde_json::Value;
 
 mod system_monitor;
-use system_monitor::{SystemInfo, get_system_info};
+use system_monitor::{SystemInfo, get_system_info, get_system_info_for_path};
 
 mod config_manager;
-use config_manager::{get_ollama_host, set_ollama_host, clear_ollama_host, get_config_info};
+use config_manager::{get_ollama_host, set_ollama_host, clear_ollama_host, get_config_info, get_ollama_models_path, set_ollama_models_path, clear_ollama_models_path, restart_ollama_service, check_ollama_service_status};
 
 // Window state structure for serialization and deserialization
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -245,6 +245,11 @@ fn get_system_resources() -> Result<SystemInfo, String> {
     get_system_info().map_err(|e| e.to_string())
 }
 
+#[tauri::command]
+fn get_system_resources_for_path(storage_path: String) -> Result<SystemInfo, String> {
+    get_system_info_for_path(&storage_path).map_err(|e| e.to_string())
+}
+
 // Ollama service management commands
 #[tauri::command]
 fn restart_ollama() -> Result<String, String> {
@@ -446,10 +451,16 @@ fn main() {
             close_window,
             start_dragging,
             get_system_resources,
+            get_system_resources_for_path,
             get_ollama_host,
             set_ollama_host,
             clear_ollama_host,
             get_config_info,
+            get_ollama_models_path,
+            set_ollama_models_path,
+            clear_ollama_models_path,
+            restart_ollama_service,
+            check_ollama_service_status,
             restart_ollama
         ])
         .setup(|app| {

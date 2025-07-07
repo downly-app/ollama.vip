@@ -1,5 +1,7 @@
-import { safeGetFromStorage } from '@/utils/dataUtils';
 import { invoke } from '@tauri-apps/api/tauri';
+
+import { safeGetFromStorage } from '@/utils/dataUtils';
+
 import configApi from './configApi';
 
 export interface OllamaModel {
@@ -107,7 +109,7 @@ export interface OllamaConfig {
 
 class OllamaAPI {
   private config: OllamaConfig = {
-    baseUrl: 'http://localhost:11434'
+    baseUrl: 'http://localhost:11434',
   };
 
   /**
@@ -117,10 +119,10 @@ class OllamaAPI {
   private async getBaseUrl(): Promise<string> {
     try {
       const host = await configApi.getOllamaHost();
-      console.log('OllamaAPI: Using host from configApi:', host);
+      // OllamaAPI: Using host from configApi
       return host;
     } catch (error) {
-      console.error('OllamaAPI: Failed to get host from configApi, using fallback:', error);
+      // OllamaAPI: Failed to get host from configApi, using fallback
       return this.config.baseUrl;
     }
   }
@@ -130,7 +132,7 @@ class OllamaAPI {
    */
   updateConfig(newConfig: Partial<OllamaConfig>) {
     this.config = { ...this.config, ...newConfig };
-    console.log('OllamaAPI: Config updated (will be overridden by configApi):', this.config);
+    // OllamaAPI: Config updated (will be overridden by configApi)
   }
 
   /**
@@ -139,7 +141,7 @@ class OllamaAPI {
   async checkConnection(): Promise<boolean> {
     try {
       const baseUrl = await this.getBaseUrl();
-      console.log('OllamaAPI: Checking connection to:', baseUrl);
+      // OllamaAPI: Checking connection to
 
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 5000);
@@ -151,10 +153,10 @@ class OllamaAPI {
 
       clearTimeout(timeoutId);
       const isConnected = response.ok;
-      console.log('OllamaAPI: Connection check result:', isConnected);
+      // OllamaAPI: Connection check result
       return isConnected;
     } catch (error) {
-      console.error('OllamaAPI: Connection check failed:', error);
+      // OllamaAPI: Connection check failed
       return false;
     }
   }
@@ -165,7 +167,7 @@ class OllamaAPI {
   async getVersion(): Promise<OllamaVersion | null> {
     try {
       const baseUrl = await this.getBaseUrl();
-      console.log('OllamaAPI: Getting version from:', baseUrl);
+      // OllamaAPI: Getting version from
 
       const response = await fetch(`${baseUrl}/api/version`);
       if (!response.ok) {
@@ -173,10 +175,10 @@ class OllamaAPI {
       }
 
       const version = await response.json();
-      console.log('OllamaAPI: Version info:', version);
+      // OllamaAPI: Version info
       return version;
     } catch (error) {
-      console.error('OllamaAPI: Failed to get version:', error);
+      // OllamaAPI: Failed to get version
       return null;
     }
   }
@@ -185,22 +187,17 @@ class OllamaAPI {
    * Get local model list
    */
   async listModels(): Promise<OllamaModel[]> {
-    try {
-      const baseUrl = await this.getBaseUrl();
-      console.log('OllamaAPI: Listing models from:', baseUrl);
+    const baseUrl = await this.getBaseUrl();
+    // OllamaAPI: Listing models from
 
-      const response = await fetch(`${baseUrl}/api/tags`);
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      console.log('OllamaAPI: Models list:', data.models?.length || 0, 'models');
-      return data.models || [];
-    } catch (error) {
-      console.error('OllamaAPI: Failed to fetch models:', error);
-      throw error;
+    const response = await fetch(`${baseUrl}/api/tags`);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
+
+    const data = await response.json();
+    // OllamaAPI: Models list
+    return data.models || [];
   }
 
   // Generate text completion
@@ -251,7 +248,7 @@ class OllamaAPI {
       const content = await this.handleStreamResponse(response, onStreamData, 'chat');
       return {
         role: 'assistant',
-        content
+        content,
       };
     } else {
       const data = await response.json();
@@ -270,13 +267,13 @@ class OllamaAPI {
         },
         body: JSON.stringify({
           model: modelName,
-          verbose
+          verbose,
         }),
       });
       if (!response.ok) throw new Error('Failed to get model info');
       return await response.json();
     } catch (error) {
-      console.error('Failed to get model info:', error);
+      // Failed to get model info
       return null;
     }
   }
@@ -292,73 +289,79 @@ class OllamaAPI {
         },
         body: JSON.stringify({
           source,
-          destination
+          destination,
         }),
       });
       return response.ok;
     } catch (error) {
-      console.error('Failed to copy model:', error);
+      // Failed to copy model
       return false;
     }
   }
 
   // Delete model
   async deleteModel(modelName: string): Promise<boolean> {
-    try {
-      const baseUrl = await this.getBaseUrl();
-      const response = await fetch(`${baseUrl}/api/delete`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ model: modelName }),
-      });
-      return response.ok;
-    } catch (error) {
-      console.error('Failed to delete model:', error);
-      return false;
+    const baseUrl = await this.getBaseUrl();
+    const response = await fetch(`${baseUrl}/api/delete`, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model: modelName }),
+    });
+
+    if (!response.ok && response.status !== 404) {
+      throw new Error(`Failed to delete model: ${response.statusText}`);
     }
+    return response.ok;
   }
 
   // Pull model
-  async pullModel(modelName: string, onProgress?: (progress: any) => void): Promise<void> {
+  async pullModel(
+    modelName: string,
+    onProgress?: (progress: any) => void,
+    signal?: AbortSignal
+  ): Promise<void> {
     const baseUrl = await this.getBaseUrl();
     const response = await fetch(`${baseUrl}/api/pull`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ model: modelName, stream: true }),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: modelName, stream: true }),
+      signal, // Pass signal to fetch
     });
 
     if (!response.ok) {
-      throw new Error(`Failed to pull model: ${response.statusText}`);
+      const errorText = await response.text();
+      throw new Error(`Failed to pull model: ${response.statusText} - ${errorText}`);
     }
 
-    const reader = response.body?.getReader();
-    if (!reader) return;
+    if (!response.body) {
+      throw new Error('Response body is null');
+    }
 
-    try {
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
 
-        const chunk = new TextDecoder().decode(value);
-        const lines = chunk.split('\n').filter(line => line.trim());
+    let buffer = '';
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) {
+        break;
+      }
 
-        for (const line of lines) {
-          try {
-            const data = JSON.parse(line);
-            if (onProgress) {
-              onProgress(data);
-            }
-          } catch (e) {
-            // Ignore invalid JSON lines
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split('\n');
+      buffer = lines.pop() || ''; // Keep the last, possibly incomplete, line
+
+      for (const line of lines) {
+        if (line.trim() === '') continue;
+        try {
+          const progressData = JSON.parse(line);
+          if (onProgress) {
+            onProgress(progressData);
           }
+        } catch (error) {
+          // Failed to parse progress update
         }
       }
-    } finally {
-      reader.releaseLock();
     }
   }
 
@@ -377,7 +380,7 @@ class OllamaAPI {
       body: JSON.stringify({
         model: modelName,
         stream: true,
-        insecure
+        insecure,
       }),
     });
 
@@ -417,7 +420,7 @@ class OllamaAPI {
     model: string,
     input: string | string[],
     options?: Record<string, any>
-  ): Promise<{ embeddings: number[][]; model: string; total_duration: number; }> {
+  ): Promise<{ embeddings: number[][]; model: string; total_duration: number }> {
     const baseUrl = await this.getBaseUrl();
     const response = await fetch(`${baseUrl}/api/embed`, {
       method: 'POST',
@@ -427,7 +430,7 @@ class OllamaAPI {
       body: JSON.stringify({
         model,
         input,
-        options
+        options,
       }),
     });
 
@@ -447,7 +450,7 @@ class OllamaAPI {
       const data = await response.json();
       return data.models || [];
     } catch (error) {
-      console.error('Failed to fetch running models:', error);
+      // Failed to fetch running models
       return [];
     }
   }
@@ -555,11 +558,11 @@ class OllamaAPI {
       const response = await this.generateCompletion({
         model: modelName,
         prompt: '',
-        stream: false
+        stream: false,
       });
       return true;
     } catch (error) {
-      console.error('Failed to load model:', error);
+      // Failed to load model
       return false;
     }
   }
@@ -571,11 +574,11 @@ class OllamaAPI {
         model: modelName,
         prompt: '',
         keep_alive: 0,
-        stream: false
+        stream: false,
       });
       return true;
     } catch (error) {
-      console.error('Failed to unload model:', error);
+      // Failed to unload model
       return false;
     }
   }
@@ -586,11 +589,14 @@ class OllamaAPI {
     prompt: string,
     onStreamData?: (data: string) => void
   ): Promise<string> {
-    return this.generateCompletion({
-      model,
-      prompt,
-      stream: !!onStreamData
-    }, onStreamData);
+    return this.generateCompletion(
+      {
+        model,
+        prompt,
+        stream: !!onStreamData,
+      },
+      onStreamData
+    );
   }
 
   /**
@@ -602,11 +608,11 @@ class OllamaAPI {
   async restartOllama(): Promise<string> {
     try {
       const result = await invoke<string>('restart_ollama');
-      console.log('Ollama restart result:', result);
+      // Ollama restart result
       return result;
     } catch (error) {
-      console.error('Failed to restart Ollama:', error);
-      
+      // Failed to restart Ollama
+
       // Parse error type and provide more friendly error message
       const errorMessage = this.parseRestartError(error as string);
       throw new Error(errorMessage);
@@ -620,25 +626,26 @@ class OllamaAPI {
    */
   private parseRestartError(error: string): string {
     const errorStr = error.toString().toLowerCase();
-    
+
     // Permission related errors
-    if (errorStr.includes('administrator') ||
-            errorStr.includes('permission')) {
+    if (errorStr.includes('administrator') || errorStr.includes('permission')) {
       return `Insufficient permissions: ${error}\n\nSuggested solutions:\n• Windows: Right-click app icon and select "Run as administrator"\n• macOS/Linux: Use sudo privileges or manually restart Ollama in terminal`;
     }
-    
+
     // Ollama not installed error
-    if (errorStr.includes('not found') || 
-        errorStr.includes('path') || errorStr.includes('download')) {
+    if (
+      errorStr.includes('not found') ||
+      errorStr.includes('path') ||
+      errorStr.includes('download')
+    ) {
       return `Ollama not installed or not found: ${error}\n\nPlease visit https://ollama.ai/download to download and install Ollama`;
     }
-    
+
     // Command unavailable error
-    if (errorStr.includes('command not found') ||
-        errorStr.includes('procps')) {
+    if (errorStr.includes('command not found') || errorStr.includes('procps')) {
       return `System command missing: ${error}\n\nPlease ensure system integrity or install necessary system tools`;
     }
-    
+
     // Default error message
     return `Failed to restart Ollama: ${error}\n\nPlease check:\n• Whether Ollama is correctly installed\n• Whether the application has sufficient permissions\n• System firewall settings`;
   }

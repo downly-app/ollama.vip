@@ -1,4 +1,3 @@
-
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
@@ -23,40 +22,40 @@ export const useAuthStore = create<AuthState>()(
     (set, get) => ({
       user: null,
       isAuthenticated: false,
-      
+
       login: async (email: string, password: string) => {
         // Simulate login - replace with actual authentication logic
         const mockUser: User = {
           id: '1',
           email,
-          username: email.split('@')[0]
+          username: email.split('@')[0],
         };
         set({ user: mockUser, isAuthenticated: true });
       },
-      
+
       register: async (email: string, password: string, username: string) => {
         // Simulate registration - replace with actual authentication logic
         const mockUser: User = {
           id: '1',
           email,
-          username
+          username,
         };
         set({ user: mockUser, isAuthenticated: true });
       },
-      
+
       logout: () => {
         set({ user: null, isAuthenticated: false });
       },
-      
+
       updateProfile: (updates: Partial<User>) => {
         const { user } = get();
         if (user) {
           set({ user: { ...user, ...updates } });
         }
-      }
+      },
     }),
     {
-      name: 'auth-storage'
+      name: 'auth-storage',
     }
   )
 );

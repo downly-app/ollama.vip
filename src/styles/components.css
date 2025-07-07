@@ -1,0 +1,1193 @@
+/* Component Styles System v2.0
+ * Modular UI component style definitions
+ * Provide consistent design language and component styles
+ * Support themes, responsive design, and accessibility
+ */
+
+/* ==========================================================================
+   Button Components - Various button styles
+   ========================================================================== */
+
+.btn-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+  outline: none;
+  user-select: none;
+  min-height: 2.5rem;
+  border: 1px solid transparent;
+}
+
+.btn-base:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+}
+
+.btn-base:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+  outline: none;
+  user-select: none;
+  min-height: 2.5rem;
+  border: 1px solid transparent;
+  background-color: rgb(37, 99, 235);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: rgb(29, 78, 216);
+}
+
+.btn-primary:active {
+  background-color: rgb(30, 58, 138);
+  transform: scale(0.95);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+  outline: none;
+  user-select: none;
+  min-height: 2.5rem;
+  border: 1px solid transparent;
+  background-color: rgb(75, 85, 99);
+  color: white;
+}
+
+.btn-secondary:hover {
+  background-color: rgb(55, 65, 81);
+}
+
+.btn-secondary:active {
+  background-color: rgb(31, 41, 55);
+  transform: scale(0.95);
+}
+
+.btn-success {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+  outline: none;
+  user-select: none;
+  min-height: 2.5rem;
+  border: 1px solid transparent;
+  background-color: rgb(22, 163, 74);
+  color: white;
+}
+
+.btn-success:hover {
+  background-color: rgb(21, 128, 61);
+}
+
+.btn-success:active {
+  background-color: rgb(20, 83, 45);
+  transform: scale(0.95);
+}
+
+.btn-warning {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+  outline: none;
+  user-select: none;
+  min-height: 2.5rem;
+  border: 1px solid transparent;
+  background-color: rgb(217, 119, 6);
+  color: white;
+}
+
+.btn-warning:hover {
+  background-color: rgb(180, 83, 9);
+}
+
+.btn-warning:active {
+  background-color: rgb(146, 64, 14);
+  transform: scale(0.95);
+}
+
+.btn-danger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+  outline: none;
+  user-select: none;
+  min-height: 2.5rem;
+  border: 1px solid transparent;
+  background-color: rgb(220, 38, 38);
+  color: white;
+}
+
+.btn-danger:hover {
+  background-color: rgb(185, 28, 28);
+}
+
+.btn-danger:active {
+  background-color: rgb(153, 27, 27);
+  transform: scale(0.95);
+}
+
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+  outline: none;
+  user-select: none;
+  min-height: 2.5rem;
+  background-color: transparent;
+  border: 1px solid currentColor;
+  color: currentColor;
+}
+
+.btn-outline:hover {
+  background-color: currentColor;
+  color: white;
+}
+
+.btn-outline:focus {
+  background-color: currentColor;
+  color: white;
+}
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+  outline: none;
+  user-select: none;
+  min-height: 2.5rem;
+  border: 1px solid transparent;
+  background-color: transparent;
+  color: currentColor;
+}
+
+.btn-ghost:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.btn-ghost:focus {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.btn-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+  outline: none;
+  user-select: none;
+  background-color: transparent;
+  border: 1px solid transparent;
+  color: rgb(59, 130, 246);
+  padding: 0;
+  height: auto;
+  min-height: 0;
+}
+
+.btn-link:hover {
+  color: rgb(37, 99, 235);
+  text-decoration: underline;
+}
+
+.btn-link:focus {
+  color: rgb(37, 99, 235);
+  text-decoration: underline;
+}
+
+/* Button sizes */
+.btn-xs {
+  @apply px-2 py-1 text-xs min-h-[1.5rem];
+}
+
+.btn-sm {
+  @apply px-3 py-1.5 text-sm min-h-[2rem];
+}
+
+.btn-md {
+  @apply px-4 py-2 text-base min-h-[2.5rem];
+}
+
+.btn-lg {
+  @apply px-6 py-3 text-lg min-h-[3rem];
+}
+
+.btn-xl {
+  @apply px-8 py-4 text-xl min-h-[3.5rem];
+}
+
+/* Button shapes */
+.btn-square {
+  @apply aspect-square p-0;
+}
+
+.btn-circle {
+  @apply rounded-full aspect-square p-0;
+}
+
+.btn-pill {
+  @apply rounded-full;
+}
+
+/* Button states */
+.btn-loading {
+  @apply relative text-transparent;
+}
+
+.btn-loading::before {
+  @apply absolute inset-0 flex items-center justify-center;
+  content: '';
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  border-top-color: transparent;
+  animation: spin 1s linear infinite;
+}
+
+/* ==========================================================================
+   Card Components - Content containers
+   ========================================================================== */
+
+.card-base {
+  background-color: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(8px);
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.card-hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(8px);
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 25px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  transform: scale(1.02);
+}
+
+.card-interactive {
+  background-color: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(8px);
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.card-interactive:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 25px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  transform: scale(1.02);
+}
+
+.card-interactive:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+}
+
+.card-interactive:active {
+  transform: scale(0.98);
+}
+
+.card-header {
+  @apply p-6 pb-0;
+}
+
+.card-body {
+  @apply p-6;
+}
+
+.card-footer {
+  @apply p-6 pt-0;
+}
+
+.card-title {
+  @apply text-lg font-semibold text-white mb-2;
+}
+
+.card-subtitle {
+  @apply text-sm text-white/70;
+}
+
+.card-content {
+  @apply text-white/90;
+}
+
+/* Card variants */
+.card-flat {
+  @apply bg-white/5 border-white/10 shadow-none;
+}
+
+.card-bordered {
+  @apply border-2 border-white/20;
+}
+
+.card-glass {
+  @apply bg-white/5 backdrop-blur-md border border-white/10;
+  @apply shadow-2xl;
+}
+
+.card-solid {
+  @apply bg-gray-800 border-gray-700;
+}
+
+/* ==========================================================================
+   Input Components - Form controls
+   ========================================================================== */
+
+.input-base {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.2s ease;
+  background-color: rgba(255, 255, 255, 0.05);
+  color: white;
+}
+
+.input-base::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.input-base:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+  border-color: transparent;
+}
+
+.input-base:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.input-primary {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.2s ease;
+  background-color: rgba(255, 255, 255, 0.05);
+  color: white;
+}
+
+.input-primary::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.input-primary:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+  border-color: transparent;
+}
+
+.input-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.input-secondary {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgb(75, 85, 99);
+  transition: all 0.2s ease;
+  background-color: rgba(255, 255, 255, 0.05);
+  color: white;
+}
+
+.input-secondary::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.input-secondary:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(107, 114, 128, 0.5);
+  border-color: transparent;
+}
+
+.input-secondary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.input-success {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgb(22, 163, 74);
+  transition: all 0.2s ease;
+  background-color: rgba(255, 255, 255, 0.05);
+  color: white;
+}
+
+.input-success::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.input-success:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.5);
+  border-color: transparent;
+}
+
+.input-success:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.input-warning {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgb(217, 119, 6);
+  transition: all 0.2s ease;
+  background-color: rgba(255, 255, 255, 0.05);
+  color: white;
+}
+
+.input-warning::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.input-warning:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.5);
+  border-color: transparent;
+}
+
+.input-warning:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.input-error {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgb(220, 38, 38);
+  transition: all 0.2s ease;
+  background-color: rgba(255, 255, 255, 0.05);
+  color: white;
+}
+
+.input-error::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.input-error:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.5);
+  border-color: transparent;
+}
+
+.input-error:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Input sizes */
+.input-xs {
+  @apply px-2 py-1 text-xs;
+}
+
+.input-sm {
+  @apply px-3 py-1.5 text-sm;
+}
+
+.input-md {
+  @apply px-4 py-2 text-base;
+}
+
+.input-lg {
+  @apply px-6 py-3 text-lg;
+}
+
+.input-xl {
+  @apply px-8 py-4 text-xl;
+}
+
+/* Input group */
+.input-group {
+  @apply relative flex items-center;
+}
+
+.input-group-text {
+  @apply px-3 py-2 bg-white/5 border border-white/20 text-white/70;
+  @apply border-r-0 rounded-l-lg;
+}
+
+.input-group .input-base {
+  @apply rounded-l-none;
+}
+
+/* Textarea */
+.textarea-base {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.2s ease;
+  background-color: rgba(255, 255, 255, 0.05);
+  color: white;
+  resize: none;
+  min-height: 100px;
+}
+
+.textarea-base::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.textarea-base:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+  border-color: transparent;
+}
+
+.textarea-base:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.textarea-auto {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.2s ease;
+  background-color: rgba(255, 255, 255, 0.05);
+  color: white;
+  resize: vertical;
+  min-height: 100px;
+}
+
+.textarea-auto::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.textarea-auto:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+  border-color: transparent;
+}
+
+.textarea-auto:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ==========================================================================
+   Label and Badge Components
+   ========================================================================== */
+
+.label-base {
+  @apply inline-block text-sm font-medium text-white/90 mb-1;
+}
+
+.label-required::after {
+  @apply text-red-500 ml-1;
+  content: '*';
+}
+
+.badge-base {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.badge-primary {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  background-color: rgba(37, 99, 235, 0.2);
+  color: rgb(147, 197, 253);
+  border: 1px solid rgba(37, 99, 235, 0.3);
+}
+
+.badge-secondary {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  background-color: rgba(75, 85, 99, 0.2);
+  color: rgb(209, 213, 219);
+  border: 1px solid rgba(75, 85, 99, 0.3);
+}
+
+.badge-success {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  background-color: rgba(22, 163, 74, 0.2);
+  color: rgb(134, 239, 172);
+  border: 1px solid rgba(22, 163, 74, 0.3);
+}
+
+.badge-warning {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  background-color: rgba(217, 119, 6, 0.2);
+  color: rgb(253, 224, 71);
+  border: 1px solid rgba(217, 119, 6, 0.3);
+}
+
+.badge-danger {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  background-color: rgba(220, 38, 38, 0.2);
+  color: rgb(248, 113, 113);
+  border: 1px solid rgba(220, 38, 38, 0.3);
+}
+
+.badge-outline {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  background-color: transparent;
+  border: 1px solid currentColor;
+}
+
+.badge-dot {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.75rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  padding: 0;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 9999px;
+}
+
+/* ==========================================================================
+   Progress Bar Components
+   ========================================================================== */
+
+.progress-base {
+  @apply w-full bg-white/10 rounded-full overflow-hidden;
+  height: 8px;
+}
+
+.progress-bar {
+  @apply h-full bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-300;
+  @apply rounded-full;
+}
+
+.progress-striped .progress-bar {
+  background-image: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.15) 25%,
+    transparent 25%,
+    transparent 50%,
+    rgba(255, 255, 255, 0.15) 50%,
+    rgba(255, 255, 255, 0.15) 75%,
+    transparent 75%,
+    transparent
+  );
+  background-size: 1rem 1rem;
+}
+
+.progress-animated .progress-bar {
+  animation: progress-stripes 1s linear infinite;
+}
+
+@keyframes progress-stripes {
+  0% {
+    background-position: 1rem 0;
+  }
+  100% {
+    background-position: 0 0;
+  }
+}
+
+/* Progress bar sizes */
+.progress-xs {
+  height: 4px;
+}
+
+.progress-sm {
+  height: 6px;
+}
+
+.progress-md {
+  height: 8px;
+}
+
+.progress-lg {
+  height: 12px;
+}
+
+.progress-xl {
+  height: 16px;
+}
+
+/* ==========================================================================
+   Loading Indicator Components
+   ========================================================================== */
+
+.loading-spinner {
+  @apply inline-block w-6 h-6 border-2 border-current border-t-transparent rounded-full;
+  animation: spin 1s linear infinite;
+}
+
+.loading-dots {
+  @apply inline-flex items-center space-x-1;
+}
+
+.loading-dots::before,
+.loading-dots::after,
+.loading-dots {
+  @apply w-2 h-2 bg-current rounded-full;
+  animation: loading-dots 1.4s infinite ease-in-out;
+}
+
+.loading-dots::before {
+  content: '';
+  animation-delay: -0.32s;
+}
+
+.loading-dots::after {
+  content: '';
+  animation-delay: -0.16s;
+}
+
+.loading-pulse {
+  @apply bg-white/20 rounded animate-pulse;
+}
+
+.loading-skeleton {
+  @apply bg-gradient-to-r from-white/5 via-white/10 to-white/5;
+  @apply animate-pulse;
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s ease-in-out infinite;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* ==========================================================================
+   Navigation Components
+   ========================================================================== */
+
+.nav-base {
+  @apply flex items-center space-x-1;
+}
+
+.nav-item {
+  @apply relative;
+}
+
+.nav-link {
+  @apply px-3 py-2 rounded-lg text-white/70 hover:text-white hover:bg-white/10;
+  @apply transition-all duration-200;
+  @apply focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
+}
+
+.nav-link-active {
+  @apply nav-link bg-white/10 text-white;
+}
+
+.nav-link-disabled {
+  @apply nav-link opacity-50 cursor-not-allowed;
+}
+
+/* Navigation separator */
+.nav-separator {
+  @apply w-px h-6 bg-white/20 mx-2;
+}
+
+/* Breadcrumb navigation */
+.breadcrumb {
+  @apply flex items-center space-x-2 text-sm text-white/70;
+}
+
+.breadcrumb-item {
+  @apply hover:text-white transition-colors duration-200;
+}
+
+.breadcrumb-separator {
+  @apply text-white/40;
+}
+
+/* ==========================================================================
+   Dialog Components
+   ========================================================================== */
+
+.dialog-overlay {
+  @apply fixed inset-0 bg-black/50 backdrop-blur-sm;
+  @apply flex items-center justify-center p-4;
+  @apply animate-modal-backdrop;
+}
+
+.dialog-content {
+  @apply bg-gray-800 rounded-xl shadow-2xl border border-white/10;
+  @apply max-w-md w-full max-h-[80vh] overflow-auto;
+  @apply animate-modal-content;
+}
+
+.dialog-header {
+  @apply p-6 pb-0;
+}
+
+.dialog-body {
+  @apply p-6;
+}
+
+.dialog-footer {
+  @apply p-6 pt-0 flex items-center justify-end space-x-3;
+}
+
+.dialog-title {
+  @apply text-lg font-semibold text-white;
+}
+
+.dialog-description {
+  @apply text-white/70 mt-2;
+}
+
+.dialog-close {
+  @apply absolute top-4 right-4 p-2 text-white/50 hover:text-white/80;
+  @apply rounded-lg hover:bg-white/10 transition-colors duration-200;
+}
+
+/* ==========================================================================
+   Notification Components
+   ========================================================================== */
+
+.notification-container {
+  @apply fixed top-4 right-4 space-y-3 z-50;
+  @apply max-w-sm w-full;
+}
+
+.notification-base {
+  @apply p-4 rounded-lg shadow-lg border;
+  @apply backdrop-blur-sm;
+  @apply animate-notification-enter;
+}
+
+.notification-success {
+  @apply notification-base bg-green-600/20 border-green-600/30 text-green-300;
+}
+
+.notification-error {
+  @apply notification-base bg-red-600/20 border-red-600/30 text-red-300;
+}
+
+.notification-warning {
+  @apply notification-base bg-yellow-600/20 border-yellow-600/30 text-yellow-300;
+}
+
+.notification-info {
+  @apply notification-base bg-blue-600/20 border-blue-600/30 text-blue-300;
+}
+
+.notification-title {
+  @apply font-semibold mb-1;
+}
+
+.notification-description {
+  @apply text-sm opacity-90;
+}
+
+.notification-close {
+  @apply absolute top-2 right-2 p-1 text-current opacity-70 hover:opacity-100;
+  @apply rounded transition-opacity duration-200;
+}
+
+/* ==========================================================================
+   Table Components
+   ========================================================================== */
+
+.table-container {
+  overflow: auto;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-gray-400, rgba(156, 163, 175, 0.6))
+    var(--color-bg-muted, rgba(0, 0, 0, 0.03));
+}
+
+.table-container::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+.table-container::-webkit-scrollbar-track {
+  background: var(--color-bg-muted, rgba(0, 0, 0, 0.03));
+  border-radius: var(--radius-full, 9999px);
+}
+
+.table-container::-webkit-scrollbar-thumb {
+  background: var(--color-gray-400, rgba(156, 163, 175, 0.6));
+  border-radius: var(--radius-full, 9999px);
+  transition: background-color 0.2s ease;
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+  background: var(--color-gray-500, rgba(107, 114, 128, 0.8));
+}
+
+.table-base {
+  @apply w-full text-left text-white/90;
+}
+
+.table-header {
+  @apply bg-white/5 border-b border-white/10;
+}
+
+.table-header-cell {
+  @apply px-4 py-3 text-sm font-medium text-white/70 uppercase tracking-wider;
+}
+
+.table-row {
+  @apply border-b border-white/5 hover:bg-white/5 transition-colors duration-200;
+}
+
+.table-cell {
+  @apply px-4 py-3 text-sm;
+}
+
+.table-striped .table-row:nth-child(even) {
+  @apply bg-white/5;
+}
+
+.table-bordered {
+  @apply border-collapse border border-white/10;
+}
+
+.table-bordered .table-header-cell,
+.table-bordered .table-cell {
+  @apply border border-white/10;
+}
+
+/* ==========================================================================
+   List Components
+   ========================================================================== */
+
+.list-base {
+  @apply divide-y divide-white/10;
+}
+
+.list-item {
+  @apply py-3 hover:bg-white/5 transition-colors duration-200;
+}
+
+.list-item-interactive {
+  @apply list-item cursor-pointer;
+  @apply focus:outline-none focus:bg-white/10;
+  @apply active:bg-white/10;
+}
+
+.list-item-content {
+  @apply flex items-center space-x-3;
+}
+
+.list-item-title {
+  @apply text-white font-medium;
+}
+
+.list-item-subtitle {
+  @apply text-white/70 text-sm;
+}
+
+.list-item-meta {
+  @apply text-white/50 text-xs;
+}
+
+/* ==========================================================================
+   Pagination Components
+   ========================================================================== */
+
+.pagination-base {
+  @apply flex items-center justify-center space-x-1;
+}
+
+.pagination-item {
+  @apply px-3 py-2 rounded-lg text-white/70 hover:text-white hover:bg-white/10;
+  @apply transition-all duration-200;
+  @apply focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
+}
+
+.pagination-item-active {
+  @apply pagination-item bg-blue-600 text-white;
+}
+
+.pagination-item-disabled {
+  @apply pagination-item opacity-50 cursor-not-allowed;
+}
+
+.pagination-dots {
+  @apply px-3 py-2 text-white/50;
+}
+
+/* ==========================================================================
+   Tooltip Components
+   ========================================================================== */
+
+.tooltip-base {
+  @apply relative;
+}
+
+.tooltip-content {
+  @apply absolute z-50 px-2 py-1 text-xs text-white bg-gray-800 rounded;
+  @apply border border-white/10 shadow-lg;
+  @apply opacity-0 invisible transition-all duration-200;
+  @apply pointer-events-none;
+}
+
+.tooltip-base:hover .tooltip-content {
+  @apply opacity-100 visible;
+}
+
+.tooltip-top .tooltip-content {
+  @apply bottom-full left-1/2 transform -translate-x-1/2 mb-2;
+}
+
+.tooltip-bottom .tooltip-content {
+  @apply top-full left-1/2 transform -translate-x-1/2 mt-2;
+}
+
+.tooltip-left .tooltip-content {
+  @apply right-full top-1/2 transform -translate-y-1/2 mr-2;
+}
+
+.tooltip-right .tooltip-content {
+  @apply left-full top-1/2 transform -translate-y-1/2 ml-2;
+}
+
+/* ==========================================================================
+   Responsive Design - Component Adaptation
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  .btn-base {
+    @apply px-3 py-2 text-sm;
+  }
+
+  .card-base {
+    @apply rounded-lg;
+  }
+
+  .card-header,
+  .card-body,
+  .card-footer {
+    @apply p-4;
+  }
+
+  .dialog-content {
+    @apply max-w-[90vw] m-4;
+  }
+
+  .notification-container {
+    @apply left-4 right-4 max-w-none;
+  }
+}
+
+/* ==========================================================================
+   Print Styles - Component Print Optimization
+   ========================================================================== */
+
+@media print {
+  .btn-base,
+  .dialog-overlay,
+  .notification-container,
+  .tooltip-content {
+    @apply hidden;
+  }
+
+  .card-base {
+    @apply bg-white text-black border-black/20;
+  }
+
+  .table-base {
+    @apply text-black;
+  }
+
+  .table-header {
+    @apply bg-gray-100;
+  }
+}
