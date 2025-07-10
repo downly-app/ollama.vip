@@ -227,7 +227,7 @@ const ModelManager = () => {
         ) : (
           <div className='h-full flex flex-col'>
             <div className='flex-1 overflow-hidden'>
-              <ScrollArea className='h-full [&>[data-radix-scroll-area-viewport]]:!pr-0 custom-scrollbar'>
+              <ScrollArea className='h-full [&>[data-radix-scroll-area-viewport]]:!pr-0'>
                 <div className='min-w-full'>
                   <Table>
                     <TableHeader>

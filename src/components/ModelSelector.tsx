@@ -233,7 +233,7 @@ const ModelSelector = ({
 
       {/* Dropdown menu */}
       {isOpen && (
-        <div className='absolute top-full left-0 right-0 mt-1 bg-white/95 backdrop-blur-xl border border-white/30 rounded-xl shadow-2xl z-[9999] max-h-96 overflow-y-auto custom-scrollbar'>
+        <div className='absolute top-full left-0 right-0 mt-1 bg-white/95 backdrop-blur-xl border border-white/30 rounded-xl shadow-2xl z-[9999] max-h-96 overflow-y-auto'>
           {isLoading ? (
             <div className='p-4 text-center text-gray-600'>
               <div className='animate-spin w-5 h-5 border-2 border-gray-300 border-t-gray-600 rounded-full mx-auto mb-2'></div>

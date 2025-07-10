@@ -32,7 +32,7 @@ const General = () => {
           </h1>
         </TitleBar>
 
-        <div className='flex-1 overflow-y-auto p-6 custom-scrollbar'>
+        <div className='flex-1 overflow-y-auto p-6'>
           <div className='w-full'>
             {/* Main content area - left and right layout */}
             <div className='grid grid-cols-1 xl:grid-cols-3 gap-6'>

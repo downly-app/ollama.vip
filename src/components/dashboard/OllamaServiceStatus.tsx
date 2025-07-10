@@ -75,8 +75,12 @@ const OllamaServiceStatus = () => {
       label: t('dashboard.ollamaService.quickActionLabels.importGguf'),
       color: 'from-purple-500 to-pink-500',
       onClick: () => {
-        // Open import dialog
-        // Import GGUF model
+        // Show not supported message
+        toast({
+          title: t('common.notSupported'),
+          description: t('dashboard.ollamaService.actions.importGgufNotSupported'),
+          variant: 'default',
+        });
       },
     },
   ];
@@ -182,9 +186,12 @@ const OllamaServiceStatus = () => {
       // Update API configuration
       ollamaApi.updateConfig({ baseUrl: normalizedHost });
 
+      // Extract host:port for display
+      const envHost = normalizedHost.replace('http://', '').replace('https://', '');
+
       toast({
         title: t('dashboard.ollamaService.actions.save'),
-        description: t('dashboard.ollamaService.actions.addressSaved'),
+        description: t('dashboard.ollamaService.actions.addressSavedWithEnv', { envHost }),
       });
 
       // Recheck connection after saving
@@ -304,20 +311,9 @@ const OllamaServiceStatus = () => {
                 <Tag size={16} className='mr-2' />
                 {t('dashboard.ollamaService.version')}
               </span>
-              <div className='flex items-center space-x-2'>
                 <Badge variant='secondary' className='text-white/90 bg-white/20'>
                   {version || t('dashboard.ollamaService.unknown')}
                 </Badge>
-                <Button
-                  size='sm'
-                  variant='ghost'
-                  className='text-white/70 hover:text-white hover:bg-white/10'
-                  onClick={checkConnection}
-                >
-                  <RefreshCw size={14} className='mr-1' />
-                  {t('dashboard.ollamaService.checkUpdate')}
-                </Button>
-              </div>
             </div>
 
             {/* Service status */}
@@ -393,13 +389,27 @@ const OllamaServiceStatus = () => {
                   type='checkbox'
                   className='sr-only'
                   checked={autoStart}
-                  onChange={e => setAutoStart(e.target.checked)}
+                  onChange={e => {
+                    // Show not supported message
+                    toast({
+                      title: t('common.notSupported'),
+                      description: t('dashboard.ollamaService.actions.autoStartNotSupported'),
+                      variant: 'default',
+                    });
+                  }}
                 />
                 <span
                   className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform cursor-pointer ${
                     autoStart ? 'translate-x-6 bg-blue-500' : 'translate-x-1'
                   }`}
-                  onClick={() => setAutoStart(!autoStart)}
+                  onClick={() => {
+                    // Show not supported message
+                    toast({
+                      title: t('common.notSupported'),
+                      description: t('dashboard.ollamaService.actions.autoStartNotSupported'),
+                      variant: 'default',
+                    });
+                  }}
                 />
               </div>
             </div>

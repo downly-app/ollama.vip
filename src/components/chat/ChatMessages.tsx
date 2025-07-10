@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import ChatMessage from '@/components/ChatMessage';
 import ErrorBoundary from '@/components/ErrorBoundary';
+import TypingIndicator from '@/components/TypingIndicator';
 import { ChatMessage as ChatMessageType } from '@/types/chat';
 
 interface ChatMessagesProps {
@@ -11,6 +12,8 @@ interface ChatMessagesProps {
   onEditMessage: (messageId: string, newContent: string) => void;
   onDeleteMessage: (messageId: string) => void;
   onResendMessage: (messageId: string, content: string) => Promise<void>;
+  isTyping?: boolean;
+  typingModel?: string;
 }
 
 const ChatEmpty: React.FC = () => {
@@ -53,9 +56,11 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({
   onEditMessage,
   onDeleteMessage,
   onResendMessage,
+  isTyping = false,
+  typingModel,
 }) => {
   return (
-    <div className='flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar'>
+    <div className='flex-1 overflow-y-auto p-4 space-y-4'>
       {messages.length === 0 ? (
         <ChatEmpty />
       ) : (
@@ -70,6 +75,11 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({
               />
             </ErrorBoundary>
           ))}
+          {isTyping && (
+            <ErrorBoundary>
+              <TypingIndicator model={typingModel} />
+            </ErrorBoundary>
+          )}
         </>
       )}
       <div ref={messagesEndRef} />

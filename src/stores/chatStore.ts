@@ -9,6 +9,8 @@ interface ChatState {
   currentChatId: string | null;
   isLoading: boolean;
   error: string | null;
+  isTyping: boolean;
+  typingModel?: string;
 }
 
 interface ChatActions {
@@ -28,6 +30,8 @@ interface ChatActions {
   getConversation: (chatId: string) => Conversation | undefined;
   getCurrentConversation: () => Conversation | undefined;
   searchConversations: (query: string) => Conversation[];
+  setTyping: (typing: boolean, model?: string) => void;
+  clearTyping: () => void;
 }
 
 type ChatStore = ChatState & ChatActions;
@@ -66,6 +70,8 @@ export const useChatStore = create<ChatStore>()(
       currentChatId: null,
       isLoading: false,
       error: null,
+      isTyping: false,
+      typingModel: undefined,
 
       createConversation: (title, provider, model) => {
         // If no provider and model specified, use default values
@@ -247,6 +253,14 @@ export const useChatStore = create<ChatStore>()(
             conv.title.toLowerCase().includes(lowercaseQuery) ||
             conv.messages.some(msg => msg.content.toLowerCase().includes(lowercaseQuery))
         );
+      },
+
+      setTyping: (typing, model) => {
+        set({ isTyping: typing, typingModel: model });
+      },
+
+      clearTyping: () => {
+        set({ isTyping: false, typingModel: undefined });
       },
     }),
     {

@@ -7,6 +7,7 @@ import {
   Trash2,
   XCircle,
   Zap,
+  ExternalLink,
 } from 'lucide-react';
 
 import React, { useEffect, useState } from 'react';
@@ -16,6 +17,8 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useTheme } from '@/contexts/ThemeContext';
+
+import LogsDialog from './LogsDialog';
 
 interface Activity {
   id: string;
@@ -148,6 +151,7 @@ const ActivityLogAndActions = () => {
   const { currentTheme } = useTheme();
   const { t } = useTranslation();
   const [activities, setActivities] = useState<Activity[]>([]);
+  const [showAllActivities, setShowAllActivities] = useState(false);
   const activityLogger = ActivityLogger.getInstance();
 
   useEffect(() => {
@@ -210,100 +214,120 @@ const ActivityLogAndActions = () => {
     }
   };
 
+
+
   return (
-    <Card className='bg-white/10 backdrop-blur-sm border-white/20'>
-      <CardHeader className='pb-4'>
-        <CardTitle
-          className={`text-xl font-bold bg-gradient-to-r ${currentTheme.colors.secondary} bg-clip-text text-transparent flex items-center justify-between`}
-        >
-          <div className='flex items-center'>
-            <Zap className='mr-2' size={20} />
-            {t('dashboard.activityLog.title')}
-          </div>
-          <div className='flex items-center space-x-1'>
-            <Button
-              size='sm'
-              variant='ghost'
-              onClick={handleRefreshActivities}
-              className='text-white/70 hover:text-white hover:bg-white/10'
-            >
-              <RefreshCw size={14} />
-            </Button>
-            <Button
-              size='sm'
-              variant='ghost'
-              onClick={handleClearActivities}
-              className='text-white/70 hover:text-white hover:bg-white/10'
-            >
-              <Trash2 size={14} />
-            </Button>
-          </div>
-        </CardTitle>
-      </CardHeader>
-      <CardContent className='space-y-4'>
-        {/* Recent Activities */}
-        <div className='space-y-2'>
-          <h4 className='text-white font-medium flex items-center'>
-            <Clock size={16} className='mr-2' />
-            {t('dashboard.activityLog.recentActivity')} ({activities.length})
-          </h4>
+    <>
+      <Card className='bg-white/10 backdrop-blur-sm border-white/20'>
+        <CardHeader className='pb-4'>
+          <CardTitle
+            className={`text-xl font-bold bg-gradient-to-r ${currentTheme.colors.secondary} bg-clip-text text-transparent flex items-center justify-between`}
+          >
+            <div className='flex items-center'>
+              <Zap className='mr-2' size={20} />
+              {t('dashboard.activityLog.title')}
+            </div>
+            <div className='flex items-center space-x-1'>
+              <Button
+                size='sm'
+                variant='ghost'
+                onClick={handleRefreshActivities}
+                className='text-white/70 hover:text-white hover:bg-white/10'
+              >
+                <RefreshCw size={14} />
+              </Button>
+              <Button
+                size='sm'
+                variant='ghost'
+                onClick={handleClearActivities}
+                className='text-white/70 hover:text-white hover:bg-white/10'
+              >
+                <Trash2 size={14} />
+              </Button>
+            </div>
+          </CardTitle>
+        </CardHeader>
+        <CardContent className='space-y-4'>
+          {/* Recent Activities */}
           <div className='space-y-2'>
-            {activities.length > 0 ? (
-              activities.slice(0, 10).map(activity => (
-                <div
-                  key={activity.id}
-                  className='flex items-start space-x-2 p-2 bg-black/20 rounded-lg hover:bg-black/30 transition-colors'
-                >
-                  <activity.icon
-                    size={14}
-                    className={`mt-0.5 flex-shrink-0 ${getActivityColor(activity.type)}`}
-                  />
-                  <div className='flex-1 min-w-0'>
-                    <p className='text-white/90 text-xs break-words'>{activity.message}</p>
-                    <div className='flex items-center justify-between mt-1'>
-                      <span className='text-white/50 text-xs'>{activity.timestamp}</span>
-                      <Badge
-                        variant={getActivityBadgeVariant(activity.type)}
-                        className={`text-xs ${
-                          activity.type === 'success'
-                            ? 'bg-green-600 text-white'
-                            : activity.type === 'warning'
-                              ? 'bg-yellow-600 text-white'
-                              : activity.type === 'error'
-                                ? 'bg-red-600 text-white'
-                                : 'bg-blue-600 text-white'
-                        }`}
-                      >
-                        {t(`dashboard.activityLog.status.${activity.type}`)}
-                      </Badge>
+            <h4 className='text-white font-medium flex items-center'>
+              <Clock size={16} className='mr-2' />
+              {t('dashboard.activityLog.recentActivity')} ({activities.length})
+            </h4>
+            <div className='space-y-2'>
+              {activities.length > 0 ? (
+                activities.slice(0, 5).map(activity => (
+                  <div
+                    key={activity.id}
+                    className='flex items-start space-x-2 p-2 bg-black/20 rounded-lg hover:bg-black/30 transition-colors'
+                  >
+                    <activity.icon
+                      size={14}
+                      className={`mt-0.5 flex-shrink-0 ${getActivityColor(activity.type)}`}
+                    />
+                    <div className='flex-1 min-w-0'>
+                      <p className='text-white/90 text-xs break-words'>{activity.message}</p>
+                      <div className='flex items-center justify-between mt-1'>
+                        <span className='text-white/50 text-xs'>
+                          {activity.timestamp}
+                        </span>
+                        <Badge
+                          variant={getActivityBadgeVariant(activity.type)}
+                          className={`text-xs ${
+                            activity.type === 'success'
+                              ? 'bg-green-600 text-white'
+                              : activity.type === 'warning'
+                                ? 'bg-yellow-600 text-white'
+                                : activity.type === 'error'
+                                  ? 'bg-red-600 text-white'
+                                  : 'bg-blue-600 text-white'
+                          }`}
+                        >
+                          {t(`dashboard.activityLog.status.${activity.type}`)}
+                        </Badge>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))
-            ) : (
-              <p className='text-white/50 text-sm text-center py-4'>
-                {t('dashboard.activityLog.noActivities')}
-              </p>
-            )}
+                ))
+              ) : (
+                <p className='text-white/50 text-sm text-center py-4'>
+                  {t('dashboard.activityLog.noActivities')}
+                </p>
+              )}
+            </div>
           </div>
-        </div>
 
-        {/* View More */}
-        {activities.length > 10 && (
-          <Button
-            variant='ghost'
-            size='sm'
-            className='w-full text-white/70 border border-white/20 hover:bg-white/10 hover:text-white bg-transparent'
-            onClick={() => {
-              /* Show all activities */
-            }}
-          >
-            {t('dashboard.activityLog.viewAllActivities')} ({activities.length - 10}{' '}
-            {t('dashboard.activityLog.more')})
-          </Button>
-        )}
-      </CardContent>
-    </Card>
+          {/* View More */}
+          {activities.length > 5 && (
+            <Button
+              variant='ghost'
+              size='sm'
+              className='w-full text-white/70 border border-white/20 hover:bg-white/10 hover:text-white bg-transparent'
+              onClick={() => setShowAllActivities(true)}
+            >
+              <ExternalLink size={14} className='mr-2' />
+              {t('dashboard.activityLog.viewAllActivities')} ({activities.length - 5}{' '}
+              {t('dashboard.activityLog.more')})
+            </Button>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* All Activities Dialog */}
+      <LogsDialog
+        open={showAllActivities}
+        onOpenChange={setShowAllActivities}
+        title={t('dashboard.activityLog.allActivities')}
+        description={t('dashboard.activityLog.allActivitiesDescription')}
+        logs={activities.map(activity => ({
+          ...activity,
+          level: activity.type,
+        }))}
+        onRefresh={handleRefreshActivities}
+        onClear={handleClearActivities}
+        icon={Zap}
+      />
+    </>
   );
 };
 

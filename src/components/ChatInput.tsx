@@ -94,8 +94,8 @@ const ChatInput = ({ onSendMessage, disabled, onMinimize }: ChatInputProps) => {
         <div
           className={`relative flex items-end bg-white/8 border rounded-2xl transition-all duration-300 ${
             isFocused
-              ? 'border-blue-400/50 bg-white/12 shadow-lg shadow-blue-400/10'
-              : 'border-white/20 hover:border-white/30'
+              ? 'border-transparent bg-white/12 shadow-lg gradient-border-focus'
+              : 'border-transparent gradient-border'
           }`}
         >
           {/* Left side tool buttons */}
@@ -137,7 +137,7 @@ const ChatInput = ({ onSendMessage, disabled, onMinimize }: ChatInputProps) => {
               placeholder={t('chat.typeMessage')}
               disabled={disabled}
               rows={1}
-              className='w-full bg-transparent text-white placeholder-white/50 focus:outline-none resize-none text-sm leading-relaxed custom-scrollbar'
+              className='w-full bg-transparent text-white placeholder-white/50 focus:outline-none resize-none text-sm leading-relaxed'
               style={{ minHeight: '20px', maxHeight: '120px' }}
             />
           </div>

@@ -223,7 +223,7 @@ const AISettings = ({ open, onClose, onSave, currentSettings }: AISettingsProps)
                       <div className='flex items-center justify-between w-full'>
                         <span className='text-xs sm:text-sm'>{lang.label}</span>
                         {selectedLanguage === lang.value && (
-                          <div className='w-2 h-2 rounded-full ml-2 bg-white/40'></div>
+                          <div className='w-2 h-2 rounded-full ml-6 bg-white/40'></div>
                         )}
                       </div>
                     </SelectItem>
@@ -253,7 +253,7 @@ const AISettings = ({ open, onClose, onSave, currentSettings }: AISettingsProps)
                       <div className='flex items-center justify-between w-full'>
                         <span className='text-xs sm:text-sm'>{getThemeDisplayName(theme.id)}</span>
                         {selectedThemeId === theme.id && (
-                          <div className='w-2 h-2 rounded-full ml-2 bg-white/40'></div>
+                          <div className='w-2 h-2 rounded-full ml-6 bg-white/40'></div>
                         )}
                       </div>
                     </SelectItem>
@@ -309,7 +309,7 @@ const AISettings = ({ open, onClose, onSave, currentSettings }: AISettingsProps)
                               )}
                               <span className='text-sm'>{provider.name}</span>
                             </div>
-                            <div className='flex items-center space-x-1'>
+                            <div className='flex items-center ml-6'>
                               {hasApiKey ? (
                                 <div className='w-2 h-2 rounded-full bg-green-400'></div>
                               ) : (

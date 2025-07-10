@@ -17,6 +17,8 @@
     "cancel": "취소",
     "delete": "삭제",
     "edit": "편집",
+    "clear": "지우기",
+    "notSupported": "지원되지 않음",
     "copy": "복사",
     "search": "검색",
     "loading": "로딩 중...",
@@ -81,7 +83,25 @@
     "configureModels": "모델 설정",
     "modelSelectorFooter": "로컬 모델이 우선 표시됩니다",
     "noMatchingConversations": "일치하는 대화를 찾을 수 없습니다",
-    "thinkingProcess": "사고 과정"
+
+
+    "downloadProgress": "다운로드 진행률",
+    "downloadComplete": "다운로드 완료",
+    "downloadFailed": "다운로드 실패",
+    "thinkingProcess": "사고 과정",
+    "tips": {
+      "selectModel": "위 드롭다운에서 모델을 선택하세요",
+      "typeMessage": "메시지를 입력하고 Enter를 누르세요",
+      "configure": "설정에서 API 키를 구성하세요",
+      "createNew": "+ 버튼을 클릭하여 새 대화를 시작하세요",
+      "selectExisting": "또는 목록에서 기존 대화를 선택하세요"
+    },
+    "suggestions": "제안",
+    "suggestion": {
+      "downloadLocal": "모델 페이지에서 로컬 모델 다운로드",
+      "configureApi": "원격 모델용 API 키 구성",
+      "checkConnection": "네트워크 연결 확인"
+    }
   },
   "models": {
     "title": "모델 관리",
@@ -116,6 +136,80 @@
     "downloadProgress": "다운로드 진행률",
     "downloadComplete": "다운로드 완료",
     "downloadFailed": "다운로드 실패"
+  },
+  "localModels": {
+    "title": "로컬 모델 관리",
+    "modelsCount": "{{count}}개 모델",
+    "searchPlaceholder": "모델 검색...",
+    "downloadNewModel": "새 모델 다운로드",
+    "modelNamePlaceholder": "모델 이름 입력 (예: llama3.2:3b)",
+    "localModelsList": "로컬 모델 목록",
+    "loading": "로딩 중...",
+    "noModelsFound": "일치하는 모델을 찾을 수 없습니다",
+    "noLocalModels": "로컬 모델이 아직 없습니다",
+    "adjustSearchCriteria": "검색 조건을 조정해 보세요",
+    "browseOnlineModels": "위의 다운로드 기능을 사용하여 모델을 추가하거나 <0>온라인 모델 마켓플레이스</0>에서 찾아보고 설치하세요.",
+    "size": "크기",
+    "parameters": "매개변수",
+    "installedTime": "설치 시간",
+    "details": "세부 정보",
+    "modelInfo": "모델 정보",
+    "viewDetailedInfo": "모델의 자세한 정보 및 구성 보기",
+    "basicInfo": "기본 정보",
+    "family": "패밀리",
+    "format": "형식",
+    "quantization": "양자화",
+    "capabilities": "기능",
+    "architectureInfo": "아키텍처 정보",
+    "parameterConfig": "매개변수 구성",
+    "promptTemplate": "프롬프트 템플릿",
+    "modelfile": "Modelfile",
+    "failedToGetModelInfo": "모델 정보를 가져올 수 없습니다",
+    "confirmDeleteModel": "모델 삭제 확인",
+    "deleteConfirmation": "모델 {{modelName}}을(를) 삭제하시겠습니까? 이 작업은 되돌릴 수 없으며 {{size}}의 저장 공간이 해제됩니다.",
+    "cancel": "취소",
+    "delete": "삭제",
+    "deleteSuccess": "삭제 성공",
+    "deleteSuccessMessage": "모델 {{modelName}}이(가) 성공적으로 삭제되었습니다",
+    "deleteFailed": "삭제 실패",
+    "deleteFailedMessage": "모델 {{modelName}}을(를) 삭제할 수 없습니다",
+    "fetchFailed": "모델 가져오기 실패",
+    "fetchFailedMessage": "로컬 모델 목록을 가져올 수 없습니다. Ollama 서비스가 실행 중인지 확인하세요",
+    "getInfoFailed": "정보 가져오기 실패",
+    "getInfoFailedMessage": "모델 {{modelName}}의 자세한 정보를 가져올 수 없습니다",
+    "enterModelName": "모델 이름을 입력하세요",
+    "enterModelNameMessage": "다운로드할 모델 이름을 입력하세요",
+    "installed": "설치됨",
+    "allFamilies": "모든 패밀리",
+    "filteredCount": "{{count}}개 필터링됨",
+    "dialog": {
+      "tabs": {
+        "overview": "개요",
+        "architecture": "아키텍처",
+        "parameters": "매개변수",
+        "configuration": "구성"
+      },
+      "overview": {
+        "basicInfo": "기본 정보",
+        "format": "형식",
+        "family": "패밀리",
+        "parameterSize": "매개변수 크기",
+        "quantizationLevel": "양자화 수준",
+        "supportedFamilies": "지원되는 패밀리",
+        "modelCapabilities": "모델 기능"
+      },
+      "architecture": {
+        "coreArchitectureInfo": "핵심 아키텍처 정보",
+        "detailedConfigInfo": "자세한 구성 정보"
+      },
+      "parameters": {
+        "runtimeParameters": "런타임 매개변수"
+      },
+      "configuration": {
+        "modelfileConfig": "Modelfile 구성",
+        "templateConfig": "템플릿 구성"
+      }
+    }
   },
   "settings": {
     "title": "설정",
@@ -215,6 +309,13 @@
     "fileTooLarge": "파일이 너무 큽니다",
     "unknownError": "알 수 없는 오류가 발생했습니다"
   },
+  "error": {
+    "somethingWentWrong": "문제가 발생했습니다",
+    "unknownError": "알 수 없는 오류가 발생했습니다",
+    "tryAgain": "다시 시도",
+    "reloadPage": "페이지 새로고침",
+    "technicalDetails": "기술적 세부사항"
+  },
   "tooltips": {
     "refresh": "새로고침",
     "minimize": "최소화",
@@ -271,7 +372,10 @@
       },
       "recentLogs": {
         "title": "최근 로그",
-        "viewAll": "모든 로그 보기"
+        "viewAll": "모든 로그 보기",
+        "allLogs": "모든 로그",
+        "allLogsDescription": "시스템의 모든 로그 항목을 표시합니다",
+        "noLogs": "로그가 없습니다"
       },
       "logLevels": {
         "info": "정보",
@@ -309,13 +413,16 @@
         "copied": "복사됨",
         "addressCopied": "서비스 주소가 클립보드에 복사됨",
         "addressSaved": "수신 주소가 저장됨",
+        "addressSavedWithEnv": "수신 주소가 저장되었습니다, 환경변수 OLLAMA_HOST={{envHost}}",
         "serviceStopped": "서비스 중지됨",
         "serviceStoppedDesc": "Ollama 서비스가 성공적으로 중지됨",
         "serviceStarted": "서비스 시작됨",
         "serviceStartedDesc": "Ollama 서비스가 성공적으로 시작됨",
         "serviceRestarted": "서비스 재시작됨",
         "restartFailed": "재시작 실패",
-        "startFailed": "시작 실패"
+        "startFailed": "시작 실패",
+        "importGgufNotSupported": "GGUF 모델 가져오기 기능은 개발 중입니다. 기대해 주세요",
+        "autoStartNotSupported": "자동 시작 기능은 아직 지원되지 않습니다. 기대해 주세요"
       },
       "quickActionLabels": {
         "aiChat": "AI 채팅",
@@ -349,6 +456,8 @@
       "recentActivity": "최근 활동",
       "viewAllActivities": "모든 활동 보기",
       "more": "개 더",
+      "allActivities": "모든 활동",
+      "allActivitiesDescription": "시스템의 모든 활동 기록을 표시합니다",
       "noActivities": "기록된 활동이 없음",
       "confirmClear": "모든 활동 기록을 삭제하시겠습니까?",
       "timeAgo": {
@@ -372,79 +481,6 @@
       }
     }
   },
-  "localModels": {
-    "title": "로컬 모델 관리",
-    "modelsCount": "{{count}}개 모델",
-    "searchPlaceholder": "모델 검색...",
-    "downloadNewModel": "새 모델 다운로드",
-    "modelNamePlaceholder": "모델 이름 입력 (예: llama3.2:3b)",
-    "localModelsList": "로컬 모델 목록",
-    "loading": "로딩 중...",
-    "noModelsFound": "일치하는 모델을 찾을 수 없습니다",
-    "noLocalModels": "아직 로컬 모델이 없습니다",
-    "adjustSearchCriteria": "검색 기준을 조정해 보세요",
-    "browseOnlineModels": "위의 다운로드 기능을 사용하여 모델을 추가하거나, <0>온라인 모델 마켓플레이스</0>로 이동하여 찾아보고 설치하세요.",
-    "size": "크기",
-    "parameters": "매개변수",
-    "installedTime": "설치 시간",
-    "details": "세부정보",
-    "modelInfo": "모델 정보",
-    "viewDetailedInfo": "모델의 상세 정보 및 구성 보기",
-    "basicInfo": "기본 정보",
-    "family": "패밀리",
-    "allFamilies": "모든 패밀리",
-    "format": "형식",
-    "quantization": "양자화",
-    "capabilities": "기능",
-    "architectureInfo": "아키텍처 정보",
-    "parameterConfig": "매개변수 구성",
-    "promptTemplate": "프롬프트 템플릿",
-    "modelfile": "Modelfile",
-    "failedToGetModelInfo": "모델 정보를 가져올 수 없음",
-    "confirmDeleteModel": "모델 삭제 확인",
-    "deleteConfirmation": "모델 {{modelName}}을(를) 삭제하시겠습니까? 이 작업은 되돌릴 수 없으며 {{size}}의 저장 공간이 해제됩니다.",
-    "cancel": "취소",
-    "delete": "삭제",
-    "deleteSuccess": "삭제 성공",
-    "deleteSuccessMessage": "모델 {{modelName}}이(가) 성공적으로 삭제되었습니다",
-    "deleteFailed": "삭제 실패",
-    "deleteFailedMessage": "모델 {{modelName}}을(를) 삭제할 수 없습니다",
-    "fetchFailed": "모델 가져오기 실패",
-    "fetchFailedMessage": "로컬 모델 목록을 가져올 수 없습니다. Ollama 서비스가 실행 중인지 확인하세요",
-    "getInfoFailed": "정보 가져오기 실패",
-    "getInfoFailedMessage": "모델 {{modelName}}의 상세 정보를 가져올 수 없습니다",
-    "enterModelName": "모델 이름을 입력하세요",
-    "enterModelNameMessage": "다운로드할 모델 이름을 입력하세요",
-    "installed": "설치됨",
-    "downloadProgress": "다운로드 진행률",
-    "downloadComplete": "다운로드 완료",
-    "downloadFailed": "다운로드 실패",
-    "dialog": {
-      "tabs": {
-        "overview": "개요",
-        "architecture": "아키텍처",
-        "parameters": "매개변수",
-        "configuration": "구성"
-      },
-      "content": {
-        "basicInfo": "기본 정보",
-        "format": "형식",
-        "family": "패밀리",
-        "parameterSize": "매개변수 규모",
-        "quantizationLevel": "양자화 수준",
-        "supportedFamilies": "지원되는 모델 패밀리",
-        "runtimeParameters": "런타임 매개변수",
-        "modelfileConfig": "Modelfile 구성",
-        "templateConfig": "템플릿 구성",
-        "coreArchitectureInfo": "핵심 아키텍처 정보",
-        "detailedConfigInfo": "상세 구성 정보",
-        "modelCapabilities": "모델 기능"
-      }
-    }
-  },
-  "apiKeyRequired": "API 키가 필요합니다",
-  "apiKeyRequiredDescription": "대화를 시작하기 전에 API 키를 설정해주세요.",
-  "typing": "AI가 입력 중...",
   "downloads": {
     "title": "다운로드 관리자",
     "downloading": "다운로드 중",
@@ -452,8 +488,6 @@
     "pause": "일시 중지",
     "resume": "재개",
     "retry": "재시도",
-    "cancel": "취소",
-    "delete": "삭제",
     "fileName": "파일 이름",
     "size": "크기",
     "progress": "진행률",

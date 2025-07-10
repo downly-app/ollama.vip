@@ -56,6 +56,9 @@
     "configureModels": "Configure Models",
     "modelSelectorFooter": "Local models are prioritized",
     "noMatchingConversations": "No matching conversations found",
+    "downloadProgress": "Download Progress",
+    "downloadComplete": "Download Complete",
+    "downloadFailed": "Download Failed",
     "thinkingProcess": "Thinking Process",
     "tips": {
       "selectModel": "Select a model from the dropdown above",
@@ -272,7 +275,9 @@
     "close": "Close",
     "settings": "Settings",
     "language": "Language",
-    "refresh": "Refresh"
+    "refresh": "Refresh",
+    "clear": "Clear",
+    "notSupported": "Not Supported"
   },
   "general": {
     "title": "Dashboard",
@@ -335,6 +340,7 @@
         "addressCopied": "Service address copied to clipboard",
         "save": "Save",
         "addressSaved": "Listening address saved",
+        "addressSavedWithEnv": "Listening address saved, environment variable OLLAMA_HOST={{envHost}}",
         "serviceStopped": "Service stopped",
         "serviceStoppedDesc": "Ollama service has been successfully stopped",
         "serviceStarted": "Service started",
@@ -344,7 +350,9 @@
         "start": "Start",
         "stop": "Stop",
         "restartFailed": "Restart Failed",
-        "startFailed": "Start Failed"
+        "startFailed": "Start Failed",
+        "importGgufNotSupported": "GGUF model import feature is under development, please stay tuned",
+        "autoStartNotSupported": "Auto start feature is not supported yet, please stay tuned"
       },
       "quickActionLabels": {
         "aiChat": "AI Chat",
@@ -377,6 +385,8 @@
       "title": "Activity Log",
       "recentActivity": "Recent Activity",
       "viewAllActivities": "View All Activities",
+      "allActivities": "All Activity Logs",
+      "allActivitiesDescription": "View all activity records in the system, including model operations, service status changes, etc.",
       "more": "more",
       "noActivities": "No activities recorded",
       "confirmClear": "Are you sure you want to clear all activity records?",
@@ -413,7 +423,10 @@
       },
       "recentLogs": {
         "title": "Recent Logs",
-        "viewAll": "View All Logs"
+        "viewAll": "View All Logs",
+        "allLogs": "All System Logs",
+        "allLogsDescription": "View all log records in the system, including resource monitoring, system status, and other information.",
+        "noLogs": "No logs available"
       },
       "resources": {
         "cpu": "CPU",

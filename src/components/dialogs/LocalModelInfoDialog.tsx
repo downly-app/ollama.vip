@@ -144,7 +144,7 @@ const LocalModelInfoDialog: React.FC<LocalModelInfoDialogProps> = ({
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <ScrollArea className='h-48 custom-scrollbar'>
+              <ScrollArea className='h-48'>
                 <div className='space-y-2 pr-3'>
                   {otherFields.slice(0, 20).map(field => {
                     const value = modelInfo.model_info[field];
@@ -250,7 +250,7 @@ const LocalModelInfoDialog: React.FC<LocalModelInfoDialogProps> = ({
         </TabsList>
 
         <TabsContent value='overview' className='mt-4 h-[400px]'>
-          <ScrollArea className='h-full custom-scrollbar'>
+          <ScrollArea className='h-full'>
             <div className='pr-3'>
               <div className='space-y-4'>
                 <div className='grid grid-cols-2 gap-4'>
@@ -319,13 +319,13 @@ const LocalModelInfoDialog: React.FC<LocalModelInfoDialogProps> = ({
         </TabsContent>
 
         <TabsContent value='architecture' className='mt-4 h-[400px]'>
-          <ScrollArea className='h-full custom-scrollbar'>
+          <ScrollArea className='h-full'>
             <div className='pr-3'>{renderModelInfo()}</div>
           </ScrollArea>
         </TabsContent>
 
         <TabsContent value='parameters' className='mt-4 h-[400px]'>
-          <ScrollArea className='h-full custom-scrollbar'>
+          <ScrollArea className='h-full'>
             <div className='pr-3'>
               <div className='space-y-3'>
                 <h4 className='font-semibold text-white/90 flex items-center gap-2'>
@@ -345,7 +345,7 @@ const LocalModelInfoDialog: React.FC<LocalModelInfoDialogProps> = ({
               {t('localModels.dialog.configuration.modelfileConfig')}
             </h4>
             <ScrollArea
-              className='bg-white/5 backdrop-blur-sm rounded-lg p-4 text-white/90 font-mono text-xs border border-white/10 custom-scrollbar'
+              className='bg-white/5 backdrop-blur-sm rounded-lg p-4 text-white/90 font-mono text-xs border border-white/10'
               style={{ height: modelInfo.template ? 'calc(50% - 2rem)' : 'calc(100% - 3rem)' }}
             >
               <pre className='whitespace-pre-wrap pr-3'>{modelInfo.modelfile}</pre>
@@ -358,7 +358,7 @@ const LocalModelInfoDialog: React.FC<LocalModelInfoDialogProps> = ({
                   {t('localModels.dialog.configuration.templateConfig')}
                 </h4>
                 <ScrollArea
-                  className='bg-white/5 backdrop-blur-sm rounded-lg p-4 text-white/90 font-mono text-xs border border-white/10 custom-scrollbar'
+                  className='bg-white/5 backdrop-blur-sm rounded-lg p-4 text-white/90 font-mono text-xs border border-white/10'
                   style={{ height: 'calc(50% - 2rem)' }}
                 >
                   <pre className='whitespace-pre-wrap pr-3'>{modelInfo.template}</pre>

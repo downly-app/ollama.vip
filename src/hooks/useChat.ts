@@ -19,6 +19,8 @@ interface UseChatReturn {
   currentChatId: string | null;
   currentChat: any;
   isLoading: boolean;
+  isTyping: boolean;
+  typingModel?: string;
 
   // Store actions
   selectConversation: (id: string) => void;
@@ -30,6 +32,8 @@ interface UseChatReturn {
   updateConversationTitle: (chatId: string, title: string) => void;
   getCurrentConversation: () => any;
   setLoading: (loading: boolean) => void;
+  setTyping: (typing: boolean, model?: string) => void;
+  clearTyping: () => void;
 
   // Chat handlers
   handleChatSelect: (chatId: string) => void;
@@ -70,6 +74,10 @@ export const useChat = ({
     updateConversationTitle,
     setLoading,
     isLoading = false,
+    isTyping = false,
+    typingModel,
+    setTyping,
+    clearTyping,
   } = store || {};
 
   const currentChat = getCurrentConversation?.() || null;
@@ -190,6 +198,8 @@ export const useChat = ({
           updateConversationTitle?.(currentChatId, title);
         }
 
+        // Immediately show typing status for better UX
+        setTyping?.(true, parsed.model);
         setLoading?.(true);
 
         try {
@@ -212,17 +222,21 @@ export const useChat = ({
             model: parsed.model,
           });
 
-          // Add an empty message for AI response first
-          const aiMessageId = addMessage(currentChatId, {
-            content: '',
-            sender: 'assistant',
-            timestamp: new Date(),
-            model: parsed.model,
-          });
-
           // Callback function for handling stream data
+          let aiMessageId: string | null = null;
           const handleStreamChunk = (chunk: string) => {
-            if (currentChatId && aiMessageId) {
+            // Clear typing indicator when first chunk arrives
+            if (aiMessageId === null) {
+              clearTyping?.();
+              // Create AI message when first chunk arrives
+              aiMessageId = addMessage(currentChatId, {
+                content: chunk,
+                sender: 'assistant',
+                timestamp: new Date(),
+                model: parsed.model,
+              });
+            } else if (currentChatId && aiMessageId) {
+              // Append subsequent chunks
               appendMessageContent(currentChatId, aiMessageId, chunk);
             }
           };
@@ -240,9 +254,12 @@ export const useChat = ({
 
           onError?.(error as Error);
         } finally {
+          // Clear typing and loading states
+          clearTyping?.();
           setLoading?.(false);
         }
       } catch (error) {
+        clearTyping?.();
         setLoading?.(false);
         onError?.(error as Error);
       }
@@ -314,6 +331,8 @@ export const useChat = ({
     currentChatId,
     currentChat,
     isLoading,
+    isTyping,
+    typingModel,
 
     // Store actions
     selectConversation,
@@ -325,6 +344,8 @@ export const useChat = ({
     updateConversationTitle,
     getCurrentConversation,
     setLoading,
+    setTyping,
+    clearTyping,
 
     // Chat handlers
     handleChatSelect,

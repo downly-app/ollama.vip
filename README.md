@@ -8,9 +8,11 @@ A modern, cross-platform desktop application for interacting with Ollama models.
 
 > 🤖 **AI-Powered Development**: This project was collaboratively developed using AI-assisted coding (vibe coding) with WindSurf + Cursor + Trae + Lovable (UI and frontend design) + Manus (early research and requirements analysis), primarily powered by Claude 4 and Gemini 2.5 Pro models.
 
+**Main Dashboard Interface:**
 
+![General](./images/image-20250710231818143.png)
 
-![image-20250627172622496](./images/image-20250627172622496.png)
+*The main dashboard provides an overview of system status, model management, and quick access to key features.*
 
 ## ✨ Features
 
@@ -21,7 +23,19 @@ A modern, cross-platform desktop application for interacting with Ollama models.
 - **Conversation History**: Persistent chat history with search functionality
 - **Markdown Rendering**: Full support for code highlighting and formatting
 
-![image-20250627173433707](./images/image-20250627173433707.png)
+
+
+**AI Chat Interface:**
+
+![AI Chat](./images/image-20250710231733710.png)
+
+*Clean and intuitive chat interface with message history, markdown support, and real-time streaming responses.*
+
+**Third-party Model API Configuration:**
+
+![Third-party model API configuration](./images/image-20250710232528111.png)
+
+*Easy configuration panel for setting up API keys and parameters for OpenAI, DeepSeek, and other AI providers.*
 
 ### 🎨 User Interface
 - **Modern Design**: Glass-morphism UI with smooth animations
@@ -37,7 +51,35 @@ A modern, cross-platform desktop application for interacting with Ollama models.
 
 
 
-![image-20250627172748941](./images/image-20250627172748941.png)
+**Local Model Management:**
+
+![Local model management](./images/image-20250710232127313.png)
+
+*Comprehensive view of locally installed models with options to manage, update, and remove models.*
+
+**Local Model Details:**
+
+![Read local model details](./images/image-20250710232149771.png)
+
+*Detailed information about each model including size, parameters, and performance metrics.*
+
+**Online Model Library:**
+
+![Online models](./images/image-20250710231856427.png)
+
+*Browse and discover available models from the Ollama library with one-click download functionality.*
+
+**Model Information Page:**
+
+![Online model details page](./images/image-20250710232018977.png)
+
+*Comprehensive model details including description, capabilities, and system requirements before download.*
+
+**Download Management:**
+
+![Ollama model download management](./images/image-20250710232244938.png)
+
+*Real-time download progress tracking with pause, resume, and cancel options for model installations.*
 
 ### ⚙️ System Features
 - **Cross-platform**: Windows, macOS, and Linux support

@@ -214,7 +214,7 @@ const Downloads = () => {
           </div>
         </TitleBar>
 
-        <div className='flex-1 p-6 overflow-y-auto custom-scrollbar'>
+        <div className='flex-1 p-6 overflow-y-auto'>
           <Tabs defaultValue='downloading' className='h-full flex flex-col'>
             <div className='flex justify-between items-center mb-4'>
               <TabsList className='grid w-full grid-cols-2 bg-transparent border border-white/10 p-1 h-auto self-start max-w-sm'>

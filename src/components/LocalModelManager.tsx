@@ -476,7 +476,7 @@ const LocalModelManager = () => {
               </div>
             </div>
           ) : (
-            <ScrollArea className='h-full custom-scrollbar'>
+            <ScrollArea className='h-full'>
               <div
                 className={
                   viewMode === 'grid'

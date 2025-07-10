@@ -291,25 +291,7 @@
   padding: 0 var(--content-padding);
 }
 
-/* Scrollbar styles */
-.custom-scrollbar::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: var(--color-bg-muted);
-  border-radius: var(--radius-full);
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: var(--color-gray-400);
-  border-radius: var(--radius-full);
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: var(--color-gray-500);
-}
+/* Scrollbar styles removed - using global styles from scrollbar-unified.css */
 
 /* Accessibility optimization */
 @media (prefers-reduced-motion: reduce) {

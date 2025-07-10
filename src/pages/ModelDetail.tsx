@@ -120,7 +120,7 @@ const ModelDetail = () => {
     const latestTag = model.tags.find(tag => tag.tag === 'latest') || model.tags[0];
 
     return (
-      <div className='flex-1 overflow-y-auto p-6 custom-scrollbar'>
+              <div className='flex-1 overflow-y-auto p-6'>
         <div className='max-w-none mx-auto space-y-6'>
           {/* Model basic information */}
           <Card className='bg-white/5 border-white/20'>

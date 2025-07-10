@@ -12,6 +12,8 @@
     "save": "保存",
     "cancel": "キャンセル",
     "delete": "削除",
+    "clear": "クリア",
+    "notSupported": "サポートされていません",
     "edit": "編集",
     "copy": "コピー",
     "search": "検索",
@@ -81,7 +83,23 @@
     "configureModels": "モデルを設定",
     "modelSelectorFooter": "ローカルモデルが優先表示されます",
     "noMatchingConversations": "一致する会話が見つかりません",
-    "thinkingProcess": "思考プロセス"
+    "downloadProgress": "ダウンロード進行中...",
+    "downloadComplete": "ダウンロード完了",
+    "downloadFailed": "ダウンロード失敗",
+    "thinkingProcess": "思考プロセス",
+    "tips": {
+      "selectModel": "上のドロップダウンからモデルを選択してください",
+      "typeMessage": "メッセージを入力してEnterキーを押してください",
+      "configure": "設定でAPIキーを設定してください",
+      "createNew": "+ボタンをクリックして新しい会話を開始してください",
+      "selectExisting": "またはリストから既存の会話を選択してください"
+    },
+    "suggestions": "提案",
+    "suggestion": {
+      "downloadLocal": "モデルページからローカルモデルをダウンロード",
+      "configureApi": "リモートモデル用のAPIキーを設定",
+      "checkConnection": "ネットワーク接続を確認"
+    }
   },
   "models": {
     "title": "モデル管理",
@@ -161,6 +179,7 @@
     "enterModelName": "モデル名を入力してください",
     "enterModelNameMessage": "ダウンロードするモデル名を入力してください",
     "installed": "インストール済み",
+    "filteredCount": "{{count}} 件フィルタリング済み",
     "dialog": {
       "tabs": {
         "overview": "概要",
@@ -188,18 +207,7 @@
         "modelfileConfig": "Modelfile設定",
         "templateConfig": "テンプレート設定"
       }
-    },
-    "status": {
-      "downloading": "ダウンロード中",
-      "paused": "一時停止中",
-      "completed": "完了",
-      "error": "エラー",
-      "pending": "待機中",
-      "finalizing": "完了処理中"
-    },
-    "clearCompleted": "完了済みをクリア",
-    "noDownloadingJobs": "アクティブなダウンロードジョブはありません。",
-    "noCompletedJobs": "完了したダウンロードはありません"
+    }
   },
   "settings": {
     "title": "設定",
@@ -355,7 +363,10 @@
       },
       "recentLogs": {
         "title": "最近のログ",
-        "viewAll": "すべてのログを表示"
+        "viewAll": "すべてのログを表示",
+        "allLogs": "すべてのログ",
+        "allLogsDescription": "システムのすべてのログエントリを表示します",
+        "noLogs": "ログがありません"
       },
       "logLevels": {
         "info": "情報",
@@ -393,13 +404,16 @@
         "copied": "コピー済み",
         "addressCopied": "サービスアドレスをクリップボードにコピーしました",
         "addressSaved": "リスニングアドレスが保存されました",
+        "addressSavedWithEnv": "リスニングアドレスが保存されました、環境変数 OLLAMA_HOST={{envHost}}",
         "serviceStopped": "サービス停止",
         "serviceStoppedDesc": "Ollamaサービスが正常に停止されました",
         "serviceStarted": "サービス開始",
         "serviceStartedDesc": "Ollamaサービスが正常に開始されました",
         "serviceRestarted": "サービス再起動",
         "restartFailed": "再起動に失敗しました",
-        "startFailed": "開始に失敗しました"
+        "startFailed": "開始に失敗しました",
+        "importGgufNotSupported": "GGUFモデルインポート機能は開発中です。お楽しみに",
+        "autoStartNotSupported": "自動開始機能はまだサポートされていません。お楽しみに"
       },
       "quickActionLabels": {
         "aiChat": "AIチャット",
@@ -434,7 +448,9 @@
       "viewAllActivities": "すべてのアクティビティを表示",
       "more": "件以上",
       "noActivities": "記録されたアクティビティはありません",
-      "confirmClear": "すべてのアクティビティ記録を削除してもよろしいですか？",
+        "allActivities": "すべてのアクティビティ",
+        "allActivitiesDescription": "システムのすべてのアクティビティ記録を表示します",
+        "confirmClear": "すべてのアクティビティ記録を削除してもよろしいですか？",
       "timeAgo": {
         "minutesAgo": "{{count}}分前",
         "minutesAgo_plural": "{{count}}分前",
@@ -454,13 +470,7 @@
         "newVersionAvailable": "新しいバージョンOllama {{version}}が利用可能です",
         "memoryUsageHigh": "メモリ使用量が{{percent}}%に達しました"
       }
-    },
-    "apiKeyRequired": "APIキーが必要です",
-    "apiKeyRequiredDescription": "会話を開始する前にAPIキーを設定してください。",
-    "typing": "AIが入力中...",
-    "downloadProgress": "ダウンロード進行状況",
-    "downloadComplete": "ダウンロード完了",
-    "downloadFailed": "ダウンロード失敗"
+    }
   },
   "downloads": {
     "title": "ダウンロード管理",
@@ -469,8 +479,6 @@
     "pause": "一時停止",
     "resume": "再開",
     "retry": "再試行",
-    "cancel": "キャンセル",
-    "delete": "削除",
     "fileName": "ファイル名",
     "size": "サイズ",
     "progress": "進行状況",
@@ -492,5 +500,12 @@
     "noDownloadingJobs": "アクティブなダウンロードジョブはありません。",
     "noCompletedJobs": "完了したダウンロードはありません",
     "clearCompleted": "完了済みをクリア"
+  },
+  "error": {
+    "somethingWentWrong": "何かが間違っています",
+    "unknownError": "不明なエラー",
+    "tryAgain": "再試行",
+    "reloadPage": "ページを再読み込み",
+    "technicalDetails": "技術的詳細"
   }
 }

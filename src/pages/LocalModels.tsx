@@ -26,7 +26,7 @@ const LocalModels = () => {
           </div>
         </TitleBar>
 
-        <div className='flex-1 p-6 overflow-y-auto overflow-x-hidden custom-scrollbar'>
+        <div className='flex-1 p-6 overflow-y-auto overflow-x-hidden'>
           <LocalModelManager />
         </div>
       </div>

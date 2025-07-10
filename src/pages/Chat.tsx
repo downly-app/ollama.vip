@@ -54,15 +54,14 @@ const Chat = () => {
     onWarning: handleWarning,
   });
 
-  // Debounced model value for performance
-  const debouncedModelValue = useDebounce(currentModelValue, 300);
-
   // Chat hook
   const {
     conversations,
     currentChatId,
     currentChat,
     isLoading,
+    isTyping,
+    typingModel,
     handleChatSelect,
     handleSendMessage,
     handleEditMessage,
@@ -131,7 +130,7 @@ const Chat = () => {
 
     // Update current model value
     const modelValue = modelService.createModelSelectValue(newSettings.provider, newSettings.model);
-    setCurrentModelValue(modelValue);
+            setCurrentModelValue(modelValue);
 
     setShowSettings(false);
 
@@ -164,7 +163,7 @@ const Chat = () => {
                 currentModelValue={currentModelValue}
                 onModelChange={handleModelChange}
                 isGenerating={isGenerating || isLoading}
-                onShowSettings={() => setShowSettings(true)}
+                        onShowSettings={() => setShowSettings(true)}
                 onShowApiKeyWarning={() => handleShowApiKeyWarning()}
               />
 
@@ -175,6 +174,8 @@ const Chat = () => {
                 onEditMessage={handleEditMessage}
                 onDeleteMessage={handleDeleteMessage}
                 onResendMessage={handleResendMessageWithState}
+                isTyping={isTyping}
+                typingModel={typingModel}
               />
 
               {/* Input area */}
@@ -240,9 +241,9 @@ const Chat = () => {
           isOpen={showApiKeyWarning}
           message={warningMessage}
           onCancel={() => {
-            setShowApiKeyWarning(false);
-            setWarningMessage('');
-          }}
+                    setShowApiKeyWarning(false);
+                    setWarningMessage('');
+                  }}
           onOpenSettings={() => setShowSettings(true)}
         />
 

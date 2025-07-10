@@ -93,8 +93,20 @@ impl ConfigManager {
             Some(self.normalize_host(&host))
         };
         
-        self.config.ollama_host = normalized_host;
+        self.config.ollama_host = normalized_host.clone();
         self.save_config()?;
+        
+        // Set system-level environment variable
+        if let Some(host) = &normalized_host {
+            // Extract host:port from the normalized URL for environment variable
+            let env_host = host.replace("http://", "").replace("https://", "");
+            self.set_system_env_var("OLLAMA_HOST", &env_host)
+                .context("Failed to set system environment variable")?;
+        } else {
+            self.remove_system_env_var("OLLAMA_HOST")
+                .context("Failed to remove system environment variable")?;
+        }
+        
         Ok(())
     }
     
@@ -102,6 +114,11 @@ impl ConfigManager {
     pub fn clear_ollama_host(&mut self) -> Result<()> {
         self.config.ollama_host = None;
         self.save_config()?;
+        
+        // Remove system-level environment variable
+        self.remove_system_env_var("OLLAMA_HOST")
+            .context("Failed to remove system environment variable")?;
+        
         Ok(())
     }
     
@@ -650,5 +667,48 @@ mod tests {
     fn test_host_priority() {
         // This test needs to run in actual environment as it involves file system operations
         // Here just showing the test structure
+    }
+    
+    #[test]
+    fn test_env_host_extraction() {
+        // Test that we correctly extract host:port from normalized URLs for environment variables
+        let test_cases = vec![
+            ("http://127.0.0.1:11434", "127.0.0.1:11434"),
+            ("https://api.example.com:8080", "api.example.com:8080"),
+            ("http://localhost:11434", "localhost:11434"),
+            ("https://192.168.1.100:11434", "192.168.1.100:11434"),
+        ];
+        
+        for (input, expected) in test_cases {
+            let env_host = input.replace("http://", "").replace("https://", "");
+            assert_eq!(env_host, expected, "Failed for input: {}", input);
+        }
+    }
+    
+    #[test]
+    fn test_normalize_host_comprehensive() {
+        let manager = ConfigManager {
+            config_path: PathBuf::new(),
+            config: AppConfig::default(),
+        };
+        
+        // Test cases that should result in proper environment variable values
+        let test_cases = vec![
+            // Input format -> Normalized URL -> Expected OLLAMA_HOST env var
+            ("127.0.0.1:11434", "http://127.0.0.1:11434", "127.0.0.1:11434"),
+            ("127.0.0.1", "http://127.0.0.1:11434", "127.0.0.1:11434"),
+            ("192.168.1.100:8080", "http://192.168.1.100:8080", "192.168.1.100:8080"),
+            ("192.168.1.100", "http://192.168.1.100:11434", "192.168.1.100:11434"),
+            ("http://api.example.com:11434", "http://api.example.com:11434", "api.example.com:11434"),
+            ("https://secure.example.com:11434", "https://secure.example.com:11434", "secure.example.com:11434"),
+        ];
+        
+        for (input, expected_normalized, expected_env) in test_cases {
+            let normalized = manager.normalize_host(input);
+            assert_eq!(normalized, expected_normalized, "Normalization failed for: {}", input);
+            
+            let env_host = normalized.replace("http://", "").replace("https://", "");
+            assert_eq!(env_host, expected_env, "Environment variable extraction failed for: {}", input);
+        }
     }
 }

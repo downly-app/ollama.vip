@@ -91,7 +91,23 @@
     "configureModels": "Configurer les modèles",
     "modelSelectorFooter": "Les modèles locaux sont prioritaires",
     "noMatchingConversations": "Aucune conversation correspondante trouvée",
-    "thinkingProcess": "Processus de réflexion"
+    "downloadProgress": "Progression du téléchargement",
+    "downloadComplete": "Téléchargement terminé",
+    "downloadFailed": "Échec du téléchargement",
+    "thinkingProcess": "Processus de réflexion",
+    "tips": {
+      "selectModel": "Sélectionnez un modèle dans le menu déroulant ci-dessus",
+      "typeMessage": "Tapez votre message et appuyez sur Entrée",
+      "configure": "Configurez les clés API dans les Paramètres",
+      "createNew": "Cliquez sur le bouton + pour commencer une nouvelle conversation",
+      "selectExisting": "Ou sélectionnez une conversation existante dans la liste"
+    },
+    "suggestions": "Suggestions",
+    "suggestion": {
+      "downloadLocal": "Téléchargez des modèles locaux depuis la page Modèles",
+      "configureApi": "Configurez les clés API pour les modèles distants",
+      "checkConnection": "Vérifiez votre connexion réseau"
+    }
   },
   "models": {
     "title": "Gestion des modèles",
@@ -171,6 +187,7 @@
     "enterModelName": "Veuillez entrer le nom du modèle",
     "enterModelNameMessage": "Veuillez entrer le nom du modèle à télécharger",
     "installed": "Installé",
+    "filteredCount": "{{count}} filtrés",
     "dialog": {
       "tabs": {
         "overview": "Aperçu",
@@ -178,19 +195,25 @@
         "parameters": "Paramètres",
         "configuration": "Configuration"
       },
-      "content": {
+      "overview": {
         "basicInfo": "Informations de base",
         "format": "Format",
         "family": "Famille",
         "parameterSize": "Taille des paramètres",
         "quantizationLevel": "Niveau de quantification",
-        "supportedFamilies": "Familles de modèles supportées",
-        "runtimeParameters": "Paramètres d'exécution",
-        "modelfileConfig": "Configuration Modelfile",
-        "templateConfig": "Configuration du modèle",
-        "coreArchitectureInfo": "Informations d'architecture principale",
-        "detailedConfigInfo": "Informations de configuration détaillées",
+        "supportedFamilies": "Familles supportées",
         "modelCapabilities": "Capacités du modèle"
+      },
+      "architecture": {
+        "coreArchitectureInfo": "Informations d'architecture principale",
+        "detailedConfigInfo": "Informations de configuration détaillées"
+      },
+      "parameters": {
+        "runtimeParameters": "Paramètres d'exécution"
+      },
+      "configuration": {
+        "modelfileConfig": "Configuration Modelfile",
+        "templateConfig": "Configuration du modèle"
       }
     }
   },
@@ -400,13 +423,16 @@
         "copied": "Copié",
         "addressCopied": "Adresse du service copiée dans le presse-papiers",
         "addressSaved": "Adresse d'écoute enregistrée",
+        "addressSavedWithEnv": "Adresse d'écoute enregistrée, variable d'environnement OLLAMA_HOST={{envHost}}",
         "serviceStopped": "Service arrêté",
         "serviceStoppedDesc": "Le service Ollama a été arrêté avec succès",
         "serviceStarted": "Service démarré",
         "serviceStartedDesc": "Le service Ollama a été démarré avec succès",
         "serviceRestarted": "Service redémarré",
         "restartFailed": "Échec du redémarrage",
-        "startFailed": "Échec du démarrage"
+        "startFailed": "Échec du démarrage",
+        "importGgufNotSupported": "La fonctionnalité d'importation de modèles GGUF est en développement, restez à l'écoute",
+        "autoStartNotSupported": "La fonctionnalité de démarrage automatique n'est pas encore prise en charge, restez à l'écoute"
       },
       "quickActionLabels": {
         "aiChat": "Chat IA",

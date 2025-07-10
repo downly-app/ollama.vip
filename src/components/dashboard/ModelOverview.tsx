@@ -289,7 +289,7 @@ const ModelOverview = () => {
             size='sm'
             variant='ghost'
             className='mt-2 text-white/70 hover:text-white hover:bg-white/10'
-            onClick={() => (window.location.href = '/models')}
+            onClick={() => (window.location.href = '/local-models')}
           >
             <ExternalLink size={14} className='mr-1' />
             {t('dashboard.modelOverview.viewAllModels')}
@@ -303,7 +303,7 @@ const ModelOverview = () => {
             {t('dashboard.modelOverview.runningModels')} ({runningModels.length})
           </h4>
           {runningModels.length > 0 ? (
-            <div className='space-y-2 max-h-32 overflow-y-auto custom-scrollbar-thin'>
+                            <div className='space-y-2 max-h-32 overflow-y-auto'>
               {runningModels.map((model, index) => (
                 <div
                   key={index}
@@ -413,7 +413,7 @@ const ModelOverview = () => {
             <Download size={16} className='mr-2' />
             {t('dashboard.modelOverview.recentDownloads')}
           </h4>
-          <div className='space-y-2 max-h-28 overflow-y-auto custom-scrollbar-thin'>
+                        <div className='space-y-2 max-h-28 overflow-y-auto'>
             {recentDownloads.length > 0 ? (
               recentDownloads.map((download, index) => (
                 <div
