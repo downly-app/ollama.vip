@@ -151,7 +151,10 @@ jobs:
           fi
 
       - name: Install frontend dependencies
-        run: yarn install --frozen-lockfile --registry https://registry.yarnpkg.com
+        run: |
+          yarn config set registry https://registry.yarnpkg.com
+          yarn config set network-timeout 300000
+          yarn install --frozen-lockfile
 
       - name: Build the frontend
         run: yarn build
