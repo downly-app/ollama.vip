@@ -27,9 +27,14 @@ anyhow = "1.0.75"
 
 # GPU monitoring dependencies (optional for better compatibility)
 # Note: Ubuntu 22.04 supports webkit2gtk-4.0, which provides better compatibility
-[target.'cfg(target_os = "linux")'.dependencies]
+# Disable GPU monitoring for ARM64 Linux to avoid compatibility issues
+[target.'cfg(all(target_os = "linux", target_arch = "x86_64"))'.dependencies]
 gfxinfo = { version = "0.1.2", default-features = false, features = ["gpu_info", "nvidia", "amd"], optional = true }
 nvml-wrapper = { version = "0.11", optional = true }
+
+# ARM64 Linux - minimal dependencies for better compatibility
+[target.'cfg(all(target_os = "linux", target_arch = "aarch64"))'.dependencies]
+# Skip GPU monitoring dependencies for ARM64 to avoid build issues
 
 [target.'cfg(target_os = "windows")'.dependencies]
 gfxinfo = { version = "0.1.2", default-features = false, features = ["gpu_info", "nvidia", "amd"] }
@@ -42,9 +47,10 @@ nvml-wrapper = { version = "0.11", optional = true }
 [features]
 # this feature is used for production builds or when `devPath` points to the filesystem
 # DO NOT REMOVE!!
-default = ["custom-protocol", "gpu-monitoring"]
+default = ["custom-protocol"]
 custom-protocol = ["tauri/custom-protocol"]
 # Optional GPU monitoring features for better compatibility
+# Note: GPU monitoring is disabled by default for ARM64 compatibility
 gpu-monitoring = ["dep:gfxinfo", "dep:nvml-wrapper"]
 gpu-nvidia = ["gpu-monitoring"]
 gpu-amd = ["gpu-monitoring"]

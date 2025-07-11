@@ -595,7 +595,7 @@ pub fn restart_ollama_service() -> Result<String, String> {
     #[cfg(not(target_os = "windows"))]
     {
         // For Unix systems, try to stop and start Ollama
-        let stop_result = Command::new("pkill")
+        let _stop_result = Command::new("pkill")
             .args(["-f", "ollama"])
             .output();
         

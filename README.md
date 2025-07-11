@@ -1,5 +1,14 @@
-# Ollama Pro
+<div align="center">
+<a href="https://github.com/putyy/res-downloader"><img src="images/ollama.png" width="120" alt="ollama"/></a>
+<h1>Ollama Pro</h1>
+</div>
 
+**🌍 Multi-language Versions:**
+[中文](docs/zh/README.md) | [日本語](docs/ja/README.md) | [한국어](docs/ko/README.md) | [Français](docs/fr/README.md)
+
+
+[![GitHub stars](https://img.shields.io/github/stars/downly-app/ollama.vip)](https://github.com/downly-app/ollama.vip/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/downly-app/ollama.vip)](https://github.com/downly-app/ollama.vip/fork)
 [![License](https://img.shields.io/badge/license-GPL%20v3%20with%20Commercial%20Exception-blue.svg)](LICENSE)
 [![Release](https://img.shields.io/github/v/release/downly-app/ollama.vip)](https://github.com/downly-app/ollama.vip/releases)
 [![Downloads](https://img.shields.io/github/downloads/downly-app/ollama.vip/total)](https://github.com/downly-app/ollama.vip/releases)
@@ -357,7 +366,7 @@ This project is licensed under the GNU General Public License v3 with Commercial
 For non-commercial use (personal, educational, research), this software is available under GPL v3 terms.
 
 ### Commercial Use
-Commercial use requires a separate commercial license. Contact us at [contact@ollama.vip] for commercial licensing.
+Commercial use requires a separate commercial license. Contact us at [yzmm@outlook.com] for commercial licensing.
 
 See the [LICENSE](LICENSE) file for complete details.
 
@@ -382,10 +391,10 @@ See the [LICENSE](LICENSE) file for complete details.
 ### Development Philosophy
 This project demonstrates the power of **AI-assisted development** (vibe coding), where human creativity and AI capabilities work together to create innovative software solutions.
 
-## 📞 Support
+## Support
 
 If you encounter any issues or have questions:
 - Create an issue on [GitHub Issues](https://github.com/downly-app/ollama.vip/issues)
 - Check the [Documentation](docs/)
 - Join our community discussions
-- For commercial licensing inquiries: [contact@ollama.vip]
+- For commercial licensing inquiries: [yzmm@outlook.com]

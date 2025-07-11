@@ -6,7 +6,7 @@ use nvml_wrapper::Nvml;
 use serde::Serialize;
 
 #[cfg(target_os = "linux")]
-use std::{fs, path::Path};
+use std::fs;
 
 // Conditional compilation for GPU monitoring features
 #[cfg(not(feature = "gpu-monitoring"))]

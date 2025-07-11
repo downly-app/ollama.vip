@@ -12,10 +12,6 @@ export const deepEqual = (a: any, b: any): boolean => {
     return a === b;
   }
 
-  if (a === null || a === undefined || b === null || b === undefined) {
-    return false;
-  }
-
   if (a.prototype !== b.prototype) return false;
 
   const keys = Object.keys(a);
@@ -42,9 +38,9 @@ export const shallowEqual = (a: any, b: any): boolean => {
 
 // Enhanced memo component factory
 export const createMemoComponent = <P extends object>(
-  Component: React.ComponentType<P>,
-  areEqual?: (prevProps: P, nextProps: P) => boolean,
-  debugName?: string
+    Component: React.ComponentType<P>,
+    areEqual?: (prevProps: P, nextProps: P) => boolean,
+    debugName?: string
 ) => {
   const MemoComponent = memo(Component, areEqual);
 
@@ -57,8 +53,8 @@ export const createMemoComponent = <P extends object>(
 
 // Performance monitoring HOC
 export const withPerformanceMonitoring = <P extends object>(
-  Component: React.ComponentType<P>,
-  componentName?: string
+    Component: React.ComponentType<P>,
+    componentName?: string
 ) => {
   const PerformanceMonitoredComponent: React.FC<P> = props => {
     const renderCount = useRef(0);
@@ -71,12 +67,12 @@ export const withPerformanceMonitoring = <P extends object>(
 
       if (process.env.NODE_ENV === 'development') {
         console.log(
-          `🔄 [${componentName || Component.name}] Render #${renderCount.current} (${timeSinceLastRender}ms since last)`
+            `🔄 [${componentName || Component.name}] Render #${renderCount.current} (${timeSinceLastRender}ms since last)`
         );
 
         if (timeSinceLastRender < 16 && renderCount.current > 1) {
           console.warn(
-            `⚠️ [${componentName || Component.name}] Fast re-render detected (${timeSinceLastRender}ms)`
+              `⚠️ [${componentName || Component.name}] Fast re-render detected (${timeSinceLastRender}ms)`
           );
         }
       }
@@ -102,15 +98,15 @@ export const useLazyLoad = (threshold = 0.1) => {
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        const intersecting = entry.isIntersecting;
-        setIsIntersecting(intersecting);
+        ([entry]) => {
+          const intersecting = entry.isIntersecting;
+          setIsIntersecting(intersecting);
 
-        if (intersecting && !hasBeenIntersecting) {
-          setHasBeenIntersecting(true);
-        }
-      },
-      { threshold }
+          if (intersecting && !hasBeenIntersecting) {
+            setHasBeenIntersecting(true);
+          }
+        },
+        { threshold }
     );
 
     if (targetRef.current) {
@@ -151,13 +147,13 @@ export const useThrottle = <T>(value: T, limit: number): T => {
 
   useEffect(() => {
     const handler = setTimeout(
-      () => {
-        if (Date.now() - lastRan.current >= limit) {
-          setThrottledValue(value);
-          lastRan.current = Date.now();
-        }
-      },
-      limit - (Date.now() - lastRan.current)
+        () => {
+          if (Date.now() - lastRan.current >= limit) {
+            setThrottledValue(value);
+            lastRan.current = Date.now();
+          }
+        },
+        limit - (Date.now() - lastRan.current)
     );
 
     return () => {
@@ -200,18 +196,20 @@ export const useRenderPerformance = (componentName: string) => {
 
 // Optimized event handler Hook
 export const useOptimizedCallback = <T extends (...args: any[]) => any>(
-  callback: T,
-  deps: React.DependencyList
+    callback: T,
+    deps: React.DependencyList
 ): T => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   return useCallback(callback, deps);
 };
 
 // Optimized computed value Hook
 export const useOptimizedMemo = <T>(
-  factory: () => T,
-  deps: React.DependencyList,
-  isEqual?: (a: T, b: T) => boolean
+    factory: () => T,
+    deps: React.DependencyList,
+    isEqual?: (a: T, b: T) => boolean
 ): T => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const memoized = useMemo(factory, deps);
   const ref = useRef<{ value: T; deps: React.DependencyList }>({
     value: memoized,
@@ -278,8 +276,8 @@ export const createComponentCache = () => {
 export const optimizeRenders = {
   // Skip unnecessary renders
   skipRender: <P extends object>(
-    Component: React.ComponentType<P>,
-    shouldSkip: (props: P) => boolean
+      Component: React.ComponentType<P>,
+      shouldSkip: (props: P) => boolean
   ) => {
     return memo(Component, (prevProps, nextProps) => {
       return shouldSkip(nextProps) || shallowEqual(prevProps, nextProps);
@@ -288,9 +286,9 @@ export const optimizeRenders = {
 
   // Conditional render optimization
   conditionalRender: <P extends object>(
-    Component: React.ComponentType<P>,
-    condition: (props: P) => boolean,
-    fallback?: React.ComponentType<P>
+      Component: React.ComponentType<P>,
+      condition: (props: P) => boolean,
+      fallback?: React.ComponentType<P>
   ) => {
     return memo((props: P) => {
       if (condition(props)) {
@@ -316,7 +314,7 @@ export const performanceAnalyzer = {
 
           if (renderTime > 50) {
             console.warn(
-              `⚠️ [${name || Component.name}] Slow render detected: ${renderTime.toFixed(2)}ms`
+                `⚠️ [${name || Component.name}] Slow render detected: ${renderTime.toFixed(2)}ms`
             );
           }
         }
