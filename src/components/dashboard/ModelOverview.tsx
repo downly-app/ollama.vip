@@ -21,7 +21,42 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { useTheme } from '@/contexts/ThemeContext';
 import { configApi } from '@/services/configApi';
-import { type OllamaModel, type OllamaRunningModel, ollamaApi } from '@/services/ollamaApi';
+import { ollamaTauriApi } from '@/services/ollamaTauriApi';
+
+// Define types needed from original ollamaApi
+type OllamaModel = {
+  name: string;
+  model: string;
+  modified_at: string;
+  size: number;
+  digest: string;
+  details: {
+    parent_model: string;
+    format: string;
+    family: string;
+    families: string[];
+    parameter_size: string;
+    quantization_level: string;
+  };
+};
+
+// Define OllamaRunningModel interface matching what's returned from Rust backend
+type OllamaRunningModel = {
+  name: string;
+  model: string;
+  size: number;
+  digest: string;
+  details: {
+    parent_model: string;
+    format: string;
+    family: string;
+    families: string[];
+    parameter_size: string;
+    quantization_level: string;
+  };
+  expires_at: string;
+  size_vram: number;
+};
 
 interface RecentDownload {
   name: string;
@@ -51,24 +86,20 @@ const ModelOverview = () => {
         // ModelOverview: Fetching model data
 
         // Fetch models and storage base path in parallel
-        const [modelsResponse, storageBasePath] = await Promise.all([
-          fetch('http://127.0.0.1:11434/api/tags'),
+        const [models, storageBasePath] = await Promise.all([
+          ollamaTauriApi.listModels(),
           configApi.getOllamaModelsPath(),
         ]);
 
-        if (!modelsResponse.ok) {
-          throw new Error(`HTTP error! status: ${modelsResponse.status}`);
-        }
-
-        const data = await modelsResponse.json();
+        // Models are now directly available from ollamaTauriApi.listModels()
         // ModelOverview: Received data
         // ModelOverview: Storage base path
 
-        if (data && data.models) {
-          setLocalModels(data.models);
+        if (models) {
+          setLocalModels(models);
 
           // Calculate storage info with base directory path
-          const totalSize = data.models.reduce(
+          const totalSize = models.reduce(
             (sum: number, model: any) => sum + (model.size || 0),
             0
           );
@@ -117,7 +148,7 @@ const ModelOverview = () => {
       // ModelOverview: Fetching model data
 
       // First check if Ollama service is available
-      const isOllamaAvailable = await ollamaApi.checkConnection();
+      const isOllamaAvailable = await ollamaTauriApi.checkConnection();
 
       let models: OllamaModel[] = [];
       let runningList: OllamaRunningModel[] = [];
@@ -126,8 +157,8 @@ const ModelOverview = () => {
         try {
           // Fetch local models and running models in parallel
           [models, runningList] = await Promise.all([
-            ollamaApi.listModels(),
-            ollamaApi.listRunningModels(),
+            ollamaTauriApi.listModels(),
+            ollamaTauriApi.listRunningModels(),
           ]);
         } catch (error) {
           // ModelOverview: Failed to fetch model data, Ollama service may be unavailable

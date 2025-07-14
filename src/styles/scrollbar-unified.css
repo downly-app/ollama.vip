@@ -1,13 +1,13 @@
-/* 简化的全局滚动条样式 - 紫色主题 */
+/* Simplified global scrollbar styles - Purple theme */
 
-/* 全局滚动条样式 */
+/* Global scrollbar styles */
 * {
   /* Firefox */
   scrollbar-width: thin;
   scrollbar-color: rgba(139, 92, 246, 0.8) rgba(255, 255, 255, 0.1);
 }
 
-/* WebKit浏览器 */
+/* WebKit browsers */
 *::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -28,7 +28,7 @@
   background: rgba(139, 92, 246, 1);
 }
 
-/* 移动端适配 */
+/* Mobile adaptation */
 @media (max-width: 768px) {
   *::-webkit-scrollbar {
     width: 4px;
@@ -36,7 +36,7 @@
   }
 }
 
-/* 隐藏滚动条的工具类 */
+/* Utility class to hide scrollbar */
 .scrollbar-hidden {
   scrollbar-width: none;
   -ms-overflow-style: none;

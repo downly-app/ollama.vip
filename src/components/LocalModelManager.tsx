@@ -55,7 +55,7 @@ import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useToast } from '@/hooks/use-toast';
-import { ollamaApi } from '@/services/ollamaApi';
+import { ollamaTauriApi } from '@/services/ollamaTauriApi';
 import { useDownloadStore } from '@/stores/downloadStore';
 
 interface LocalModel {
@@ -109,7 +109,7 @@ const LocalModelManager = () => {
   const fetchLocalModels = async () => {
     setIsLoading(true);
     try {
-      const models = await ollamaApi.listModels();
+      const models = await ollamaTauriApi.listModels();
       setLocalModels(models);
     } catch (error) {
       // Failed to fetch local models
@@ -126,7 +126,7 @@ const LocalModelManager = () => {
 
   const handleDeleteModel = async (modelName: string) => {
     try {
-      const success = await ollamaApi.deleteModel(modelName);
+      const success = await ollamaTauriApi.deleteModel(modelName);
       if (success) {
         toast({
           title: t('localModels.deleteSuccess'),

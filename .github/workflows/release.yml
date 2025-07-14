@@ -39,7 +39,7 @@ jobs:
           - platform: macos-latest
             arch: x86_64
             rust-target: x86_64-apple-darwin
-          # macOS ARM64 (Apple Silicon) - 原生构建
+          # macOS ARM64 (Apple Silicon) - Native build
           - platform: macos-latest
             arch: aarch64
             rust-target: aarch64-apple-darwin
@@ -47,7 +47,7 @@ jobs:
           - platform: ubuntu-22.04
             arch: x86_64
             rust-target: x86_64-unknown-linux-gnu
-          # Linux ARM64 - 使用GitHub Actions原生ARM64运行器
+          # Linux ARM64 - Using GitHub Actions native ARM64 runner
           - platform: ubuntu-22.04-arm
             arch: aarch64
             rust-target: aarch64-unknown-linux-gnu

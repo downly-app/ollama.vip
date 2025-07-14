@@ -13,7 +13,7 @@ import {
 import { safeGetFromStorage } from '@/utils/dataUtils';
 
 import { configApi } from './configApi';
-import { ollamaApi } from './ollamaApi';
+import { ollamaTauriApi } from './ollamaTauriApi';
 
 class ModelService {
   private localModels: LocalModel[] = [];
@@ -66,7 +66,7 @@ class ModelService {
 
     try {
       // Fetching local models from Ollama
-      this.localModels = await ollamaApi.listModels();
+      this.localModels = await ollamaTauriApi.listModels();
       this.lastFetchTime = now;
       // Successfully fetched local models
       return this.localModels;
@@ -75,7 +75,7 @@ class ModelService {
 
       // Check if it's a connection issue
       try {
-        const isConnected = await ollamaApi.checkConnection();
+        const isConnected = await ollamaTauriApi.checkConnection();
         // Ollama connection status checked
         if (!isConnected) {
           // Ollama service is not running or not accessible
@@ -247,7 +247,7 @@ class ModelService {
    */
   async isOllamaRunning(): Promise<boolean> {
     try {
-      return await ollamaApi.checkConnection();
+      return await ollamaTauriApi.checkConnection();
     } catch {
       return false;
     }

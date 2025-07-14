@@ -3,6 +3,10 @@
 /* Code block enhancement effects */
 .markdown-content pre {
   position: relative;
+  max-width: 100%;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-wrap: break-word;
 }
 
 .markdown-content pre::before {

@@ -28,7 +28,7 @@ import { Input } from '@/components/ui/input';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useToast } from '@/hooks/use-toast';
 import configApi from '@/services/configApi';
-import { ollamaApi } from '@/services/ollamaApi';
+import { ollamaTauriApi } from '@/services/ollamaTauriApi';
 import { useSystemResourceStore } from '@/stores/systemResourceStore';
 
 const OllamaServiceStatus = () => {
@@ -108,8 +108,8 @@ const OllamaServiceStatus = () => {
       const host = await configApi.getOllamaHost();
       setServiceAddress(host);
 
-      // Update ollamaApi configuration
-      ollamaApi.updateConfig({ baseUrl: host });
+      // Note: No need to update the base URL in Rust backend
+      // As the host is automatically obtained from config manager
 
       // Then check connection and fetch Ollama data
       await checkConnection();
@@ -119,19 +119,19 @@ const OllamaServiceStatus = () => {
       // Use default address as fallback
       const defaultHost = 'http://127.0.0.1:11434';
       setServiceAddress(defaultHost);
-      ollamaApi.updateConfig({ baseUrl: defaultHost });
+      // Host is automatically configured in backend
     }
   };
 
   const checkConnection = async () => {
     setIsChecking(true);
     try {
-      const connected = await ollamaApi.checkConnection();
+      const connected = await ollamaTauriApi.checkConnection();
       setIsConnected(connected);
 
       if (connected) {
         // Get version information
-        const versionInfo = await ollamaApi.getVersion();
+        const versionInfo = await ollamaTauriApi.getVersion();
         if (versionInfo) {
           setVersion(versionInfo.version);
         }
@@ -152,8 +152,8 @@ const OllamaServiceStatus = () => {
       if (isConnected) {
         try {
           [models, runningModelsList] = await Promise.all([
-            ollamaApi.listModels(),
-            ollamaApi.listRunningModels(),
+            ollamaTauriApi.listModels(),
+            ollamaTauriApi.listRunningModels(),
           ]);
         } catch (error) {
           // Failed to fetch Ollama data, service may be unavailable
@@ -183,8 +183,8 @@ const OllamaServiceStatus = () => {
       const normalizedHost = await configApi.setOllamaHost(serviceAddress);
       setServiceAddress(normalizedHost);
 
-      // Update API configuration
-      ollamaApi.updateConfig({ baseUrl: normalizedHost });
+      // Host is automatically configured in backend
+      // No need to update configuration
 
       // Extract host:port for display
       const envHost = normalizedHost.replace('http://', '').replace('https://', '');

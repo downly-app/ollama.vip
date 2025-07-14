@@ -1,4 +1,4 @@
-/* 导入统一样式系统 - 必须在最前面 */
+/* Import unified style system - Must be at the top */
 @import './styles/theme.css';
 @import './styles/scrollbar-unified.css';
 @import './styles/animations.css';

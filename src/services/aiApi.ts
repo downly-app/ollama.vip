@@ -1,3 +1,5 @@
+import { invoke } from '@tauri-apps/api/tauri';
+import { listen } from '@tauri-apps/api/event';
 import { AIConfig, MODEL_PROVIDERS, RemoteModelProvider } from '@/types/ai';
 
 import configApi from './configApi';
@@ -91,39 +93,71 @@ class AIApiService {
 
     // Ensure using complete model name
     const modelName = config.model;
-    // Original model name logged
+    
+    try {
+      // Use streaming if callback function is provided
+      const useStream = !!onChunk;
+      
+      // If using streaming, set up listeners first
+      let unlisten: (() => void) | undefined;
+      let fullResponse = '';
+      let responsePromiseResolve: ((value: string) => void) | undefined;
+      
+      // Create a Promise to track streaming response completion
+      const responsePromise = new Promise<string>((resolve) => {
+        responsePromiseResolve = resolve;
+      });
+      
+      if (useStream) {
+        // Listen for streaming events from Rust backend
+        unlisten = await listen<{ content: string; done: boolean }>('ollama-chat-stream', (event) => {
+          const { content, done } = event.payload;
+          
+          // Call callback function to handle each chunk
+          if (content && onChunk) {
+            onChunk(content);
+          }
+          
+          // Accumulate complete response
+          if (content) {
+            fullResponse += content;
+          }
+          
+          // When done, resolve Promise
+          if (done && responsePromiseResolve) {
+            responsePromiseResolve(fullResponse);
+            // Clean up event listener
+            if (unlisten) unlisten();
+          }
+        });
+      }
+      
+      // Create request body
+      const requestBody = {
+        model: modelName,
+        messages: apiMessages,
+        stream: useStream, // Decide whether to use streaming based on callback presence
+        options: {
+          temperature: config.temperature || 0.7,
+        },
+      };
 
-    // If model name doesn't contain colon, it might be incomplete, need to log warning
-    if (!modelName.includes(':')) {
-      // Model name might be incomplete
-    }
-
-    const requestBody = {
-      model: modelName,
-      messages: apiMessages,
-      stream: !!onChunk,
-      options: {
-        temperature: config.temperature || 0.7,
-      },
-    };
-
-    const baseURL = await this.getBaseURL(config);
-    const url = `${baseURL}/api/chat`;
-
-    const response = await this.makeRequest(
-      url,
-      {
-        method: 'POST',
-        body: JSON.stringify(requestBody),
-      },
-      config
-    );
-
-    if (onChunk) {
-      return await this.handleOllamaStreamResponse(response, onChunk);
-    } else {
-      const data = await response.json();
-      return data.message?.content || '';
+      // Call Rust backend command
+      const result = await invoke<string>('generate_chat_completion', { request: requestBody });
+      
+      // If not using streaming, or streaming encounters issues, use returned result
+      if (!useStream) {
+        if (onChunk) {
+          onChunk(result);
+        }
+        return result;
+      } else {
+        // Wait for streaming to complete
+        return await responsePromise;
+      }
+    } catch (error) {
+      console.error('Failed to generate chat completion:', error);
+      throw new Error(`Chat completion failed: ${error}`);
     }
   }
 

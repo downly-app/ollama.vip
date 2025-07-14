@@ -4,31 +4,31 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-# 系统信息
+# System information
 sysinfo = { version = "0.29.11", features = ["serde"] }
 num_cpus = "1.16.0"
 
-# 序列化
+# Serialization
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0.67"
 
-# GPU 通用信息
+# GPU general information
 gfxinfo = { version = "0.1.2", default-features = false, features = ["gpu_info", "nvidia", "amd"] }
 
 # NVIDIA NVML
 nvml-wrapper = "0.11"
 
-# 条件编译
+# Conditional compilation
 cfg-if = "1.0"
 
-# 错误处理
+# Error handling
 anyhow = "1.0.75"
 
 [features]
-# 默认启用 GPU 信息收集
+# Enable GPU information collection by default
 default = ["gpu_info"]
 
-# gfxinfo 对应的 feature
+# Features corresponding to gfxinfo
 gpu_info = ["gfxinfo/gpu_info"]
 nvidia    = ["gfxinfo/nvidia"]
 amd       = ["gfxinfo/amd"]

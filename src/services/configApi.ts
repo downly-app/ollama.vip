@@ -74,23 +74,12 @@ class ConfigApi {
    */
   async validateHost(host: string): Promise<boolean> {
     try {
-      // Normalize address
-      const normalizedHost = this.normalizeHost(host);
-
-      // Use AbortController to implement timeout
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
-
-      // Try to access /api/version endpoint
-      const response = await fetch(`${normalizedHost}/api/version`, {
-        method: 'GET',
-        signal: controller.signal,
-      });
-
-      clearTimeout(timeoutId);
-      return response.ok;
+      // Use Tauri backend to validate host - this avoids CORS issues
+      // and centralizes the host validation logic in Rust
+      return await invoke<boolean>('validate_host', { host });
     } catch (error) {
       // Host validation failed
+      console.error('Host validation failed:', error);
       return false;
     }
   }

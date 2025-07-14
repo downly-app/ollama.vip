@@ -13,6 +13,8 @@ use system_monitor::{SystemInfo, get_system_info, get_system_info_for_path};
 mod config_manager;
 use config_manager::{get_ollama_host, set_ollama_host, clear_ollama_host, get_config_info, get_ollama_models_path, set_ollama_models_path, clear_ollama_models_path, restart_ollama_service, check_ollama_service_status};
 
+mod ollama_api;
+
 // Window state structure for serialization and deserialization
 #[derive(Serialize, Deserialize, Debug, Clone)]
 struct WindowState {
@@ -446,12 +448,17 @@ fn get_adaptive_window_position(window: &Window, width: u32, height: u32) -> (i3
 fn main() {
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
+            // Window control commands
             minimize_window,
             maximize_window,
             close_window,
             start_dragging,
+            
+            // System monitoring commands
             get_system_resources,
             get_system_resources_for_path,
+            
+            // Config commands
             get_ollama_host,
             set_ollama_host,
             clear_ollama_host,
@@ -461,9 +468,31 @@ fn main() {
             clear_ollama_models_path,
             restart_ollama_service,
             check_ollama_service_status,
-            restart_ollama
+            restart_ollama,
+            
+            // Ollama API commands
+            ollama_api::check_connection,
+            ollama_api::get_version,
+            ollama_api::list_models,
+            ollama_api::list_running_models,
+            ollama_api::show_model_info,
+            ollama_api::copy_model,
+            ollama_api::delete_model,
+            ollama_api::generate_completion,
+            ollama_api::generate_chat,
+            ollama_api::generate_embeddings,
+            ollama_api::create_model,
+            ollama_api::load_model,
+            ollama_api::unload_model,
+            ollama_api::pull_model,
+            ollama_api::push_model,
+            ollama_api::validate_host,
+            ollama_api::generate_chat_completion
         ])
         .setup(|app| {
+            // We can get app_handle, but actually Tauri will automatically inject it
+            // So no need to register additional commands, just ensure app_handle parameter is correctly declared in command function signature
+            
             // Get main window
             let window = app.get_window("main").unwrap();
             

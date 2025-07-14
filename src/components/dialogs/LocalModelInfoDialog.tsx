@@ -16,7 +16,24 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
-import { ModelInfo, ollamaApi } from '@/services/ollamaApi';
+import { ollamaTauriApi } from '@/services/ollamaTauriApi';
+
+// Define interface for model info from Ollama API
+interface OllamaModelInfo {
+  modelfile: string;
+  parameters: string;
+  template: string;
+  details: {
+    parent_model: string;
+    format: string;
+    family: string;
+    families: string[];
+    parameter_size: string;
+    quantization_level: string;
+  };
+  model_info: Record<string, string | number | boolean | null>;
+  capabilities: string[];
+}
 
 interface LocalModelInfoDialogProps {
   modelName: string | null;
@@ -31,7 +48,7 @@ const LocalModelInfoDialog: React.FC<LocalModelInfoDialogProps> = ({
 }) => {
   const { t } = useTranslation();
   const { toast } = useToast();
-  const [modelInfo, setModelInfo] = useState<ModelInfo | null>(null);
+  const [modelInfo, setModelInfo] = useState<OllamaModelInfo | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -39,7 +56,7 @@ const LocalModelInfoDialog: React.FC<LocalModelInfoDialogProps> = ({
       if (!modelName) return;
       setIsLoading(true);
       try {
-        const info = await ollamaApi.showModelInfo(modelName, true);
+        const info = await ollamaTauriApi.showModelInfo(modelName, true);
         setModelInfo(info);
       } catch (error) {
         // Failed to get model info

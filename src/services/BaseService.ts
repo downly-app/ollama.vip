@@ -301,7 +301,7 @@ export class BaseService {
     }
   }
 
-  // GET请求
+  // GET request
   async get<T = any>(
     endpoint: string,
     params?: Record<string, any>,
@@ -315,7 +315,7 @@ export class BaseService {
     });
   }
 
-  // POST请求
+  // POST request
   async post<T = any>(
     endpoint: string,
     data?: any,
@@ -328,7 +328,7 @@ export class BaseService {
     });
   }
 
-  // PUT请求
+  // PUT request
   async put<T = any>(
     endpoint: string,
     data?: any,
@@ -341,7 +341,7 @@ export class BaseService {
     });
   }
 
-  // DELETE请求
+  // DELETE request
   async delete<T = any>(
     endpoint: string,
     config: Omit<RequestConfig, 'method' | 'body'> = {}
@@ -352,7 +352,7 @@ export class BaseService {
     });
   }
 
-  // PATCH请求
+  // PATCH request
   async patch<T = any>(
     endpoint: string,
     data?: any,

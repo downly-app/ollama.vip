@@ -3,7 +3,7 @@ import { createJSONStorage, persist } from 'zustand/middleware';
 
 import { toast } from '@/components/ui/use-toast';
 import i18n from '@/i18n';
-import { ollamaApi } from '@/services/ollamaApi';
+import { ollamaTauriApi } from '@/services/ollamaTauriApi';
 
 export type DownloadStatus =
   | 'downloading'
@@ -93,53 +93,31 @@ export const useDownloadStore = create<DownloadState>()(
         const UPDATE_INTERVAL = 500; // Update UI every 500ms to reduce flickering
 
         try {
-          await ollamaApi.pullModel(
-            modelName,
-            progress => {
-              if (abortController.signal.aborted) {
-                throw new Error('Download aborted by user');
-              }
+          // Using the non-streaming pullModel implementation
+          // Manually handle download progress reporting
+          updateTaskState(modelName, {
+            status: 'downloading',
+            total: modelSize || 0,  // Use the provided model size as estimate
+            completed: 0,
+            progress: 0,
+            speed: 0,
+            remainingTime: Infinity,
+          });
 
-              const now = Date.now();
-              const timeDiff = (now - lastProgressTime) / 1000; // in seconds
-              const bytesDiff = progress.completed - lastCompleted;
+          // Check for abort before starting
+          if (abortController.signal.aborted) {
+            throw new Error('Download aborted by user');
+          }
 
-              let speed = 0;
-              if (timeDiff > 0) {
-                speed = bytesDiff / timeDiff;
-              }
+          // Call the backend API to pull the model
+          await ollamaTauriApi.pullModel(modelName);
 
-              const remainingBytes = progress.total - progress.completed;
-              const remainingTime = speed > 0 ? remainingBytes / speed : Infinity;
-
-              // Only update UI every UPDATE_INTERVAL milliseconds to reduce flickering
-              if (
-                now - lastUpdateTime >= UPDATE_INTERVAL ||
-                progress.completed === progress.total
-              ) {
-                updateTaskState(modelName, {
-                  status: 'downloading',
-                  total: progress.total || 0,
-                  completed: progress.completed || 0,
-                  progress:
-                    (progress.total || 0) > 0
-                      ? ((progress.completed || 0) / (progress.total || 1)) * 100
-                      : 0,
-                  speed,
-                  remainingTime,
-                });
-                lastUpdateTime = now;
-              }
-
-              lastProgressTime = now;
-              lastCompleted = progress.completed;
-            },
-            abortController.signal
-          );
-
+          // Since we don't have streaming progress in the new API,
+          // we'll update to finalizing state directly
           updateTaskState(modelName, { status: 'finalizing', speed: 0 });
 
-          const models = await ollamaApi.listModels();
+          // Get the updated model list to confirm download and get actual size
+          const models = await ollamaTauriApi.listModels();
           const completedModel = models.find(m => m.name === modelName);
           const finalSize = completedModel
             ? completedModel.size
