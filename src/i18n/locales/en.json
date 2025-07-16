@@ -297,6 +297,8 @@
     "systemResources": {
       "title": "System Resource Monitoring",
       "overview": "System Overview",
+      "usageUnavailable": "Usage data unavailable",
+      "refreshSuccess": "Resource data refreshed successfully",
       "resources": {
         "cpu": "CPU",
         "gpu": "GPU",
@@ -517,9 +519,18 @@
     },
     "toast": {
       "downloadCompleteTitle": "Download Complete",
-      "downloadCompleteMessage": "{{modelName}} has been successfully downloaded."
+      "downloadCompleteMessage": "{{modelName}} has been successfully downloaded.",
+      "downloadFailedTitle": "Download Failed",
+      "downloadFailedMessage": "Failed to download {{modelName}}: {{error}}"
     },
-    "actions": "Actions",
+    "actions": {
+      "pause": "Pause Download",
+      "resume": "Resume Download",
+      "retry": "Retry Download",
+      "restart": "Restart Download",
+      "cancel": "Cancel and Clear",
+      "details": "View Model Details"
+    },
     "noDownloadingJobs": "No active download jobs.",
     "noCompletedJobs": "No completed jobs.",
     "clearCompleted": "Clear Completed",

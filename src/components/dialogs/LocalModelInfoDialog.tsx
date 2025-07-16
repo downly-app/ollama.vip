@@ -1,7 +1,8 @@
 import { Code, Cpu, Database, Info, Loader2, Settings } from 'lucide-react';
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { useQuery } from '@tanstack/react-query';
 
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -21,7 +22,7 @@ import { ollamaTauriApi } from '@/services/ollamaTauriApi';
 // Define interface for model info from Ollama API
 interface OllamaModelInfo {
   modelfile: string;
-  parameters: string;
+  parameters?: string;
   template: string;
   details: {
     parent_model: string;
@@ -48,34 +49,24 @@ const LocalModelInfoDialog: React.FC<LocalModelInfoDialogProps> = ({
 }) => {
   const { t } = useTranslation();
   const { toast } = useToast();
-  const [modelInfo, setModelInfo] = useState<OllamaModelInfo | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    const fetchModelInfo = async () => {
-      if (!modelName) return;
-      setIsLoading(true);
-      try {
-        const info = await ollamaTauriApi.showModelInfo(modelName, true);
-        setModelInfo(info);
-      } catch (error) {
-        // Failed to get model info
-        toast({
-          title: t('localModels.getInfoFailed'),
-          description: t('localModels.getInfoFailedMessage', { modelName }),
-          variant: 'destructive',
-          className: 'bg-red-900/80 backdrop-blur-sm border-red-500/20 text-white',
-        });
-        onClose();
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  const {
+    data: modelInfo,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ['modelInfo', modelName],
+    queryFn: () => ollamaTauriApi.showModelInfo(modelName!, true),
+    enabled: !!modelName && open,
+    staleTime: Infinity, // Data is static, no need to refetch unless modelName changes
+    retry: false,
+  });
 
-    if (open) {
-      fetchModelInfo();
-    }
-  }, [modelName, open, t, toast, onClose]);
+  if (isError) {
+    // Optionally handle error state, e.g., by closing the dialog or showing an error message
+    onClose();
+    return null;
+  }
 
   const renderParameters = () => {
     if (!modelInfo?.parameters) return null;

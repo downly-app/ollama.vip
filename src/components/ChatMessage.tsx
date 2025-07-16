@@ -6,21 +6,15 @@ import { useTranslation } from 'react-i18next';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { modelService } from '@/services/modelService';
 import { AIProvider } from '@/types/ai';
+import { ChatMessage as ChatMessageType } from '@/types/chat';
 import { formatTime } from '@/utils/dateUtils';
 
 import { getModelIconUrl, getProviderIconUrl, handleModelIconError } from '../utils/modelUtils';
+import ImagePreviewDialog from './dialogs/ImagePreviewDialog';
 import MarkdownRenderer from './MarkdownRenderer';
 
 interface ChatMessageProps {
-  message: {
-    id: string;
-    content: string;
-    sender: 'user' | 'assistant';
-    timestamp: Date | string | number;
-    type?: 'text' | 'image';
-    imageUrl?: string;
-    model?: string;
-  };
+  message: ChatMessageType;
   onEdit?: (messageId: string, newContent: string) => void;
   onDelete?: (messageId: string) => void;
   onResend?: (messageId: string, content: string) => void;
@@ -34,6 +28,8 @@ const ChatMessage = ({ message, onEdit, onDelete, onResend }: ChatMessageProps) 
   const [showActions, setShowActions] = useState(false);
   const [copied, setCopied] = useState(false);
   const [showThinking, setShowThinking] = useState(false);
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null);
 
   const { thinkingContent, answerContent } = useMemo(() => {
     if (isUser) {
@@ -100,6 +96,11 @@ const ChatMessage = ({ message, onEdit, onDelete, onResend }: ChatMessageProps) 
     setShowActions(false);
   };
 
+  const handleImageClick = (url: string) => {
+    setSelectedImageUrl(url);
+    setIsPreviewOpen(true);
+  };
+
   return (
     <div
       className={`flex ${isUser ? 'justify-end' : 'justify-start'} mb-6 px-2 sm:px-0 group`}
@@ -147,18 +148,39 @@ const ChatMessage = ({ message, onEdit, onDelete, onResend }: ChatMessageProps) 
                 : 'bg-white/8 border border-white/15'
             }`}
           >
-            {/* Message content */}
-            {message.type === 'image' && message.imageUrl ? (
-              <div className='mb-3'>
-                <img
-                  src={message.imageUrl}
-                  alt='Uploaded image'
-                  className='max-w-full h-auto rounded-xl shadow-md'
-                />
-              </div>
-            ) : null}
+            {/* Render images if they exist */}
+            {message.images &&
+              message.images.length > 0 &&
+              (() => {
+                const imageCount = message.images.length;
+                let gridClasses = 'grid-cols-3'; // Default for 5+ images
+                if (imageCount === 1) gridClasses = 'grid-cols-1';
+                if (imageCount === 2) gridClasses = 'grid-cols-2';
+                if (imageCount === 3) gridClasses = 'grid-cols-3';
+                if (imageCount === 4) gridClasses = 'grid-cols-2';
 
-            {/* Edit mode */}
+                return (
+                  <div className='max-w-sm'>
+                    <div className={`mb-3 grid ${gridClasses} gap-2`}>
+                      {message.images.map((img, index) => (
+                        <div key={index} className='aspect-square'>
+                          <img
+                            src={img.startsWith('http') ? img : `data:image/jpeg;base64,${img}`}
+                            alt={`Uploaded image ${index + 1}`}
+                            className='w-full h-full object-cover rounded-xl shadow-md cursor-pointer transition-transform hover:scale-105'
+                            onClick={() =>
+                              handleImageClick(
+                                img.startsWith('http') ? img : `data:image/jpeg;base64,${img}`
+                              )
+                            }
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })()}
+            {/* Message content */}
             {isEditing ? (
               <div className='space-y-3'>
                 <textarea
@@ -203,7 +225,7 @@ const ChatMessage = ({ message, onEdit, onDelete, onResend }: ChatMessageProps) 
                     </CollapsibleContent>
                   </Collapsible>
                 ) : (
-                  <MarkdownRenderer content={answerContent} />
+                  answerContent && <MarkdownRenderer content={answerContent} />
                 )}
               </div>
             )}
@@ -257,6 +279,11 @@ const ChatMessage = ({ message, onEdit, onDelete, onResend }: ChatMessageProps) 
           </div>
         </div>
       </div>
+      <ImagePreviewDialog
+        isOpen={isPreviewOpen}
+        onOpenChange={setIsPreviewOpen}
+        imageUrl={selectedImageUrl}
+      />
     </div>
   );
 };

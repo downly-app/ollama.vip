@@ -90,7 +90,7 @@ export interface OllamaVersion {
 
 export interface OllamaModelInfo {
   modelfile: string;
-  parameters: string;
+  parameters?: string;
   template: string;
   details: {
     parent_model: string;

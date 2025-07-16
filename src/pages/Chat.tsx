@@ -77,20 +77,18 @@ const Chat = () => {
   // Enhanced send message with generation state
   const handleSendMessageWithState = async (
     content: string,
-    type?: 'text' | 'image',
-    imageFile?: File
+    imageFiles?: File[]
   ) => {
     setIsGenerating(true);
 
     // Add breadcrumb for message sending
     addBreadcrumb(`Sending message: ${content.substring(0, 50)}...`, 'user_action', {
       messageLength: content.length,
-      type: type || 'text',
-      hasImage: !!imageFile,
+      imageCount: imageFiles?.length || 0,
     });
 
     try {
-      await handleSendMessage(content, type, imageFile);
+      await handleSendMessage(content, imageFiles);
       addBreadcrumb('Message sent successfully', 'success');
     } catch (error) {
       addBreadcrumb(`Message sending failed: ${error.message}`, 'error');

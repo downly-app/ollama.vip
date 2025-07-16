@@ -53,13 +53,11 @@
     "editMessage": "Modifier le message",
     "deleteMessage": "Supprimer le message",
     "copyMessage": "Copier le message",
-    "regenerateResponse": "Régénérer la réponse",
-    "stopGeneration": "Arrêter la génération",
+
     "messageCount": "{{count}} messages",
     "messageCount_plural": "{{count}} messages",
     "selectModel": "Sélectionner un modèle",
-    "noModelSelected": "Aucun modèle sélectionné",
-    "modelNotAvailable": "Modèle non disponible",
+
     "apiSettings": "Paramètres API",
     "needApiKey": "Clé API requise",
     "needApiKeyDescription": "Veuillez configurer votre clé API dans les paramètres pour utiliser la fonctionnalité de chat.",
@@ -68,12 +66,7 @@
     "messageCopied": "Message copié dans le presse-papiers",
     "messageEdited": "Message modifié",
     "messageDeleted": "Message supprimé",
-    "conversationRenamed": "Conversation renommée",
-    "deleteConversation": "Supprimer la conversation",
-    "renameConversation": "Renommer la conversation",
-    "confirmDeleteConversation": "Êtes-vous sûr de vouloir supprimer cette conversation ?",
-    "conversationName": "Nom de la conversation",
-    "enterConversationName": "Entrez le nom de la conversation",
+
     "apiKeyRequired": "Clé API requise",
     "apiKeyRequiredDescription": "Veuillez configurer votre clé API dans les paramètres pour utiliser cette fonctionnalité",
     "typing": "En cours de frappe...",
@@ -315,6 +308,13 @@
     "fileTooLarge": "Fichier trop volumineux",
     "unknownError": "Erreur inconnue survenue"
   },
+  "error": {
+    "somethingWentWrong": "Quelque chose s'est mal passé",
+    "unknownError": "Une erreur inconnue s'est produite",
+    "tryAgain": "Réessayer",
+    "reloadPage": "Recharger la page",
+    "technicalDetails": "Détails techniques"
+  },
   "tooltips": {
     "refresh": "Actualiser",
     "minimize": "Réduire",
@@ -358,6 +358,24 @@
     "cpuUsage": "Utilisation CPU",
     "diskUsage": "Utilisation disque"
   },
+  "common": {
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "copy": "Copier",
+    "search": "Rechercher",
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "success": "Succès",
+    "confirm": "Confirmer",
+    "close": "Fermer",
+    "settings": "Paramètres",
+    "language": "Langue",
+    "refresh": "Actualiser",
+    "clear": "Effacer",
+    "notSupported": "Non pris en charge"
+  },
   "dashboard": {
     "systemResources": {
       "title": "Surveillance des ressources système",
@@ -385,7 +403,10 @@
       },
       "recentLogs": {
         "title": "Journaux récents",
-        "viewAll": "Voir tous les journaux"
+        "viewAll": "Voir tous les journaux",
+        "allLogs": "Tous les journaux",
+        "allLogsDescription": "Afficher tous les journaux système",
+        "noLogs": "Aucun journal disponible"
       },
       "logLevels": {
         "info": "INFO",
@@ -468,6 +489,8 @@
       "more": "de plus",
       "noActivities": "Aucune activité enregistrée",
       "confirmClear": "Êtes-vous sûr de vouloir effacer tous les enregistrements d'activité ?",
+      "allActivities": "Toutes les activités",
+      "allActivitiesDescription": "Afficher toutes les activités système",
       "timeAgo": {
         "minutesAgo": "Il y a {{count}} minute",
         "minutesAgo_plural": "Il y a {{count}} minutes",
@@ -496,8 +519,6 @@
     "pause": "Pause",
     "resume": "Reprendre",
     "retry": "Réessayer",
-    "cancel": "Annuler",
-    "delete": "Supprimer",
     "fileName": "Nom du fichier",
     "size": "Taille",
     "progress": "Progression",
@@ -513,9 +534,18 @@
     },
     "toast": {
       "downloadCompleteTitle": "Téléchargement terminé",
-      "downloadCompleteMessage": "{{modelName}} a été téléchargé avec succès."
+      "downloadCompleteMessage": "{{modelName}} a été téléchargé avec succès.",
+      "downloadFailedTitle": "Échec du téléchargement",
+      "downloadFailedMessage": "Le téléchargement de {{modelName}} a échoué. Veuillez réessayer."
     },
-    "actions": "Actions",
+    "actions": {
+      "pause": "Pause",
+      "resume": "Reprendre",
+      "retry": "Réessayer",
+      "restart": "Redémarrer",
+      "cancel": "Annuler et effacer",
+      "details": "Voir les détails du modèle"
+    },
     "noDownloadingJobs": "Aucun travail de téléchargement actif.",
     "noCompletedJobs": "Aucun téléchargement terminé",
     "status.pending": "En attente...",

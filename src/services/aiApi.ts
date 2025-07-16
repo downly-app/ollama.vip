@@ -11,6 +11,7 @@ export interface ChatMessage {
   sender: 'user' | 'assistant';
   timestamp: Date;
   model?: string;
+  images?: string[];
 }
 
 export interface StreamResponse {
@@ -71,7 +72,7 @@ class AIApiService {
   async sendMessage(
     messages: ChatMessage[],
     config: AIConfig,
-    onChunk?: (chunk: string) => void
+    onChunk?: (chunk: string, done: boolean) => void
   ): Promise<string> {
     // Choose different API formats based on provider
     if (config.provider === 'ollama') {
@@ -84,11 +85,12 @@ class AIApiService {
   private async sendOllamaMessage(
     messages: ChatMessage[],
     config: AIConfig,
-    onChunk?: (chunk: string) => void
+    onChunk?: (chunk: string, done: boolean) => void
   ): Promise<string> {
     const apiMessages = messages.map(msg => ({
       role: msg.sender === 'user' ? 'user' : 'assistant',
       content: msg.content,
+      images: msg.images || [],
     }));
 
     // Ensure using complete model name
@@ -115,7 +117,7 @@ class AIApiService {
           
           // Call callback function to handle each chunk
           if (content && onChunk) {
-            onChunk(content);
+            onChunk(content, done);
           }
           
           // Accumulate complete response
@@ -148,7 +150,7 @@ class AIApiService {
       // If not using streaming, or streaming encounters issues, use returned result
       if (!useStream) {
         if (onChunk) {
-          onChunk(result);
+          onChunk(result, true);
         }
         return result;
       } else {
@@ -164,12 +166,25 @@ class AIApiService {
   private async sendOpenAIMessage(
     messages: ChatMessage[],
     config: AIConfig,
-    onChunk?: (chunk: string) => void
+    onChunk?: (chunk: string, done: boolean) => void
   ): Promise<string> {
-    const apiMessages = messages.map(msg => ({
-      role: msg.sender === 'user' ? 'user' : 'assistant',
-      content: msg.content,
-    }));
+    const apiMessages = messages.map(msg => {
+      const content: any[] = [{ type: 'text', text: msg.content }];
+      if (msg.images && msg.images.length > 0) {
+        msg.images.forEach(img => {
+          content.push({
+            type: 'image_url',
+            image_url: {
+              url: `data:image/jpeg;base64,${img}`,
+            },
+          });
+        });
+      }
+      return {
+        role: msg.sender === 'user' ? 'user' : 'assistant',
+        content: content,
+      };
+    });
 
     const requestBody = {
       model: config.model,
@@ -202,7 +217,7 @@ class AIApiService {
 
   private async handleOllamaStreamResponse(
     response: Response,
-    onChunk: (chunk: string) => void
+    onChunk: (chunk: string, done: boolean) => void
   ): Promise<string> {
     const reader = response.body?.getReader();
     if (!reader) {
@@ -215,7 +230,10 @@ class AIApiService {
     try {
       while (true) {
         const { done, value } = await reader.read();
-        if (done) break;
+        if (done) {
+          onChunk('', true);
+          break;
+        }
 
         const chunk = decoder.decode(value, { stream: true });
         const lines = chunk.split('\n').filter(line => line.trim());
@@ -224,11 +242,12 @@ class AIApiService {
           try {
             const parsed = JSON.parse(line);
             const content = parsed.message?.content || '';
+            const isDone = parsed.done;
             if (content) {
               fullContent += content;
-              onChunk(content);
+              onChunk(content, isDone);
             }
-            if (parsed.done) {
+            if (isDone) {
               return fullContent;
             }
           } catch (e) {
@@ -245,7 +264,7 @@ class AIApiService {
 
   private async handleOpenAIStreamResponse(
     response: Response,
-    onChunk: (chunk: string) => void
+    onChunk: (chunk: string, done: boolean) => void
   ): Promise<string> {
     const reader = response.body?.getReader();
     if (!reader) {
@@ -258,27 +277,30 @@ class AIApiService {
     try {
       while (true) {
         const { done, value } = await reader.read();
-        if (done) break;
+        if (done) {
+          onChunk('', true);
+          break;
+        }
 
-        const chunk = decoder.decode(value, { stream: true });
+        const chunk = decoder.decode(value);
         const lines = chunk.split('\n');
 
         for (const line of lines) {
           if (line.startsWith('data: ')) {
-            const data = line.slice(6);
-            if (data === '[DONE]') {
+            const data = line.substring(6);
+            if (data.trim() === '[DONE]') {
+              onChunk('', true);
               return fullContent;
             }
-
             try {
               const parsed = JSON.parse(data);
-              const content = parsed.choices?.[0]?.delta?.content || '';
+              const content = parsed.choices[0]?.delta?.content || '';
               if (content) {
                 fullContent += content;
-                onChunk(content);
+                onChunk(content, false);
               }
             } catch (e) {
-              // Ignore parsing errors
+              // Ignore JSON parsing errors
             }
           }
         }

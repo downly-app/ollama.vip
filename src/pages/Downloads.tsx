@@ -9,6 +9,9 @@ import {
   RotateCw,
   Trash2,
   XCircle,
+  Loader2,
+  X,
+  Download,
 } from 'lucide-react';
 
 import React, { useMemo, useState } from 'react';
@@ -21,11 +24,17 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { DownloadStatus, DownloadTask, useDownloadStore } from '@/stores/downloadStore';
+import { DownloadTask, useDownloadStore } from '@/stores/downloadStore';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 
 const Downloads = () => {
   const { t } = useTranslation();
-  const { tasks, pauseDownload, retryDownload, clearTask, clearAllCompleted } = useDownloadStore();
+  const { tasks, pauseDownload, retryDownload, restartDownload, clearTask, clearAllCompleted } = useDownloadStore();
   const [infoModelName, setInfoModelName] = useState<string | null>(null);
 
   const downloadingTasks = useMemo(
@@ -55,14 +64,17 @@ const Downloads = () => {
     return new Date(timestamp).toLocaleString();
   };
 
-  const StatusIcon = ({ status }: { status: DownloadStatus }) => {
-    switch (status) {
+  const renderStatusIcon = (task: DownloadTask) => {
+    switch (task.status) {
+      case 'downloading':
+      case 'finalizing':
+        return <Loader2 className='h-4 w-4 animate-spin' />;
+      case 'paused':
+        return <Pause className='h-4 w-4' />;
       case 'completed':
         return <CheckCircle className='w-5 h-5 text-green-400' />;
       case 'error':
         return <XCircle className='w-5 h-5 text-red-400' />;
-      case 'paused':
-        return <Pause className='w-5 h-5 text-yellow-400' />;
       default:
         return <Hourglass className='w-5 h-5 text-sky-400' />;
     }
@@ -71,38 +83,36 @@ const Downloads = () => {
   const renderTaskActions = (task: DownloadTask) => {
     switch (task.status) {
       case 'downloading':
-      case 'pending':
+      case 'finalizing':
         return (
-          <Button
-            size='icon'
-            variant='ghost'
-            onClick={() => pauseDownload(task.modelName)}
-            className='hover:bg-white/10 text-white/70 hover:text-white'
-          >
-            <Pause className='w-4 h-4' />
-          </Button>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant='ghost' size='icon' className='hover:bg-white/10 text-white/70 hover:text-white w-8 h-8' onClick={() => pauseDownload(task.modelName)}>
+                  <Pause className='w-4 h-4' />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>{t('downloads.actions.pause')}</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         );
       case 'paused':
-        return (
-          <Button
-            size='icon'
-            variant='ghost'
-            onClick={() => retryDownload(task.modelName)}
-            className='hover:bg-white/10 text-white/70 hover:text-white'
-          >
-            <Play className='w-4 h-4' />
-          </Button>
-        );
       case 'error':
         return (
-          <Button
-            size='icon'
-            variant='ghost'
-            onClick={() => retryDownload(task.modelName)}
-            className='hover:bg-white/10 text-white/70 hover:text-white'
-          >
-            <RotateCw className='w-4 h-4' />
-          </Button>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant='ghost' size='icon' className='hover:bg-white/10 text-white/70 hover:text-white w-8 h-8' onClick={() => retryDownload(task.modelName)}>
+                  <Play className='w-4 h-4' />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>{t(task.status === 'paused' ? 'downloads.actions.resume' : 'downloads.actions.retry')}</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         );
       default:
         return null;
@@ -153,8 +163,14 @@ const Downloads = () => {
                           </span>
                         )}
                         <span className='flex items-center gap-1'>
-                          <StatusIcon status={task.status} />
-                          {t(`downloads.status.${task.status}`, { defaultValue: task.status })}
+                          <div className='w-5 h-5'>
+                            {renderStatusIcon(task)}
+                          </div>
+                          <div className='flex-1'>
+                            <p className='text-sm font-medium leading-none truncate max-w-[200px] md:max-w-xs'>
+                              {t(`downloads.status.${task.status}`, { defaultValue: task.status })}
+                            </p>
+                          </div>
                         </span>
                       </>
                     )}
@@ -164,24 +180,56 @@ const Downloads = () => {
 
               <div className='flex items-center gap-2 shrink-0'>
                 {isCompletedList && (
-                  <Button
-                    size='icon'
-                    variant='ghost'
-                    onClick={() => setInfoModelName(task.modelName)}
-                    className='hover:bg-white/10 text-white/70 hover:text-white'
-                  >
-                    <Info className='w-4 h-4' />
-                  </Button>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          size='icon'
+                          variant='ghost'
+                          onClick={() => setInfoModelName(task.modelName)}
+                          className='hover:bg-white/10 text-white/70 hover:text-white'
+                        >
+                          <Info className='w-4 h-4' />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>{t('downloads.actions.details')}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
                 )}
                 {renderTaskActions(task)}
-                <Button
-                  size='icon'
-                  variant='ghost'
-                  onClick={() => clearTask(task.modelName)}
-                  className='hover:bg-white/10 text-white/70 hover:text-white'
-                >
-                  <Trash2 className='w-4 h-4' />
-                </Button>
+                {!isCompletedList && (
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant='ghost'
+                          size='icon'
+                          className='hover:bg-white/10 text-white/70 hover:text-white w-8 h-8'
+                          onClick={() => restartDownload(task.modelName)}
+                        >
+                          <RotateCw className='w-4 h-4' />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>{t('downloads.actions.restart')}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                )}
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button variant='ghost' size='icon' className='hover:bg-white/10 text-white/70 hover:text-white w-8 h-8' onClick={() => clearTask(task.modelName)}>
+                        <X className='w-4 h-4' />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>{t('downloads.actions.cancel')}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               </div>
             </div>
             {!isCompletedList && task.status !== 'pending' && (
@@ -222,12 +270,14 @@ const Downloads = () => {
                   value='downloading'
                   className='data-[state=active]:bg-white/10 data-[state=active]:text-white text-white/70 rounded-md'
                 >
+                  <Download className='w-4 h-4 mr-2' />
                   {t('downloads.downloading')} ({downloadingTasks.length})
                 </TabsTrigger>
                 <TabsTrigger
                   value='completed'
                   className='data-[state=active]:bg-white/10 data-[state=active]:text-white text-white/70 rounded-md'
                 >
+                  <CheckCircle className='w-4 h-4 mr-2' />
                   {t('downloads.completed')} ({completedTasks.length})
                 </TabsTrigger>
               </TabsList>

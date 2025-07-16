@@ -3,15 +3,132 @@ use anyhow::Result;
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 use std::time::Duration;
+use std::sync::Mutex;
+use std::collections::HashMap;
+use tokio::sync::oneshot;
 use futures_util::StreamExt;
 use crate::config_manager::get_ollama_host;
 use tauri::{command, Manager};
+use lazy_static::lazy_static;
+use std::fs;
+use std::path::PathBuf;
 
 // Response type for streaming data
 #[derive(Debug, Serialize, Clone)]
 pub struct StreamResponse {
     pub content: String,
     pub done: bool,
+}
+
+// Pull model streaming response type
+#[derive(Debug, Serialize, Clone)]
+pub struct PullModelResponse {
+    pub status: String,
+    pub digest: Option<String>,
+    pub total: Option<i64>,
+    pub completed: Option<i64>,
+}
+
+// Structure to store download state for pause/resume
+struct DownloadState {
+    cancel_tx: oneshot::Sender<()>,
+    completed_bytes: i64,
+}
+
+// Persistent download progress structure
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct DownloadProgress {
+    model_name: String,
+    channel_id: String,
+    completed_bytes: i64,
+    total_bytes: i64,
+    last_updated: u64, // timestamp
+}
+
+lazy_static! {
+    // Global map to store active downloads with their state
+    static ref ACTIVE_DOWNLOADS: Mutex<HashMap<String, DownloadState>> = Mutex::new(HashMap::new());
+    // Global map to store persistent download progress
+    static ref DOWNLOAD_PROGRESS: Mutex<HashMap<String, DownloadProgress>> = Mutex::new(HashMap::new());
+}
+
+// Helper functions for persistent storage
+fn get_progress_file_path() -> PathBuf {
+    let app_data_dir = dirs::config_dir()
+        .unwrap_or_else(|| PathBuf::from("."))
+        .join("ollama-pro");
+    
+    // Ensure directory exists
+    if !app_data_dir.exists() {
+        let _ = fs::create_dir_all(&app_data_dir);
+    }
+    
+    app_data_dir.join("download_progress.json")
+}
+
+fn save_download_progress(channel_id: &str, progress: &DownloadProgress) {
+    let progress_file = get_progress_file_path();
+    
+    // Load existing progress data
+    let mut all_progress: HashMap<String, DownloadProgress> = if progress_file.exists() {
+        fs::read_to_string(&progress_file)
+            .ok()
+            .and_then(|content| serde_json::from_str(&content).ok())
+            .unwrap_or_default()
+    } else {
+        HashMap::new()
+    };
+    
+    // Update progress for this channel
+    all_progress.insert(channel_id.to_string(), progress.clone());
+    
+    // Save back to file
+    if let Ok(json_content) = serde_json::to_string_pretty(&all_progress) {
+        let _ = fs::write(&progress_file, json_content);
+        println!("[PROGRESS] Save download progress to file: channel_id={}, completed_bytes={}", 
+                 channel_id, progress.completed_bytes);
+    }
+}
+
+fn load_download_progress(channel_id: &str) -> Option<DownloadProgress> {
+    let progress_file = get_progress_file_path();
+    
+    if !progress_file.exists() {
+        return None;
+    }
+    
+    let all_progress: HashMap<String, DownloadProgress> = fs::read_to_string(&progress_file)
+        .ok()
+        .and_then(|content| serde_json::from_str(&content).ok())
+        .unwrap_or_default();
+    
+    let progress = all_progress.get(channel_id).cloned();
+    if let Some(ref p) = progress {
+        println!("[PROGRESS] Load download progress from file: channel_id={}, completed_bytes={}", 
+                 channel_id, p.completed_bytes);
+    }
+    
+    progress
+}
+
+fn clear_download_progress(channel_id: &str) {
+    let progress_file = get_progress_file_path();
+    
+    if !progress_file.exists() {
+        return;
+    }
+    
+    let mut all_progress: HashMap<String, DownloadProgress> = fs::read_to_string(&progress_file)
+        .ok()
+        .and_then(|content| serde_json::from_str(&content).ok())
+        .unwrap_or_default();
+    
+    all_progress.remove(channel_id);
+    
+    if let Ok(json_content) = serde_json::to_string_pretty(&all_progress) {
+        let _ = fs::write(&progress_file, json_content);
+        println!("[PROGRESS] Clear download progress file: channel_id={}", channel_id);
+    }
 }
 
 // ---- Model Types ----
@@ -64,7 +181,7 @@ pub struct OllamaVersion {
 #[derive(Debug, Serialize, Deserialize)]
 pub struct ModelInfo {
     pub modelfile: String,
-    pub parameters: String,
+    pub parameters: Option<String>,
     pub template: String,
     pub details: ModelDetails,
     #[serde(rename = "model_info")]
@@ -451,27 +568,272 @@ pub async fn unload_model(model_name: String) -> Result<bool, String> {
 }
 
 #[command]
-pub async fn pull_model(model_name: String) -> Result<String, String> {
-    let base_url = get_ollama_host().map_err(|e| e.to_string())?;
+pub async fn pull_model(model_name: String, channel_id: String, app_handle: tauri::AppHandle) -> Result<String, String> {
+    // More detailed logging to track each incoming request
+    println!("=====================================");
+    println!("[PULL_MODEL] Received download request: model={}, channel_id={}, time={:?}", 
+             model_name, channel_id, std::time::SystemTime::now());
+    println!("=====================================");
     
+    let base_url = get_ollama_host().map_err(|e| e.to_string())?;
+    println!("[PULL_MODEL] Using Ollama server address: {}", base_url);
+    
+    // Check for any existing download state (previous progress)
+    // First check active downloads, then check persistent storage
+    let completed_bytes = {
+        let active_downloads = ACTIVE_DOWNLOADS.lock().unwrap();
+        if let Some(download_state) = active_downloads.get(&channel_id) {
+            println!("[DOWNLOAD] Found active download state: model={}, channel_id={}, completed_bytes={}", 
+                     model_name, channel_id, download_state.completed_bytes);
+            Some(download_state.completed_bytes)
+        } else {
+            // Check persistent storage for previous download progress
+            if let Some(progress) = load_download_progress(&channel_id) {
+                println!("[DOWNLOAD] Restore download progress from persistent storage: model={}, channel_id={}, completed_bytes={}", 
+                         model_name, channel_id, progress.completed_bytes);
+                Some(progress.completed_bytes)
+            } else {
+                println!("[DOWNLOAD] No existing download state found, starting fresh download: model={}, channel_id={}", 
+                         model_name, channel_id);
+                None
+            }
+        }
+    };
+    
+    // Create a oneshot channel for cancellation
+    let (cancel_tx, mut cancel_rx) = oneshot::channel::<()>();
+    
+    // Always use streaming for model pulls to get progress updates
     let payload = json!({
-        "name": model_name,
-        "stream": false
+        "name": model_name.clone(),
+        "stream": true
     });
     
+    // Store the new download state
+    {
+        let mut active_downloads = ACTIVE_DOWNLOADS.lock().unwrap();
+        active_downloads.insert(channel_id.clone(), DownloadState {
+            cancel_tx,
+            completed_bytes: completed_bytes.unwrap_or(0),
+        });
+    }
+
+    // Create a separate task for the actual download
     let client = get_client();
     let url = format!("{}/api/pull", base_url);
     
+    // Note: Ollama API does not support HTTP Range requests for resumable downloads
+    // We rely on Ollama's own incremental download mechanism
+    if let Some(bytes) = completed_bytes {
+        if bytes > 0 {
+            println!("[DOWNLOAD] Detected previous download progress: model={}, channel_id={}, completed_bytes={}", 
+                     model_name, channel_id, bytes);
+            println!("[DOWNLOAD] Note: Ollama will automatically detect downloaded parts and continue");
+        }
+    }
+    
+    // Send request to the Ollama server (without Range headers)
     let response = client.post(&url)
         .json(&payload)
+        .timeout(Duration::from_secs(600)) // Longer timeout for model downloads
         .send().await
         .map_err(|e| format!("Failed to pull model: {}", e))?;
+    
+    // Log the response status and headers for debugging
+    println!("[DOWNLOAD] Server response status: model={}, channel_id={}, status={}", 
+             model_name, channel_id, response.status());
+    println!("[DOWNLOAD] Server response headers: model={}, channel_id={}, headers={:?}", 
+             model_name, channel_id, response.headers());
+    
+    // Check if server supports Range requests
+    if completed_bytes.is_some() && completed_bytes.unwrap() > 0 {
+        if response.status() == StatusCode::PARTIAL_CONTENT {
+            println!("[DOWNLOAD] Server supports resumable downloads! model={}, channel_id={}", 
+                     model_name, channel_id);
+        } else {
+            println!("[DOWNLOAD] Warning: Server may not support resumable downloads, status code={}, model={}, channel_id={}", 
+                     response.status(), model_name, channel_id);
+        }
+    }
         
     if !response.status().is_success() {
+        // Clean up our download state
+        let mut active_downloads = ACTIVE_DOWNLOADS.lock().unwrap();
+        active_downloads.remove(&channel_id);
+        
         return Err(format!("HTTP error: {}", response.status()));
     }
     
-    Ok("Model pulled successfully".to_string())
+    // Use unique event name provided by frontend
+    let event_name = channel_id.clone();
+    
+    // Create a more concise stream processing logic, similar to the frontend implementation
+    let mut buffer = String::new();
+    
+    // Use byte stream reading method
+    let mut stream = response.bytes_stream();
+    
+    // Process response stream, parse each line of JSON and send to frontend
+    loop {
+        // Efficiently check for cancellation signal
+        if cancel_rx.try_recv().is_ok() {
+            println!("[DOWNLOAD] Received cancellation signal, stopping download: model={}, channel_id={}", 
+                     model_name, channel_id);
+            
+            // Save the completed bytes for future resume
+            let active_downloads = ACTIVE_DOWNLOADS.lock().unwrap();
+            if let Some(download_state) = active_downloads.get(&channel_id) {
+                println!("[DOWNLOAD] Save download progress state: model={}, channel_id={}, completed_bytes={}", 
+                          model_name, channel_id, download_state.completed_bytes);
+                // We don't remove the entry to keep track of progress
+            } else {
+                println!("[DOWNLOAD] Warning: Download state not found during cancellation: model={}, channel_id={}", 
+                         model_name, channel_id);
+            }
+            
+            return Ok("Download cancelled by user".to_string());
+        }
+        
+        // Use timeout mechanism to get next data chunk, ensuring timely response to cancellation requests
+        let chunk_result = match tokio::time::timeout(
+            std::time::Duration::from_millis(100), 
+            stream.next()
+        ).await {
+            Ok(Some(result)) => result,
+            Ok(None) => break, // End of stream
+            Err(_) => continue, // Timeout, check cancellation again
+        };
+        
+        match chunk_result {
+            Ok(bytes) => {
+                // Convert bytes to string and add to buffer
+                if let Ok(chunk_str) = String::from_utf8(bytes.to_vec()) {
+                    buffer.push_str(&chunk_str);
+                    
+                    // Process buffer line by line, similar to frontend implementation
+                    let lines: Vec<&str> = buffer.split('\n').collect();
+                    if lines.len() > 1 {
+                        // Process all lines except the last one (which may be incomplete)
+                        for line in &lines[0..lines.len()-1] {
+                            if line.trim().is_empty() {
+                                continue;
+                            }
+                            
+                            // Parse JSON response
+                            if let Ok(json_value) = serde_json::from_str::<Value>(line) {
+                                let status = json_value["status"].as_str().unwrap_or("unknown").to_string();
+                                
+                                // Extract key information
+                                let digest = json_value["digest"].as_str().map(|s| s.to_string());
+                                let total = json_value["total"].as_i64();
+                                let completed = json_value["completed"].as_i64();
+                                
+                                // Update completed bytes in download state
+                                if let Some(completed_value) = completed {
+                                    let mut active_downloads = ACTIVE_DOWNLOADS.lock().unwrap();
+                                    if let Some(download_state) = active_downloads.get_mut(&channel_id) {
+                                        // Only print logs when there are significant changes to avoid too many logs
+                                        if completed_value % 10_000_000 == 0 || 
+                                           (download_state.completed_bytes / 10_000_000) != (completed_value / 10_000_000) {
+                                            println!("[DOWNLOAD] Update download progress: model={}, channel_id={}, completed_bytes={}, total={}", 
+                                                     model_name, channel_id, completed_value, 
+                                                     total.unwrap_or(-1));
+                                        }
+                                        download_state.completed_bytes = completed_value;
+                                    }
+                                }
+                                
+                                // Create response object
+                                let pull_response = PullModelResponse {
+                                    status: status.clone(),
+                                    digest,
+                                    total,
+                                    completed,
+                                };
+                                
+                                // Send progress events to frontend
+                                let _ = app_handle.emit_all(&event_name, pull_response);
+                                
+                                // If status is "success", download is complete
+                                if status == "success" {
+                                    println!("Model {} download completed successfully", model_name);
+                                    // Remove from active downloads
+                                    let mut active_downloads = ACTIVE_DOWNLOADS.lock().unwrap();
+                                    active_downloads.remove(&channel_id);
+                                    
+                                    return Ok("Model download completed successfully".to_string());
+                                }
+                            } else {
+                                // Tolerant handling of JSON parsing errors - consistent with frontend implementation
+                                println!("Failed to parse JSON line: {}", line);
+                            }
+                        }
+                        
+                        // Keep the last line which may be incomplete
+                        buffer = lines[lines.len() - 1].to_string();
+                    }
+                }
+            }
+            Err(err) => {
+                // Handle errors during stream reading
+                println!("Error reading stream for model {}: {}", model_name, err);
+                
+                // Keep the download state with current progress
+                return Err(format!("Failed to read model data: {}", err));
+            }
+        }
+    }
+    
+    // If we reached the end of the stream but didn't receive a success status
+    println!("Model {} download stream ended without explicit success message", model_name);
+    
+    // On normal stream end, clean up resources
+    let mut active_downloads = ACTIVE_DOWNLOADS.lock().unwrap();
+    if let Some(download_state) = active_downloads.get(&channel_id) {
+        println!("Stream ended normally, completed bytes: {}", download_state.completed_bytes);
+    }
+    
+    // Remove download state as it's completed
+    active_downloads.remove(&channel_id);
+    
+    // We assume download completed successfully (consistent with frontend's tolerant approach)
+    Ok("Model download completed".to_string())
+}
+
+#[command]
+pub async fn cancel_pull(model_name: String, channel_id: String, cleanup: bool) -> Result<bool, String> {
+    println!("[CANCEL] Start cancelling download: model={}, channel_id={}, cleanup={}", model_name, channel_id, cleanup);
+    
+    let mut active_downloads = ACTIVE_DOWNLOADS.lock().unwrap();
+    let state = active_downloads.remove(&channel_id);
+
+    let mut result = false;
+    if let Some(download_state) = state {
+        // Save the last known progress
+        save_download_progress(&channel_id, &DownloadProgress {
+                model_name: model_name.clone(),
+                channel_id: channel_id.clone(),
+            completed_bytes: download_state.completed_bytes,
+            total_bytes: 0, // Total is not known here, might need to update this logic if total is needed
+            last_updated: std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap().as_secs(),
+        });
+        
+        if download_state.cancel_tx.send(()).is_ok() {
+            println!("[CANCEL] Cancel signal sent successfully: model={}, channel_id={}", model_name, channel_id);
+            result = true;
+    } else {
+            println!("[CANCEL] Failed to send cancel signal (receiver closed): model={}, channel_id={}", model_name, channel_id);
+        }
+    } else {
+        println!("[CANCEL] No active download task found: model={}, channel_id={}", model_name, channel_id);
+    }
+
+    if cleanup {
+        println!("[CLEANUP] Clean up download progress: channel_id={}", channel_id);
+        clear_download_progress(&channel_id);
+    }
+
+    Ok(result)
 }
 
 #[command]
@@ -653,5 +1015,46 @@ pub async fn generate_chat_completion(request: ChatRequest, app_handle: tauri::A
             .map_err(|e| format!("Failed to parse response: {}", e))?;
             
         Ok(chat_response.message.content)
+    }
+}
+
+#[command]
+#[allow(dead_code)]
+pub async fn pause_pull(channel_id: String) -> Result<bool, String> {
+    println!("[DOWNLOAD] Attempting to pause download for channel_id: {}", channel_id);
+    let mut active_downloads = ACTIVE_DOWNLOADS.lock().unwrap();
+    if let Some(state) = active_downloads.remove(&channel_id) {
+        let _ = state.cancel_tx.send(());
+        println!("[DOWNLOAD] Paused download for channel_id: {}", channel_id);
+        Ok(true)
+    } else {
+        eprintln!("[DOWNLOAD] No active download found for channel_id to pause: {}", channel_id);
+        Ok(false)
+    }
+}
+
+#[command]
+#[allow(dead_code)]
+pub async fn resume_pull(model_name: String, channel_id: String, app_handle: tauri::AppHandle) -> Result<String, String> {
+    println!("[DOWNLOAD] Attempting to resume download for model: {}, channel_id: {}", model_name, channel_id);
+    // Directly call pull_model, it will handle resume logic
+    pull_model(model_name, channel_id, app_handle).await
+}
+
+#[command]
+#[allow(dead_code)]
+pub async fn check_download_status(channel_id: String) -> Result<Option<DownloadProgress>, String> {
+    let progress_map = DOWNLOAD_PROGRESS.lock().unwrap();
+    if let Some(progress) = progress_map.get(&channel_id) {
+        // Additional check: is it still actively downloading?
+        let active_downloads = ACTIVE_DOWNLOADS.lock().unwrap();
+        if active_downloads.contains_key(&channel_id) {
+            Ok(Some(progress.clone()))
+        } else {
+            // If not in active_downloads, it might be paused or finished
+            Ok(Some(progress.clone()))
+        }
+    } else {
+        Ok(None)
     }
 }

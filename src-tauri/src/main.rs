@@ -52,6 +52,7 @@ fn is_ollama_available() -> bool {
 }
 
 // Check if specified command is available
+#[cfg(not(windows))]
 fn is_command_available(command: &str) -> bool {
     use std::process::Command;
     
@@ -485,6 +486,7 @@ fn main() {
             ollama_api::load_model,
             ollama_api::unload_model,
             ollama_api::pull_model,
+            ollama_api::cancel_pull,
             ollama_api::push_model,
             ollama_api::validate_host,
             ollama_api::generate_chat_completion

@@ -176,16 +176,12 @@ const ActivityLogAndActions = () => {
       unsubscribe();
       clearInterval(interval);
     };
-  }, []);
+  }, [activityLogger]);
 
   const handleClearActivities = () => {
     if (confirm(t('dashboard.activityLog.confirmClear'))) {
       activityLogger.clearActivities();
     }
-  };
-
-  const handleRefreshActivities = () => {
-    setActivities(activityLogger.getActivities());
   };
 
   const getActivityColor = (type: Activity['type']) => {
@@ -228,14 +224,6 @@ const ActivityLogAndActions = () => {
               {t('dashboard.activityLog.title')}
             </div>
             <div className='flex items-center space-x-1'>
-              <Button
-                size='sm'
-                variant='ghost'
-                onClick={handleRefreshActivities}
-                className='text-white/70 hover:text-white hover:bg-white/10'
-              >
-                <RefreshCw size={14} />
-              </Button>
               <Button
                 size='sm'
                 variant='ghost'
@@ -323,7 +311,7 @@ const ActivityLogAndActions = () => {
           ...activity,
           level: activity.type,
         }))}
-        onRefresh={handleRefreshActivities}
+        onRefresh={() => {}} // No refresh button in header, so no refresh action
         onClear={handleClearActivities}
         icon={Zap}
       />

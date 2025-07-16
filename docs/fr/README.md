@@ -4,7 +4,8 @@
 </div>
 
 **🌍 Versions multilingues :**
-[English](../../README.md) | [中文](../zh/README.md) | [日本語](../ja/README.md) | [한국어](../ko/README.md)
+
+[English](../../README.md) | [中文](../zh/README.md) | [日本語](../ja/README.md) | [한국어](../ko/README.md) | Français
 
 
 [![GitHub stars](https://img.shields.io/github/stars/downly-app/ollama.vip)](https://github.com/downly-app/ollama.vip/stargazers)
@@ -27,18 +28,22 @@ Application de bureau moderne et multiplateforme pour interagir avec les modèle
 
 ### 🤖 Chat IA
 - **Support multi-modèles** : Prise en charge des modèles OpenAI et DeepSeek
-- **Conversation en temps réel** : Expérience de chat en streaming fluide
-- **Gestion des messages** : Édition, suppression, copie et renvoi de messages
+- **Conversation en temps réel** : Expérience de chat fluide en streaming
+- **Gestion des messages** : Éditer, supprimer, copier et renvoyer des messages
 - **Historique des conversations** : Historique de chat persistant avec fonction de recherche
-- **Rendu Markdown** : Support complet du surlignage de code et du formatage
+- **Rendu Markdown** : Prise en charge complète de la coloration syntaxique et du formatage du code
 
 **Interface de chat IA :**
 
 ![AI Chat](../../images/image-20250710231733710.png)
 
-*Interface de chat propre et intuitive avec historique des messages, support markdown et réponses en streaming en temps réel.*
+*Interface de chat propre et intuitive avec historique des messages, prise en charge de Markdown et réponses en streaming en temps réel.*
 
-**Configuration de l'API de modèles tiers :**
+![Dialogue image et texte IA](../../images/image-20250716000309954.png)
+
+*Mélangez harmonieusement texte et images pour des conversations plus riches et contextuelles.*
+
+**Configuration de l'API du modèle tiers :**
 
 ![Third-party model API configuration](../../images/image-20250710232528111.png)
 
@@ -110,13 +115,21 @@ Application de bureau moderne et multiplateforme pour interagir avec les modèle
 - **Installateur NSIS** : `ollama-pro_x.x.x_x64-setup.exe`
 
 #### macOS
-- **Package DMG** : `ollama-pro_x.x.x_x64.dmg` (Intel)
-- **Package DMG** : `ollama-pro_x.x.x_aarch64.dmg` (Apple Silicon)
-- **Bundle App** : `ollama-pro.app.tar.gz`
+- **Paquet DMG** : `ollama-pro_x.x.x_x64.dmg` (Intel)
+- **Paquet DMG** : `ollama-pro_x.x.x_aarch64.dmg` (Apple Silicon)
+- **Bundle d'application** : `ollama-pro.app.tar.gz`
+
+> [!WARNING]
+> **Note spéciale pour macOS :**
+> Si vous rencontrez une erreur « le fichier est endommagé » en essayant d'ouvrir l'application, veuillez exécuter la commande suivante dans votre terminal. Cela est dû au fait que l'application n'a pas été notariée par Apple.
+> ```bash
+> sudo xattr -rd com.apple.quarantine /Applications/ollama-pro.app
+> ```
+> *Remplacez `/Applications/ollama-pro.app` par le chemin réel de l'application si vous l'avez installée ailleurs.*
 
 #### Linux
-- **Package Debian** : `ollama-pro_x.x.x_amd64.deb` (Ubuntu/Debian)
-- **Package RPM** : `ollama-pro_x.x.x_x86_64.rpm` (RHEL/Fedora/SUSE)
+- **Paquet Debian** : `ollama-pro_x.x.x_amd64.deb` (Ubuntu/Debian)
+- **Paquet RPM** : `ollama-pro_x.x.x_x86_64.rpm` (RHEL/Fedora/SUSE)
 - **AppImage** : `ollama-pro_x.x.x_amd64.AppImage` (universel)
 
 ### Compilation depuis les sources
@@ -339,7 +352,7 @@ TAURI_DEBUG=true npm run tauri dev
 
 ## 🤝 Contribution
 
-Les contributions sont les bienvenues ! Veuillez consulter notre [Guide de contribution](docs/CONTRIBUTING.md) pour plus de détails.
+Les contributions sont les bienvenues ! Veuillez consulter notre [Guide de contribution](../../docs/en/CONTRIBUTING.md) pour plus de détails.
 
 ### Flux de travail de développement
 1. Forker le dépôt
@@ -364,7 +377,7 @@ Pour un usage non commercial (personnel, éducatif, recherche), ce logiciel est 
 ### Utilisation commerciale
 L'utilisation commerciale nécessite une licence commerciale séparée. Contactez [yzmm@outlook.com] pour les licences commerciales.
 
-Voir le fichier [LICENSE](LICENSE) pour plus de détails.
+Voir le fichier [LICENSE](../../LICENSE) pour plus de détails.
 
 ## 🙏 Remerciements
 

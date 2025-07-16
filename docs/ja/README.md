@@ -4,7 +4,8 @@
 </div>
 
 **🌍 多言語版：**
-[English](../../README.md) | [中文](../zh/README.md) | [한국어](../ko/README.md) | [Français](../fr/README.md)
+
+[English](../../README.md) | [中文](../zh/README.md) | 日本語 | [한국어](../ko/README.md) | [Français](../fr/README.md)
 
 
 [![GitHub stars](https://img.shields.io/github/stars/downly-app/ollama.vip)](https://github.com/downly-app/ollama.vip/stargazers)
@@ -30,13 +31,17 @@ Ollamaモデルと対話するためのモダンなクロスプラットフォ�
 - **リアルタイム会話**: スムーズなストリーミングチャット体験
 - **メッセージ管理**: メッセージの編集、削除、コピー、再送信
 - **会話履歴**: 検索機能付きの永続的なチャット履歴
-- **Markdownレンダリング**: コードハイライトとフォーマットの完全サポート
+- **Markdownレンダリング**: コードハイライトとフォーマットを完全にサポート
 
 **AIチャットインターフェース：**
 
-![AI Chat](../../images/image-20250710231733710.png)
+![AIチャット](../../images/image-20250710231733710.png)
 
-*メッセージ履歴、markdownサポート、リアルタイムストリーミング応答を備えたクリーンで直感的なチャットインターフェース。*
+*メッセージ履歴、マークダウンサポート、リアルタイムストリーミング応答を備えた、クリーンで直感的なチャットインターフェース。*
+
+![AI画像対話](../../images/image-20250716000309954.png)
+
+*テキストと画像をシームレスに組み合わせ、より豊かで文脈に沿った対話を実現します。*
 
 **サードパーティモデルAPI設定：**
 
@@ -110,13 +115,21 @@ Ollamaモデルと対話するためのモダンなクロスプラットフォ�
 - **NSISインストーラー**: `ollama-pro_x.x.x_x64-setup.exe`
 
 #### macOS
-- **DMGパッケージ**: `ollama-pro_x.x.x_x64.dmg`（Intel）
-- **DMGパッケージ**: `ollama-pro_x.x.x_aarch64.dmg`（Apple Silicon）
+- **DMGパッケージ**: `ollama-pro_x.x.x_x64.dmg` (Intel)
+- **DMGパッケージ**: `ollama-pro_x.x.x_aarch64.dmg` (Apple Silicon)
 - **Appバンドル**: `ollama-pro.app.tar.gz`
 
+> [!WARNING]
+> **macOS 特別注意事項:**
+> アプリケーションを開こうとすると「ファイルが破損しています」というエラーが表示される場合は、ターミナルで次のコマンドを実行してください。これは、アプリケーションがAppleによって公証（Notarized）されていないために発生します。
+> ```bash
+> sudo xattr -rd com.apple.quarantine /Applications/ollama-pro.app
+> ```
+> *アプリケーションを別の場所にインストールした場合は、`/Applications/ollama-pro.app` を実際のパスに置き換えてください。*
+
 #### Linux
-- **Debianパッケージ**: `ollama-pro_x.x.x_amd64.deb`（Ubuntu/Debian）
-- **RPMパッケージ**: `ollama-pro_x.x.x_x86_64.rpm`（RHEL/Fedora/SUSE）
+- **Debianパッケージ**: `ollama-pro_x.x.x_amd64.deb` (Ubuntu/Debian)
+- **RPMパッケージ**: `ollama-pro_x.x.x_x86_64.rpm` (RHEL/Fedora/SUSE)
 - **AppImage**: `ollama-pro_x.x.x_amd64.AppImage`（ユニバーサル）
 
 ### ソースからビルド
@@ -339,7 +352,7 @@ TAURI_DEBUG=true npm run tauri dev
 
 ## 🤝 貢献
 
-貢献を歓迎します！詳細については[貢献ガイド](docs/CONTRIBUTING.md)をご覧ください。
+貢献を歓迎します！詳細については[貢献ガイド](../../docs/en/CONTRIBUTING.md)をご覧ください。
 
 ### 開発ワークフロー
 1. リポジトリをフォーク
@@ -364,7 +377,7 @@ TAURI_DEBUG=true npm run tauri dev
 ### 商用利用
 商用利用には別途商用ライセンスが必要です。商用ライセンスについては[yzmm@outlook.com]までお問い合わせください。
 
-詳細については[LICENSE](LICENSE)ファイルをご覧ください。
+詳細については[LICENSE](../../LICENSE)ファイルをご覧ください。
 
 ## 🙏 謝辞
 

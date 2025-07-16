@@ -2,7 +2,6 @@ import {
   Activity,
   Copy,
   Database,
-  ExternalLink,
   Globe,
   MessageCircle,
   PieChart as PieChartIcon,
@@ -11,14 +10,13 @@ import {
   Save,
   Server,
   Settings,
-  Square,
   Tag,
   Upload,
   Zap,
 } from 'lucide-react';
 import { Cell, Pie, PieChart, ResponsiveContainer } from 'recharts';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Badge } from '@/components/ui/badge';
@@ -28,6 +26,7 @@ import { Input } from '@/components/ui/input';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useToast } from '@/hooks/use-toast';
 import configApi from '@/services/configApi';
+import { ollamaApi } from '@/services/ollamaApi';
 import { ollamaTauriApi } from '@/services/ollamaTauriApi';
 import { useSystemResourceStore } from '@/stores/systemResourceStore';
 
@@ -85,65 +84,7 @@ const OllamaServiceStatus = () => {
     },
   ];
 
-  useEffect(() => {
-    initializeComponent();
-
-    // Start shared system resource monitoring
-    startAutoRefresh();
-
-    const interval = setInterval(() => {
-      checkConnection();
-      fetchOllamaData();
-    }, 5000); // Check every 5 seconds to match SystemResourceMonitoring
-
-    return () => {
-      clearInterval(interval);
-      // Don't stop auto refresh here as other components might be using it
-    };
-  }, [startAutoRefresh]);
-
-  const initializeComponent = async () => {
-    try {
-      // First get the configured API address
-      const host = await configApi.getOllamaHost();
-      setServiceAddress(host);
-
-      // Note: No need to update the base URL in Rust backend
-      // As the host is automatically obtained from config manager
-
-      // Then check connection and fetch Ollama data
-      await checkConnection();
-      await fetchOllamaData();
-    } catch (error) {
-      // Failed to initialize component
-      // Use default address as fallback
-      const defaultHost = 'http://127.0.0.1:11434';
-      setServiceAddress(defaultHost);
-      // Host is automatically configured in backend
-    }
-  };
-
-  const checkConnection = async () => {
-    setIsChecking(true);
-    try {
-      const connected = await ollamaTauriApi.checkConnection();
-      setIsConnected(connected);
-
-      if (connected) {
-        // Get version information
-        const versionInfo = await ollamaTauriApi.getVersion();
-        if (versionInfo) {
-          setVersion(versionInfo.version);
-        }
-      }
-    } catch (error) {
-      setIsConnected(false);
-      // Connection check failed
-    }
-    setIsChecking(false);
-  };
-
-  const fetchOllamaData = async () => {
+  const fetchOllamaData = useCallback(async () => {
     try {
       // Try to get model data, use default values if Ollama service is not started
       let models: any[] = [];
@@ -167,7 +108,66 @@ const OllamaServiceStatus = () => {
     } catch (error) {
       // Failed to fetch Ollama data
     }
-  };
+  }, [isConnected]);
+
+  const checkConnection = useCallback(async () => {
+    setIsChecking(true);
+    try {
+      const connected = await ollamaTauriApi.checkConnection();
+      setIsConnected(connected);
+
+      if (connected) {
+        // Get version information
+        const versionInfo = await ollamaTauriApi.getVersion();
+        if (versionInfo) {
+          setVersion(versionInfo.version);
+        }
+      }
+    } catch (error) {
+      setIsConnected(false);
+      // Connection check failed
+    }
+    setIsChecking(false);
+  }, []);
+
+  
+  const initializeComponent = useCallback(async () => {
+    try {
+      // First get the configured API address
+      const host = await configApi.getOllamaHost();
+      setServiceAddress(host);
+
+      // Note: No need to update the base URL in Rust backend
+      // As the host is automatically obtained from config manager
+
+      // Then check connection and fetch Ollama data
+      await checkConnection();
+      await fetchOllamaData();
+    } catch (error) {
+      // Failed to initialize component
+      // Use default address as fallback
+      const defaultHost = 'http://127.0.0.1:11434';
+      setServiceAddress(defaultHost);
+      // Host is automatically configured in backend
+    }
+  }, [checkConnection, fetchOllamaData]);
+
+  useEffect(() => {
+    initializeComponent();
+
+    // Start shared system resource monitoring
+    startAutoRefresh();
+
+    const interval = setInterval(() => {
+      checkConnection();
+      fetchOllamaData();
+    }, 5000); // Check every 5 seconds to match SystemResourceMonitoring
+
+    return () => {
+      clearInterval(interval);
+      // Don't stop auto refresh here as other components might be using it
+    };
+  }, [fetchOllamaData, initializeComponent, startAutoRefresh, checkConnection]);
 
   const copyAddress = () => {
     navigator.clipboard.writeText(serviceAddress);

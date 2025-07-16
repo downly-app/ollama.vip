@@ -503,9 +503,18 @@
     },
     "toast": {
       "downloadCompleteTitle": "다운로드 완료",
-      "downloadCompleteMessage": "{{modelName}}이(가) 성공적으로 다운로드되었습니다."
+      "downloadCompleteMessage": "{{modelName}}이(가) 성공적으로 다운로드되었습니다.",
+      "downloadFailedTitle": "다운로드 실패",
+      "downloadFailedMessage": "{{modelName}} 다운로드 실패: {{error}}"
     },
-    "actions": "작업",
+    "actions": {
+      "pause": "다운로드 일시 중지",
+      "resume": "다운로드 재개",
+      "retry": "다운로드 재시도",
+      "restart": "다운로드 재시작",
+      "cancel": "취소 및 삭제",
+      "details": "모델 세부 정보 보기"
+    },
     "noDownloadingJobs": "활성 다운로드 작업이 없습니다.",
     "noCompletedJobs": "완료된 다운로드 없음",
     "status.pending": "대기 중...",

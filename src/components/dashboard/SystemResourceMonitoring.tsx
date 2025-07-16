@@ -1,6 +1,5 @@
 import {
   Activity,
-  AlertTriangle,
   BarChart,
   CheckCircle,
   Cpu,
@@ -14,10 +13,9 @@ import {
 } from 'lucide-react';
 import { Line, LineChart, ResponsiveContainer, XAxis, YAxis } from 'recharts';
 
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -53,74 +51,8 @@ const SystemResourceMonitoring = () => {
 
   const [showAllLogs, setShowAllLogs] = useState(false);
 
-  // Handle activity logging when resources update
-  useEffect(() => {
-    if (systemInfo && resources.length > 0) {
-      // Log successful system resource retrieval activity
-      activityLogger.addActivity(
-        'info',
-        t('dashboard.systemResources.activities.resourcesUpdated')
-      );
-
-      // Log high usage warnings
-      resources.forEach(resource => {
-        if (resource.usage > 80) {
-          activityLogger.addActivity(
-            'warning',
-            `${resource.name} usage too high: ${resource.usage.toFixed(1)}%`
-          );
-        }
-      });
-
-      // Generate system logs
-      generateSystemLogs(systemInfo);
-    }
-  }, [systemInfo, resources, t]);
-
-  // Handle error logging
-  useEffect(() => {
-    if (error) {
-      activityLogger.addActivity('error', error);
-    }
-  }, [error]);
-
-  // Add icon mapping for resources from store
-  const getResourceIcon = (resourceName: string) => {
-    switch (resourceName.toLowerCase()) {
-      case 'cpu':
-        return Cpu;
-      case 'memory':
-        return MemoryStick;
-      case 'disk':
-        return HardDrive;
-      case 'gpu':
-        return Monitor;
-      default:
-        return Activity;
-    }
-  };
-
-  // Generate combined chart data
-  const generateCombinedChartData = () => {
-    if (resources.length === 0) return [];
-
-    const timePoints = resources[0]?.data?.map(point => point.time) || [];
-
-    return timePoints.map((time, index) => {
-      const dataPoint: any = { time };
-
-      resources.forEach(resource => {
-        if (resource.data && resource.data[index]) {
-          dataPoint[resource.name] = resource.data[index].value;
-        }
-      });
-
-      return dataPoint;
-    });
-  };
-
   // Generate system logs
-  const generateSystemLogs = (info: any) => {
+  const generateSystemLogs = useCallback((info: any) => {
     const currentTime = new Date();
     const logs = [
       {
@@ -171,6 +103,72 @@ const SystemResourceMonitoring = () => {
     }
 
     setRecentLogs(logs);
+  }, [t]);
+
+  // Handle activity logging when resources update
+  useEffect(() => {
+    if (systemInfo && resources.length > 0) {
+      // Log successful system resource retrieval activity
+      activityLogger.addActivity(
+        'info',
+        t('dashboard.systemResources.activities.resourcesUpdated')
+      );
+
+      // Log high usage warnings
+      resources.forEach(resource => {
+        if (resource.usage > 80) {
+          activityLogger.addActivity(
+            'warning',
+            `${resource.name} usage too high: ${resource.usage.toFixed(1)}%`
+          );
+        }
+      });
+
+      // Generate system logs
+      generateSystemLogs(systemInfo);
+    }
+  }, [systemInfo, resources, t, generateSystemLogs]);
+
+  // Handle error logging
+  useEffect(() => {
+    if (error) {
+      activityLogger.addActivity('error', error);
+    }
+  }, [error]);
+
+  // Add icon mapping for resources from store
+  const getResourceIcon = (resourceName: string) => {
+    switch (resourceName.toLowerCase()) {
+      case 'cpu':
+        return Cpu;
+      case 'memory':
+        return MemoryStick;
+      case 'disk':
+        return HardDrive;
+      case 'gpu':
+        return Monitor;
+      default:
+        return Activity;
+    }
+  };
+
+  // Generate combined chart data
+  const generateCombinedChartData = () => {
+    if (resources.length === 0) return [];
+
+    const timePoints = resources[0]?.data?.map(point => point.time) || [];
+
+    return timePoints.map((time, index) => {
+      const dataPoint: any = { time };
+
+      resources.forEach(resource => {
+        if (resource.data && resource.data[index]) {
+          dataPoint[resource.name] = resource.data[index].value;
+        }
+      });
+
+      return dataPoint;
+    });
   };
 
   useEffect(() => {
@@ -455,4 +453,4 @@ const SystemResourceMonitoring = () => {
   );
 };
 
-export default SystemResourceMonitoring; 
+export default SystemResourceMonitoring;

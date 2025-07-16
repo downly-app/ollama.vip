@@ -270,7 +270,7 @@
     "language": "语言",
     "refresh": "刷新",
     "clear": "清除",
-    "notSupported": "暂不支持"
+    "notSupported": "不支持"
   },
   "general": {
     "title": "仪表板",
@@ -498,9 +498,18 @@
     },
     "toast": {
       "downloadCompleteTitle": "下载完成",
-      "downloadCompleteMessage": "{{modelName}} 已成功下载。"
+      "downloadCompleteMessage": "{{modelName}} 已成功下载。",
+      "downloadFailedTitle": "下载失败",
+      "downloadFailedMessage": "下载 {{modelName}} 失败：{{error}}"
     },
-    "actions": "操作",
+    "actions": {
+      "pause": "暂停下载",
+      "resume": "恢复下载",
+      "retry": "重试下载",
+      "restart": "重新开始下载",
+      "cancel": "取消并清除",
+      "details": "查看模型详情"
+    },
     "noDownloadingJobs": "没有正在下载的任务。",
     "noCompletedJobs": "没有已完成的任务。",
     "clearCompleted": "清除已完成",

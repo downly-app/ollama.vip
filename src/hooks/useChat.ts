@@ -37,7 +37,7 @@ interface UseChatReturn {
 
   // Chat handlers
   handleChatSelect: (chatId: string) => void;
-  handleSendMessage: (content: string, type?: 'text' | 'image', imageFile?: File) => Promise<void>;
+  handleSendMessage: (content: string, imageFiles?: File[]) => Promise<void>;
   handleEditMessage: (messageId: string, newContent: string) => void;
   handleDeleteMessage: (messageId: string) => void;
   handleResendMessage: (messageId: string, content: string) => Promise<void>;
@@ -51,6 +51,22 @@ interface UseChatReturn {
   messagesEndRef: React.RefObject<HTMLDivElement>;
 }
 
+// Helper function to read file as base64
+const fileToBase64 = (file: File): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      if (typeof reader.result === 'string') {
+        resolve(reader.result.split(',')[1]); // Return only the base64 part
+      } else {
+        reject(new Error('Failed to read file as base64 string.'));
+      }
+    };
+    reader.onerror = error => reject(error);
+  });
+};
+
 export const useChat = ({
   currentModelValue,
   onError,
@@ -58,6 +74,7 @@ export const useChat = ({
 }: UseChatOptions): UseChatReturn => {
   const { t } = useTranslation();
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const isMounted = useRef(true); // To track if the component is mounted
 
   // Get store data with error handling
   const store = useChatStore();
@@ -78,9 +95,18 @@ export const useChat = ({
     typingModel,
     setTyping,
     clearTyping,
+    isStopping = false,
   } = store || {};
 
   const currentChat = getCurrentConversation?.() || null;
+
+  // Effect to handle component unmount
+  useEffect(() => {
+    isMounted.current = true;
+    return () => {
+      isMounted.current = false;
+    };
+  }, [currentChatId]); // Re-run when chat ID changes
 
   // Get AI configuration
   const getAIConfig = useCallback(async (): Promise<AIConfig> => {
@@ -130,6 +156,28 @@ export const useChat = ({
     scrollToBottom();
   }, [currentChat?.messages, scrollToBottom]);
 
+  const handleStreamEnd = useCallback(
+    (chatId: string, messageId: string) => {
+      if (!isMounted.current) return;
+      console.log('Stream ended for message:', messageId);
+      // Perform any state updates needed when the stream is complete
+      // For example, re-enabling UI elements if they were disabled
+    },
+    [isMounted]
+  );
+
+  const handleStreamError = useCallback(
+    (error: Error, chatId: string, messageId: string) => {
+      if (!isMounted.current) return;
+      console.error('Streaming error for message:', messageId, error);
+      // Update the message with an error state
+      // updateMessageError(chatId, messageId, error.message);
+      setLoading(false);
+      setTyping(false, undefined);
+    },
+    [isMounted, setLoading, setTyping]
+  );
+
   // Check model availability
   const checkModelAvailability = useCallback(
     async (provider: AIProvider, model: string): Promise<boolean> => {
@@ -157,7 +205,7 @@ export const useChat = ({
 
   // Handle send message
   const handleSendMessage = useCallback(
-    async (content: string, type?: 'text' | 'image', imageFile?: File) => {
+    async (content: string, imageFiles?: File[]) => {
       try {
         if (!currentChatId || !addMessage) return;
 
@@ -183,12 +231,18 @@ export const useChat = ({
 
         const config = await getAIConfig();
 
+        // Process images
+        let imageBase64s: string[] = [];
+        if (imageFiles && imageFiles.length > 0) {
+          imageBase64s = await Promise.all(imageFiles.map(file => fileToBase64(file)));
+        }
+
         // Add user message
         addMessage(currentChatId, {
           content,
           sender: 'user',
-          timestamp: new Date(),
           model: parsed.model,
+          images: imageBase64s,
         });
 
         // Update conversation title if it's a new chat
@@ -211,6 +265,7 @@ export const useChat = ({
               sender: msg.sender,
               timestamp: msg.timestamp,
               model: msg.model,
+              images: msg.images,
             })) || [];
 
           // Add current user message
@@ -220,48 +275,54 @@ export const useChat = ({
             sender: 'user' as const,
             timestamp: new Date(),
             model: parsed.model,
+            images: imageBase64s,
           });
 
           // Callback function for handling stream data
           let aiMessageId: string | null = null;
-          const handleStreamChunk = (chunk: string) => {
-            // Clear typing indicator when first chunk arrives
+          const handleStreamChunk = (chunk: string, done: boolean) => {
+            if (useChatStore.getState().isStopping) {
+              useChatStore.setState({ isStopping: false, isLoading: false, isTyping: false });
+              return;
+            }
+
             if (aiMessageId === null) {
               clearTyping?.();
-              // Create AI message when first chunk arrives
               aiMessageId = addMessage(currentChatId, {
                 content: chunk,
                 sender: 'assistant',
-                timestamp: new Date(),
                 model: parsed.model,
               });
-            } else if (currentChatId && aiMessageId) {
-              // Append subsequent chunks
-              appendMessageContent(currentChatId, aiMessageId, chunk);
+            } else {
+              appendMessageContent?.(currentChatId, aiMessageId, chunk);
+            }
+
+            if (done && aiMessageId) {
+              handleStreamEnd(currentChatId, aiMessageId);
             }
           };
 
-          // Call AI API in stream mode
+          // Send to API
           await aiApiService.sendMessage(messages, config, handleStreamChunk);
-        } catch (error) {
-          // Add error message
+        } catch (error: any) {
+          if (!isMounted.current) return;
+          setLoading?.(false);
+          setTyping?.(false);
           addMessage(currentChatId, {
-            content: `Sorry, an error occurred: ${error instanceof Error ? error.message : 'Unknown error'}`,
+            content: `Error: ${error.message}`,
             sender: 'assistant',
-            timestamp: new Date(),
             model: parsed.model,
           });
-
-          onError?.(error as Error);
+          onError?.(error);
         } finally {
-          // Clear typing and loading states
-          clearTyping?.();
-          setLoading?.(false);
+          if (isMounted.current) {
+            setLoading?.(false);
+            setTyping?.(false);
+            clearTyping?.();
+          }
         }
-      } catch (error) {
-        clearTyping?.();
-        setLoading?.(false);
-        onError?.(error as Error);
+      } catch (e: any) {
+        onError?.(e);
       }
     },
     [
@@ -271,13 +332,17 @@ export const useChat = ({
       checkModelAvailability,
       getAIConfig,
       getCurrentConversation,
-      updateConversationTitle,
-      currentChat?.messages,
-      appendMessageContent,
+      setTyping,
       setLoading,
       onError,
-      onWarning,
       t,
+      onWarning,
+      updateConversationTitle,
+      currentChat?.messages,
+      clearTyping,
+      appendMessageContent,
+      isMounted,
+      handleStreamEnd,
     ]
   );
 

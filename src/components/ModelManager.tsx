@@ -52,7 +52,7 @@ const ModelManager = () => {
 
   useEffect(() => {
     fetchModels(currentPage, searchQuery, selectedCategories, sortOrder);
-  }, [fetchModels, currentPage, selectedCategories, sortOrder]);
+  }, [fetchModels, currentPage, selectedCategories, sortOrder, searchQuery]);
 
   const modelCategories = [
     {

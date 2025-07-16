@@ -13,6 +13,16 @@ export interface ChatMessage {
   tool_calls?: any[];
 }
 
+/**
+ * Pull model progress response from streaming implementation
+ */
+export interface PullModelProgress {
+  status: string;
+  digest?: string;
+  total?: number;
+  completed?: number;
+}
+
 export interface GenerateRequest {
   model: string;
   prompt: string;
@@ -154,15 +164,96 @@ class OllamaTauriAPI {
   }
 
   /**
-   * Pull model - non-streaming implementation
+   * Pull model with streaming progress updates
+   * @param modelName The name of the model to pull
+   * @param onProgress Optional callback to receive progress updates
+   * @param signal Optional AbortSignal to cancel the download
+   * @returns Promise that resolves when the model is fully downloaded
    */
-  async pullModel(modelName: string): Promise<string> {
+  async pullModel(modelName: string, onProgress?: (progress: PullModelProgress) => void, signal?: AbortSignal): Promise<string> {
     try {
-      const result = await invoke<string>('pull_model', { 
-        modelName 
-      });
-      return result;
-    } catch (error) {
+      // Create a deterministic channelId to ensure the same model uses the same ID for each download
+  // This is crucial for pausing and resuming downloads
+  // We use a simple conversion rule to replace non-alphanumeric characters with underscores
+      const safeChannelId = `model-pull-${modelName.replace(/[^a-zA-Z0-9]/g, '_')}`;
+      
+      // Use this deterministic ID as the identifier for event channels and backend communication
+      const uniqueChannelId = safeChannelId;
+      
+      console.log(`Using consistent channelId for model ${modelName}: ${uniqueChannelId}`);
+      let unlistenFunc: (() => void) | undefined;
+      
+      // Setup listener for progress events if callback is provided
+      if (onProgress) {
+        // Listen for streaming events from Rust backend on the unique channel
+        const { listen } = await import('@tauri-apps/api/event');
+        unlistenFunc = await listen<PullModelProgress>(uniqueChannelId, (event) => {
+          if (onProgress && event.payload) {
+            // Check if download was aborted before processing event
+            if (signal?.aborted) {
+              // If aborted, do nothing with the event data
+              return;
+            }
+            
+            // Process progress update
+            onProgress(event.payload);
+          }
+        });
+      }
+
+      // Setup abort handler if signal is provided
+      let abortListener: ((event: Event) => void) | undefined;
+      if (signal) {
+        // If signal is already aborted, throw immediately
+        if (signal.aborted) {
+          throw new Error('Download aborted by user');
+        }
+        
+        // Otherwise setup listener for future abort signals
+        abortListener = async () => {
+          console.log(`Aborting download for ${modelName} with channel ${uniqueChannelId}`);
+          // Call the cancel_pull Rust command to stop the download on backend
+          try {
+            // For abort, we don't clean up the progress
+            const result = await invoke('cancel_pull', { modelName, channelId: uniqueChannelId, cleanup: false });
+            console.log(`Cancel result for ${modelName}: `, result);
+          } catch (err) {
+            console.error('Failed to cancel download:', err);
+          }
+        };
+        
+        // Add abort listener
+        signal.addEventListener('abort', abortListener);
+      }
+
+      try {
+        // Call the Rust backend to start the model pull with the unique channel ID
+        console.log(`Invoking pull_model with modelName=${modelName}, channelId=${uniqueChannelId}`);
+        
+        const result = await invoke<string>('pull_model', { 
+          modelName: modelName,
+          channelId: uniqueChannelId
+        });
+        
+        return result;
+      } finally {
+        // Clean up all listeners regardless of success or failure
+        if (unlistenFunc) {
+          unlistenFunc();
+        }
+        
+        if (signal && abortListener) {
+          signal.removeEventListener('abort', abortListener);
+        }
+      }
+    } catch (error: any) {
+      // Special handling for user-initiated abort
+      if (error.toString().includes('aborted') || signal?.aborted) {
+        console.log(`Download of ${modelName} was aborted by user`);
+        throw new Error('Download aborted by user');
+      }
+      
+      // Standard error handling
       console.error('Failed to pull model:', error);
       throw new Error(`Failed to pull model: ${error}`);
     }
@@ -181,6 +272,27 @@ class OllamaTauriAPI {
     } catch (error) {
       console.error('Failed to push model:', error);
       throw new Error(`Failed to push model: ${error}`);
+    }
+  }
+
+  /**
+   * Cancel a running model pull
+   * @param modelName The name of the model being pulled
+   * @param cleanup Whether to delete the download progress
+   * @returns Promise that resolves to true if cancellation was successful
+   */
+  async cancelPull(modelName: string, cleanup: boolean = false): Promise<boolean> {
+    try {
+      const safeChannelId = `model-pull-${modelName.replace(/[^a-zA-Z0-9]/g, '_')}`;
+      const result = await invoke<boolean>('cancel_pull', { 
+        modelName, 
+        channelId: safeChannelId,
+        cleanup 
+      });
+      return result;
+    } catch (error) {
+      console.error('Failed to cancel pull:', error);
+      return false;
     }
   }
 

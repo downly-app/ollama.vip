@@ -494,9 +494,18 @@
     },
     "toast": {
       "downloadCompleteTitle": "ダウンロード完了",
-      "downloadCompleteMessage": "{{modelName}} のダウンロードが正常に完了しました。"
+      "downloadCompleteMessage": "{{modelName}} のダウンロードが正常に完了しました。",
+      "downloadFailedTitle": "ダウンロード失敗",
+      "downloadFailedMessage": "{{modelName}} のダウンロードに失敗しました：{{error}}"
     },
-    "actions": "操作",
+    "actions": {
+      "pause": "ダウンロードを一時停止",
+      "resume": "ダウンロードを再開",
+      "retry": "ダウンロードを再試行",
+      "restart": "ダウンロードを再開始",
+      "cancel": "キャンセルして削除",
+      "details": "モデル詳細を表示"
+    },
     "noDownloadingJobs": "アクティブなダウンロードジョブはありません。",
     "noCompletedJobs": "完了したダウンロードはありません",
     "clearCompleted": "完了済みをクリア"

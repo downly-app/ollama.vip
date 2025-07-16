@@ -1,12 +1,10 @@
 import {
   AlertCircle,
   Download,
-  Filter,
   Grid,
   HardDrive,
   Info,
   List,
-  Play,
   RefreshCw,
   Search,
   SortAsc,
@@ -14,7 +12,7 @@ import {
   Trash2,
 } from 'lucide-react';
 
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Trans } from 'react-i18next';
 import { Link } from 'react-router-dom';
@@ -35,14 +33,6 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import CustomSelect from '@/components/ui/custom-select';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -74,22 +64,6 @@ interface LocalModel {
   };
 }
 
-interface ModelInfo {
-  modelfile: string;
-  parameters: string;
-  template: string;
-  details: {
-    parent_model: string;
-    format: string;
-    family: string;
-    families: string[];
-    parameter_size: string;
-    quantization_level: string;
-  };
-  model_info: Record<string, string | number | boolean | null>;
-  capabilities: string[];
-}
-
 const LocalModelManager = () => {
   const { t } = useTranslation();
   const { currentTheme } = useTheme();
@@ -106,7 +80,7 @@ const LocalModelManager = () => {
   const [filterFamily, setFilterFamily] = useState<string>('all');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
-  const fetchLocalModels = async () => {
+  const fetchLocalModels = useCallback(async () => {
     setIsLoading(true);
     try {
       const models = await ollamaTauriApi.listModels();
@@ -122,7 +96,7 @@ const LocalModelManager = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [t, toast]);
 
   const handleDeleteModel = async (modelName: string) => {
     try {
@@ -231,7 +205,7 @@ const LocalModelManager = () => {
 
   useEffect(() => {
     fetchLocalModels();
-  }, []);
+  }, [fetchLocalModels]);
 
   return (
     <div className='flex-1 flex flex-col h-full space-y-6'>

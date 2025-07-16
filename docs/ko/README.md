@@ -4,7 +4,8 @@
 </div>
 
 **🌍 다국어 버전：**
-[English](../../README.md) | [中文](../zh/README.md) | [日本語](../ja/README.md) | [Français](../fr/README.md)
+
+[English](../../README.md) | [中文](../zh/README.md) | [日本語](../ja/README.md) | 한국어 | [Français](../fr/README.md)
 
 
 [![GitHub stars](https://img.shields.io/github/stars/downly-app/ollama.vip)](https://github.com/downly-app/ollama.vip/stargazers)
@@ -28,17 +29,21 @@ Ollama 모델과 상호작용하기 위한 현대적인 크로스 플랫폼 데�
 ### 🤖 AI 채팅
 - **다중 모델 지원**: OpenAI 및 DeepSeek 모델 지원
 - **실시간 대화**: 부드러운 스트리밍 채팅 경험
-- **메시지 관리**: 메시지 편집, 삭제, 복사, 재전송
-- **대화 기록**: 검색 기능이 있는 영구 채팅 기록
-- **Markdown 렌더링**: 코드 하이라이팅 및 포맷팅 완전 지원
+- **메시지 관리**: 메시지 편집, 삭제, 복사 및 재전송
+- **대화 기록**: 검색 기능이 있는 영구적인 채팅 기록
+- **마크다운 렌더링**: 코드 하이라이팅 및 서식 완벽 지원
 
 **AI 채팅 인터페이스:**
 
-![AI Chat](../../images/image-20250710231733710.png)
+![AI 채팅](../../images/image-20250710231733710.png)
 
-*메시지 기록, 마크다운 지원, 실시간 스트리밍 응답을 갖춘 깔끔하고 직관적인 채팅 인터페이스.*
+*메시지 기록, 마크다운 지원 및 실시간 스트리밍 응답을 갖춘 깔끔하고 직관적인 채팅 인터페이스.*
 
-**서드파티 모델 API 구성:**
+![AI 그림-텍스트 대화](../../images/image-20250716000309954.png)
+
+*텍스트와 이미지를 원활하게 결합하여 더 풍부하고 맥락에 맞는 대화를 나눠보세요.*
+
+**타사 모델 API 구성:**
 
 ![Third-party model API configuration](../../images/image-20250710232528111.png)
 
@@ -113,6 +118,14 @@ Ollama 모델과 상호작용하기 위한 현대적인 크로스 플랫폼 데�
 - **DMG 패키지**: `ollama-pro_x.x.x_x64.dmg` (Intel)
 - **DMG 패키지**: `ollama-pro_x.x.x_aarch64.dmg` (Apple Silicon)
 - **App 번들**: `ollama-pro.app.tar.gz`
+
+> [!WARNING]
+> **macOS 특별 참고 사항:**
+> 응용 프로그램을 열 때 "파일이 손상되었습니다"라는 오류가 발생하면 터미널에서 다음 명령을 실행하십시오. 이는 응용 프로그램이 Apple에 의해 공증(Notarized)되지 않았기 때문입니다.
+> ```bash
+> sudo xattr -rd com.apple.quarantine /Applications/ollama-pro.app
+> ```
+> *응용 프로그램을 다른 곳에 설치한 경우 `/Applications/ollama-pro.app`을 실제 경로로 바꾸십시오.*
 
 #### Linux
 - **Debian 패키지**: `ollama-pro_x.x.x_amd64.deb` (Ubuntu/Debian)
@@ -339,7 +352,7 @@ TAURI_DEBUG=true npm run tauri dev
 
 ## 🤝 기여
 
-기여를 환영합니다! 자세한 내용은 [기여 가이드](docs/CONTRIBUTING.md)를 참조하세요.
+기여를 환영합니다! 자세한 내용은 [기여 가이드](../../docs/en/CONTRIBUTING.md)를 참조하세요.
 
 ### 개발 워크플로
 1. 저장소 포크
@@ -364,7 +377,7 @@ TAURI_DEBUG=true npm run tauri dev
 ### 상업적 사용
 상업적 사용에는 별도의 상업 라이선스가 필요합니다. 상업 라이선스에 대해서는 [yzmm@outlook.com]로 문의하세요.
 
-자세한 내용은 [LICENSE](LICENSE) 파일을 참조하세요.
+자세한 내용은 [LICENSE](../../LICENSE) 파일을 참조하세요.
 
 ## 🙏 감사의 말
 

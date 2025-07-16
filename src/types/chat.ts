@@ -4,6 +4,7 @@ export interface ChatMessage {
   sender: 'user' | 'assistant';
   timestamp: Date;
   model?: string;
+  images?: string[]; // For multimodal messages
 }
 
 export interface Conversation {

@@ -4,7 +4,8 @@
 </div>
 
 **🌍 Multi-language Versions:**
-[中文](docs/zh/README.md) | [日本語](docs/ja/README.md) | [한국어](docs/ko/README.md) | [Français](docs/fr/README.md)
+
+[English](./README.md) | [中文](docs/zh/README.md) | [日本語](docs/ja/README.md) | [한국어](docs/ko/README.md) | [Français](docs/fr/README.md)
 
 
 [![GitHub stars](https://img.shields.io/github/stars/downly-app/ollama.vip)](https://github.com/downly-app/ollama.vip/stargazers)
@@ -39,6 +40,10 @@ A modern, cross-platform desktop application for interacting with Ollama models.
 ![AI Chat](./images/image-20250710231733710.png)
 
 *Clean and intuitive chat interface with message history, markdown support, and real-time streaming responses.*
+
+![AI picture and text dialogue](./images/image-20250716000309954.png)
+
+*Seamlessly blend text and images for richer, more contextual conversations.*
 
 **Third-party Model API Configuration:**
 
@@ -117,6 +122,14 @@ A modern, cross-platform desktop application for interacting with Ollama models.
 - **DMG Package**: `ollama-pro_x.x.x_x64.dmg` (Intel)
 - **DMG Package**: `ollama-pro_x.x.x_aarch64.dmg` (Apple Silicon)
 - **App Bundle**: `ollama-pro.app.tar.gz`
+
+> [!WARNING]
+> **macOS Special Note:**
+> If you encounter a "file is damaged" error when trying to open the application, please run the following command in your terminal. This issue occurs because the application is not yet notarized by Apple.
+> ```bash
+> sudo xattr -rd com.apple.quarantine /Applications/ollama-pro.app
+> ```
+> *Replace `/Applications/ollama-pro.app` with the actual path to the application if you installed it elsewhere.*
 
 #### Linux
 - **Debian Package**: `ollama-pro_x.x.x_amd64.deb` (Ubuntu/Debian)

@@ -4,8 +4,8 @@
 </div>
 
 **🌍 多语言版本：**
-[English](../../README.md) | [日本語](../ja/README.md) | [한국어](../ko/README.md) | [Français](../fr/README.md)
 
+[English](../../README.md) | 中文 | [日本語](../ja/README.md) | [한국어](../ko/README.md) | [Français](../fr/README.md)
 
 [![GitHub stars](https://img.shields.io/github/stars/downly-app/ollama.vip)](https://github.com/downly-app/ollama.vip/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/downly-app/ollama.vip)](https://github.com/downly-app/ollama.vip/fork)
@@ -36,7 +36,11 @@
 
 ![AI Chat](../../images/image-20250710231733710.png)
 
-*简洁直观的聊天界面，支持消息历史、markdown 和实时流式响应。*
+*简洁直观的聊天界面，支持消息历史、Markdown和实时流式响应。*
+
+![AI图文对话](../../images/image-20250716000309954.png)
+
+*无缝融合文本与图片，开启更丰富、更具上下文的对话。*
 
 **第三方模型 API 配置：**
 
@@ -111,8 +115,16 @@
 
 #### macOS
 - **DMG 包**: `ollama-pro_x.x.x_x64.dmg`（Intel）
-- **DMG 包**: `ollama-pro_x.x.x_aarch64.dmg`（Apple Silicon）
+- **DMG 包**: `ollama-pro_x.x.x_aarch64.dmg`（macOS M系列的苹果芯片）
 - **App 包**: `ollama-pro.app.tar.gz`
+
+> [!WARNING]
+> **macOS 特别说明：**
+> 如果您在打开应用时遇到“文件已损坏”的提示，请在终端中执行以下命令。这是由于该应用尚未经过苹果公证（Notarized）导致的。
+> ```bash
+> sudo xattr -rd com.apple.quarantine /Applications/ollama-pro.app
+> ```
+> *如果您将应用安装到了其他路径，请将 `/Applications/ollama-pro.app` 替换为实际的应用路径。*
 
 #### Linux
 - **Debian 包**: `ollama-pro_x.x.x_amd64.deb`（Ubuntu/Debian）
@@ -339,7 +351,7 @@ TAURI_DEBUG=true npm run tauri dev
 
 ## 🤝 贡献
 
-我们欢迎贡献！请查看我们的[贡献指南](docs/CONTRIBUTING.md)了解详情。
+我们欢迎贡献！请查看我们的[贡献指南](../../docs/en/CONTRIBUTING.md)了解详情。
 
 ### 开发工作流程
 1. Fork 仓库
@@ -364,7 +376,7 @@ TAURI_DEBUG=true npm run tauri dev
 ### 商业使用
 商业使用需要单独的商业许可证。请联系 [yzmm@outlook.com] 获取商业许可。
 
-详情请参阅 [LICENSE](LICENSE) 文件。
+详情请参阅 [LICENSE](../../LICENSE) 文件。
 
 ## 🙏 致谢
 

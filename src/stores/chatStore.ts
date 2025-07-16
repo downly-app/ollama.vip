@@ -11,13 +11,14 @@ interface ChatState {
   error: string | null;
   isTyping: boolean;
   typingModel?: string;
+  isStopping: boolean;
 }
 
 interface ChatActions {
   createConversation: (title?: string, provider?: string, model?: string) => string;
   deleteConversation: (id: string) => void;
   selectConversation: (id: string) => void;
-  addMessage: (chatId: string, message: Omit<ChatMessage, 'id'>) => string;
+  addMessage: (chatId: string, message: Omit<ChatMessage, 'id' | 'timestamp'>) => string;
   updateMessage: (chatId: string, messageId: string, content: string) => void;
   appendMessageContent: (chatId: string, messageId: string, contentChunk: string) => void;
   updateMessageModel: (chatId: string, messageId: string, model: string) => void;
@@ -32,6 +33,7 @@ interface ChatActions {
   searchConversations: (query: string) => Conversation[];
   setTyping: (typing: boolean, model?: string) => void;
   clearTyping: () => void;
+  stopGeneration: () => void;
 }
 
 type ChatStore = ChatState & ChatActions;
@@ -72,6 +74,7 @@ export const useChatStore = create<ChatStore>()(
       error: null,
       isTyping: false,
       typingModel: undefined,
+      isStopping: false,
 
       createConversation: (title, provider, model) => {
         // If no provider and model specified, use default values
@@ -101,11 +104,28 @@ export const useChatStore = create<ChatStore>()(
       },
 
       deleteConversation: id => {
-        set(state => ({
-          conversations: state.conversations.filter(conv => conv.id !== id),
-          currentChatId: state.currentChatId === id ? null : state.currentChatId,
-          error: null,
-        }));
+        // Announce the intention to stop. This is for the stream handler to gracefully exit.
+        get().stopGeneration();
+
+        set(state => {
+          const isDeletingCurrentChat = state.currentChatId === id;
+          const generationInProgress = state.isLoading;
+
+          const newState: Partial<ChatState> = {
+            conversations: state.conversations.filter(conv => conv.id !== id),
+            currentChatId: isDeletingCurrentChat ? null : state.currentChatId,
+          };
+
+          // If we are deleting the chat that is currently generating a response,
+          // we MUST reset the loading states to prevent a permanently locked UI.
+          if (isDeletingCurrentChat && generationInProgress) {
+            newState.isLoading = false;
+            newState.isTyping = false;
+            newState.isStopping = false; // Also reset the stopping flag
+          }
+
+          return newState;
+        });
       },
 
       selectConversation: id => {
@@ -118,9 +138,9 @@ export const useChatStore = create<ChatStore>()(
       addMessage: (chatId, messageData) => {
         const messageId = `msg_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
         const message: ChatMessage = {
-          ...messageData,
           id: messageId,
           timestamp: new Date(),
+          ...messageData,
         };
 
         set(state => ({
@@ -226,6 +246,8 @@ export const useChatStore = create<ChatStore>()(
       setError: error => set({ error }),
       clearError: () => set({ error: null }),
 
+      stopGeneration: () => set({ isStopping: true }),
+
       updateConversationTitle: (chatId, title) => {
         set(state => ({
           conversations: state.conversations.map(conv =>
@@ -264,13 +286,34 @@ export const useChatStore = create<ChatStore>()(
       },
     }),
     {
-      name: 'chat-store',
-      // Use onRehydrateStorage to handle data recovery
-      onRehydrateStorage: () => state => {
-        if (state?.conversations) {
-          // Convert date fields
-          state.conversations = convertConversationDates(state.conversations);
-        }
+      name: 'chat-storage',
+      storage: {
+        getItem: name => {
+          const str = localStorage.getItem(name);
+          if (!str) return null;
+          return processStorageData(JSON.parse(str));
+        },
+        setItem: (name, value) => {
+          localStorage.setItem(name, JSON.stringify(value));
+        },
+        removeItem: name => localStorage.removeItem(name),
+      },
+      // Only persist essential data, not transient UI state
+      partialize: state =>
+        ({
+          conversations: state.conversations,
+          currentChatId: state.currentChatId,
+        } as any),
+      // On rehydration, merge persisted state with initial state,
+      // but explicitly discard any persisted transient UI states.
+      merge: (persistedState: any, currentState) => {
+        const mergedState = { ...currentState, ...persistedState };
+        // Ensure transient UI states are always reset on load
+        mergedState.isLoading = false;
+        mergedState.isTyping = false;
+        mergedState.isStopping = false;
+        mergedState.error = null;
+        return mergedState;
       },
     }
   )
