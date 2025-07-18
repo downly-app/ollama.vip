@@ -1,11 +1,11 @@
 <div align="center">
-<a href="https://github.com/putyy/res-downloader"><img src="images/ollama.png" width="120" alt="ollama"/></a>
+<a href="https://www.ollama.vip/"><img src="images/ollama.png" width="120" alt="ollama"/></a>
 <h1>Ollama Pro</h1>
 </div>
 
 **🌍 Multi-language Versions:**
 
-[English](./README.md) | [中文](docs/zh/README.md) | [日本語](docs/ja/README.md) | [한국어](docs/ko/README.md) | [Français](docs/fr/README.md)
+English | [中文](docs/zh/README.md) | [日本語](docs/ja/README.md) | [한국어](docs/ko/README.md) | [Français](docs/fr/README.md)
 
 
 [![GitHub stars](https://img.shields.io/github/stars/downly-app/ollama.vip)](https://github.com/downly-app/ollama.vip/stargazers)

@@ -35,10 +35,7 @@ jobs:
           - platform: windows-latest
             arch: i686
             rust-target: i686-pc-windows-msvc
-          # macOS 64-bit Intel
-          - platform: macos-latest
-            arch: x86_64
-            rust-target: x86_64-apple-darwin
+
           # macOS ARM64 (Apple Silicon) - Native build
           - platform: macos-latest
             arch: aarch64

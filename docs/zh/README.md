@@ -1,5 +1,5 @@
 <div align="center">
-<a href="https://github.com/putyy/res-downloader"><img src="../../images/ollama.png" width="120" alt="ollama"/></a>
+<a href="https://www.ollama.vip/"><img src="../../images/ollama.png" width="120" alt="ollama"/></a>
 <h1>Ollama Pro</h1>
 </div>
 
